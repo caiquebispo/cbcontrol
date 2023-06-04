@@ -26,11 +26,12 @@ class Create extends Component
     {
         return view('livewire.groups.create');
     }
-    // public function create(): void
-    // {
-    //     $validated = $this->validate();
-    //     $this->reset();
-    //     $this->emitTo(ListGroups::class, 'groups::index::created');
-    // }
+    public function create(): void
+    {
+        $validated = $this->validate();
+        $this->user->company->groups()->updateOrCreate($validated,$validated);
+        $this->reset();
+        $this->emitTo(GroupTable::class, 'groups::index::created');
+    }
     
 }

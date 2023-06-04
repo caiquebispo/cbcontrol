@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <x-button wire:click="$toggle('canShowModal', 'true')">
 
         {{ __('Criar novo Grupo') }}
