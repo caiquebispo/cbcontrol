@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->morphs('groups_morph');
+            $table->id('id');
+            $table->foreignId('company_id')->constrained('companies');
             $table->string('name')->null();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
