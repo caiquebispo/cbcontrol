@@ -2,15 +2,15 @@
 
 namespace App\Http\Livewire\Groups;
 
+use App\Http\Livewire\TesteGroup;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
-class Create extends Component
+use LivewireUI\Modal\ModalComponent;
+class Create extends ModalComponent
 {
     public User $user;
-    public bool $canShowModal = false;
     public ?string $name = null;
     
     protected $rules = [
@@ -31,7 +31,8 @@ class Create extends Component
         $validated = $this->validate();
         $this->user->company->groups()->updateOrCreate($validated,$validated);
         $this->reset();
-        $this->emitTo(GroupTable::class, 'groups::index::created');
+        $this->emitTo(ListGroups::class, 'groups::index::created');
+        $this->closeModal();
     }
     
 }

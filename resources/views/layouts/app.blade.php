@@ -43,6 +43,10 @@
         {{-- livewire --}}
         @livewireScripts
         
+        @livewire('livewire-ui-modal')
+        <!-- Focus plugin -->
+        <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+        
         {{-- dependece dateRangerPicker --}}
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
