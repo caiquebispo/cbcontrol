@@ -1,3 +1,4 @@
+<x-card title="Delete Group">
 <div class="content-confirmed-action">
     <div class="icon">
         <svg aria-hidden="true" class=" w-14 h-14 mx-auto mb-4 text-red-400 dark:text-red-200" fill="none"
@@ -11,12 +12,9 @@
                 class=" text-red-400 w-10 h-10 dark:text-red-200">{{$group->name}}</span> ?</h3>
     </div>
     <div class="footer flex justify-between mt-8">
-        <button data-modal-hide="popup-modal" wire:click="delete" type="button"
-            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-            Yes, I'm sure
-        </button>
-        <button wire:click="$emit('closeModal')" type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No,
-            cancel</button>
+    <x-button label="Yes, I'm sure" outline negative md right-icon="trash" wire:click="delete" />
+    <x-button label="No, Cancel" outline positive md right-icon="badge-check" wire:click="$emit('closeModal')"/>
+        
     </div>
 </div>
+</x-card>

@@ -12,9 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <style>
-            [x-cloak] { display: none !important; }
-        </style>
+        <wireui:scripts />
         {{--livewire  --}}
         @livewireStyles
 
@@ -41,9 +39,9 @@
         </div>
 
         {{-- livewire --}}
+        @livewire('livewire-ui-modal')
         @livewireScripts
         
-        @livewire('livewire-ui-modal')
         <!-- Focus plugin -->
         <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
         

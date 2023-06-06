@@ -21,6 +21,7 @@ use PowerComponents\LivewirePowerGrid\Rules\Rule;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 
+
 final class ListGroups extends PowerGridComponent
 {
     use ActionButton;
@@ -63,7 +64,8 @@ final class ListGroups extends PowerGridComponent
     public function setUp(): array
     {
         return [
-            Header::make()->showSearchInput(),
+            Header::make()
+             ->showSearchInput(),
             Header::make()->withoutLoading(),
             Header::make()->showToggleColumns(),
             Footer::make()->showPerPage()->showRecordCount(),
