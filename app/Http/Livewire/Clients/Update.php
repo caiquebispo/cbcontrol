@@ -51,7 +51,6 @@ class Update extends ModalComponent
     {
         
         $this->validate();
-
         $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
