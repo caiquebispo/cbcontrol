@@ -28,6 +28,7 @@ final class ListClients extends PowerGridComponent
                 'clients::index::created' => '$refresh',
                 'clients::index::deleted' => '$refresh',
                 'clients::index::updated' => '$refresh',
+                'clients::index::increase-or-decrease' => '$refresh',
             ]
         );
     }
@@ -52,9 +53,13 @@ final class ListClients extends PowerGridComponent
     {
         return [
             Button::add('view')
-                ->caption('Create new Group')
+                ->caption('Create new Client')
                 ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('clients.create', []),
+            Button::add('view')
+                ->caption('Increase and/or Decrease')
+                ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+                ->openModal('clients.increase-or-decrease', []),
                 
                 
         ];
