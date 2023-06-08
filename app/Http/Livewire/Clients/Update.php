@@ -42,10 +42,7 @@ class Update extends ModalComponent
     public function update(): void
     {
         
-        // dd($this->group_id);
         $validated = $this->validate();
-
-        
         $validated['birthday'] = DateTime::createFromFormat('d/m/Y', $validated['birthday'])->format('Y-m-d');
         $this->user->where('id', $this->user->id)->update($validated);
         $this->user->groups()->detach();
