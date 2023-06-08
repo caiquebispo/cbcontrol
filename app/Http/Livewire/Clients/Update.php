@@ -2,16 +2,17 @@
 
 namespace App\Http\Livewire\Clients;
 
-
 use App\Models\User;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+
 use LivewireUI\Modal\ModalComponent;
 
-class Create extends ModalComponent
+class Update extends ModalComponent
 {
     public User $user;
+    
 
     public ?string $name = null;
     public ?string $number_phone = null;
@@ -36,18 +37,21 @@ class Create extends ModalComponent
     public function render()
     {
         $groups = $this->user->company->groups;
-        return view('livewire.clients.create', compact('groups'));
+        return view('livewire.clients.update', compact('groups'));
     }
-    public function create(): void
+    public function update(): void
     {
         
+        // dd($this->group_id);
         $validated = $this->validate();
 
         
         $validated['birthday'] = DateTime::createFromFormat('d/m/Y', $validated['birthday'])->format('Y-m-d');
-        $this->user->company->users()->create($validated)->groups()->attach($this->group_id);
+        $this->user->where('id', $this->user->id)->update($validated);
+        $this->user->groups()->detach();
+        $this->user->groups()->attach($this->group_id);
         $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::created');
+        $this->emitTo(ListClients::class, 'clients::index::updated');
         $this->closeModal();
     }
 }
