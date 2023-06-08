@@ -15,11 +15,11 @@ class Update extends ModalComponent
 
     protected $rules = [
 
-        'name' => 'required|min:4|max:150'
+        'group.name' => 'required|min:4|max:150'
     ];
     public function __construct()
     {
-        $this->group = new Group();
+        $this->group = new Group;
     }
     public function render()
     {
@@ -27,8 +27,8 @@ class Update extends ModalComponent
     }
     public function update(): void
     {
-        $validated = $this->validate();
-        $this->group->update($validated);
+        $this->validate();
+        $this->group->save();
         $this->reset();
         $this->emitTo(ListGroups::class, 'groups::index::updated');
         $this->closeModal();

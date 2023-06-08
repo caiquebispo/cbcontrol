@@ -29,12 +29,12 @@ class Update extends ModalComponent
         
         return [
 
-            'full_name' => 'required|min:4|max:150',
-            'number_phone' => ['required','max:16', Rule::unique('clients')->ignore($this->client->id)],
-            'value' => 'required',
-            'payment_method' => 'required|min:4|max:16',
-            'delivery' => 'required|min:4|max:16',
-            'local' => 'string',
+            'client.full_name' => 'required|min:4|max:150',
+            'client.number_phone' => 'required|string|min:4|unique:clients,number_phone,' . $this->client->id,
+            'client.value' => 'required',
+            'client.payment_method' => 'required|min:4|max:16',
+            'client.delivery' => 'required|min:4|max:16',
+            'client.local' => 'string',
         ];
     }
     public function __construct()
@@ -50,9 +50,9 @@ class Update extends ModalComponent
     public function update(): void
     {
         
-        $validated = $this->validate();
-        
-        $this->client->update($validated);
+        $this->validate();
+
+        $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
         $this->reset();
