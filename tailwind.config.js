@@ -22,6 +22,11 @@ export default {
         "./vendor/power-components/livewire-powergrid/tailwind.config.js",
         require('./vendor/wireui/wireui/tailwind.config.js')
     ],
+    options: {
+        safelist: [
+          'sm:max-w-7xl'
+        ]
+      },
     theme: {
         extend: {
             fontFamily: {

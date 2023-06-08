@@ -20,6 +20,17 @@ final class ListClients extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
+    protected function getListeners(): array
+    {
+        return array_merge(
+            parent::getListeners(),
+            [
+                'clients::index::created' => '$refresh',
+                'clients::index::deleted' => '$refresh',
+                'clients::index::updated' => '$refresh',
+            ]
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     |  Datasource
@@ -81,10 +92,10 @@ final class ListClients extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
             ->addColumn('cpf')
-            ->addColumn('group_formatted', function($entry){return $entry->groups[0]->name;})
+            ->addColumn('group_formatted', function($entry){return $entry->groups->value('name');})
             ->addColumn('birthday_formatted', function($entry){return Carbon::parse($entry->birthday)->format('d/m/Y');})
             ->addColumn('number_phone')
-            ->addColumn('number_phone_alternative')
+            ->addColumn('number_phone_alternative_formatted',fn($entry) => $entry->number_phone_alternative == "" ? 'UNINFORMED': $entry->number_phone_alternative)
             ->addColumn('status_formatted', fn($entry) => $entry->status == true ? 'Enable': 'Disable')
             ->addColumn('created_at_formatted', function ($entry) {return Carbon::parse($entry->created_at)->format('d/m/Y');});
     }
@@ -112,7 +123,7 @@ final class ListClients extends PowerGridComponent
             Column::make('Group', 'group_formatted')->searchable()->sortable(),
             Column::make('Birthday', 'birthday_formatted'),
             Column::make('Number Phone', 'number_phone')->searchable()->sortable(),
-            Column::make('Number P. Alternative', 'number_phone_alternative')->sortable(),
+            Column::make('Number P. Alternative', 'number_phone_alternative_formatted')->sortable(),
             Column::make('Status', 'status_formatted')->sortable(),
             Column::make('Created', 'created_at_formatted'),
         ];
