@@ -128,5 +128,19 @@ final class ListClients extends PowerGridComponent
             Column::make('Created', 'created_at_formatted'),
         ];
     }
-
+    public function actions(): array
+    {
+        return [
+            
+            Button::add('view')
+            ->caption('Delete')
+            ->class('float-right inline-flex ml-4 items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150')
+            ->openModal('clients.delete',['user' => 'id']),
+            
+            Button::add('view')
+            ->caption('Update')
+            ->class('float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+            ->openModal('clients.update',['user' => 'id']),
+        ];
+    }
 }
