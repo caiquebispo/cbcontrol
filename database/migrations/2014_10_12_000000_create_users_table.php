@@ -19,10 +19,11 @@ return new class extends Migration
             ->references('id')->on('companies')
             ->nullable()
             ->onDelete('set null');
-            
             $table->string('number_phone')->nullable()->unique();
             $table->string('number_phone_alternative')->nullable();
-            $table->string('password');
+            $table->string('cpf')->nullable();
+            $table->string('birthday')->nullable();
+            $table->string('password')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
