@@ -1,4 +1,4 @@
-<x-card title="Delete Group">
+<x-card title="Delete Client">
 <div class="content-confirmed-action">
     <div class="icon">
         <svg aria-hidden="true" class=" w-14 h-14 mx-auto mb-4 text-red-400 dark:text-red-200" fill="none"
@@ -9,7 +9,7 @@
     </div>
     <div class="title text-2xl font-bold text-gray-700 text-center">
         <h3>Are you sure you want to delete <span
-                class=" text-red-400 w-10 h-10 dark:text-red-200">{{$user->name}}</span> ?</h3>
+                class=" text-red-400 w-10 h-10 dark:text-red-200">{{$client->full_name}}</span> ?</h3>
     </div>
     <div class="footer flex justify-between mt-8">
     <x-button label="Yes, I'm sure" outline negative md right-icon="trash" wire:click="delete" />

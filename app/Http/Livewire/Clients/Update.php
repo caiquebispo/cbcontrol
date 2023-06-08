@@ -2,36 +2,44 @@
 
 namespace App\Http\Livewire\Clients;
 
+use App\Models\Client;
 use App\Models\User;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 use LivewireUI\Modal\ModalComponent;
 
 class Update extends ModalComponent
 {
+    public Client $client;
     public User $user;
-    
 
-    public ?string $name = null;
+    public ?string $full_name = null;
     public ?string $number_phone = null;
-    public ?string $number_phone_alternative = null;
-    public ?string $cpf = null;
-    public ?string $birthday = null;
+    public ?float $value = null;
+    public ?string $payment_method = null;
+    public ?string $local = null;
+    public ?string $delivery = null;
     public ?int $group_id = null;
     
-    protected $rules = [
+    
+    public function rules(){
+        
+        return [
 
-        'name' => 'required|min:4|max:150',
-        'number_phone' => 'required|max:16',
-        'number_phone_alternative' => 'nullable|max:16',
-        'cpf' => 'required|min:4|max:16',
-        'birthday' => 'string',
-    ];
-
+            'full_name' => 'required|min:4|max:150',
+            'number_phone' => ['required','max:16', Rule::unique('clients')->ignore($this->client->id)],
+            'value' => 'required',
+            'payment_method' => 'required|min:4|max:16',
+            'delivery' => 'required|min:4|max:16',
+            'local' => 'string',
+        ];
+    }
     public function __construct()
     {
+        $this->client = new Client;
         $this->user = Auth::user();
     }
     public function render()
@@ -43,10 +51,10 @@ class Update extends ModalComponent
     {
         
         $validated = $this->validate();
-        $validated['birthday'] = DateTime::createFromFormat('d/m/Y', $validated['birthday'])->format('Y-m-d');
-        $this->user->where('id', $this->user->id)->update($validated);
-        $this->user->groups()->detach();
-        $this->user->groups()->attach($this->group_id);
+        
+        $this->client->update($validated);
+        $this->client->groups()->detach();
+        $this->client->groups()->attach($this->group_id);
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::updated');
         $this->closeModal();

@@ -44,7 +44,8 @@ final class ListClients extends PowerGridComponent
     }
     public function datasource(): ?Collection
     {
-        return $this->user->company->users;
+        
+        return $this->user->company->clients;
         
     }
     public function header(): array
@@ -90,13 +91,13 @@ final class ListClients extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
-            ->addColumn('name')
-            ->addColumn('cpf')
+            ->addColumn('full_name')
             ->addColumn('group_formatted', function($entry){return $entry->groups->value('name');})
-            ->addColumn('birthday_formatted', function($entry){return Carbon::parse($entry->birthday)->format('d/m/Y');})
             ->addColumn('number_phone')
-            ->addColumn('number_phone_alternative_formatted',fn($entry) => $entry->number_phone_alternative == "" ? 'UNINFORMED': $entry->number_phone_alternative)
-            ->addColumn('status_formatted', fn($entry) => $entry->status == true ? 'Enable': 'Disable')
+            ->addColumn('value_formatted',fn($entry) => "R$ ".number_format($entry->value,'2',',','.'))
+            ->addColumn('payment_method_formatted', fn($entry) => $entry->payment_method =="" ? "UNINFORMED":  $entry->payment_method)
+            ->addColumn('local_formatted', fn($entry) => $entry->local =="" ? "UNINFORMED":  $entry->local)
+            ->addColumn('delivery_formatted', fn($entry) => $entry->delivery =="" ? "UNINFORMED":  $entry->delivery)
             ->addColumn('created_at_formatted', function ($entry) {return Carbon::parse($entry->created_at)->format('d/m/Y');});
     }
 
@@ -117,14 +118,15 @@ final class ListClients extends PowerGridComponent
     public function columns(): array
     {
         return [
+
             Column::make('ID', 'id')->searchable()->sortable(),
-            Column::make('Name', 'name')->searchable()->sortable(),
-            Column::make('CPF', 'cpf')->searchable()->sortable(),
+            Column::make('Name', 'full_name')->searchable()->sortable(),
             Column::make('Group', 'group_formatted')->searchable()->sortable(),
-            Column::make('Birthday', 'birthday_formatted'),
             Column::make('Number Phone', 'number_phone')->searchable()->sortable(),
-            Column::make('Number P. Alternative', 'number_phone_alternative_formatted')->sortable(),
-            Column::make('Status', 'status_formatted')->sortable(),
+            Column::make('Value', 'value_formatted')->sortable(),
+            Column::make('Payment Method', 'payment_method_formatted')->sortable(),
+            Column::make('Local', 'local_formatted')->sortable(),
+            Column::make('Delivery', 'delivery_formatted')->sortable(),
             Column::make('Created', 'created_at_formatted'),
         ];
     }
@@ -135,12 +137,12 @@ final class ListClients extends PowerGridComponent
             Button::add('view')
             ->caption('Delete')
             ->class('float-right inline-flex ml-4 items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('clients.delete',['user' => 'id']),
+            ->openModal('clients.delete',['client' => 'id']),
             
             Button::add('view')
             ->caption('Update')
             ->class('float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('clients.update',['user' => 'id']),
+            ->openModal('clients.update',['client' => 'id']),
         ];
     }
 }

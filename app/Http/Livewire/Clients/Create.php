@@ -13,20 +13,22 @@ class Create extends ModalComponent
 {
     public User $user;
 
-    public ?string $name = null;
+    public ?string $full_name = null;
     public ?string $number_phone = null;
-    public ?string $number_phone_alternative = null;
-    public ?string $cpf = null;
-    public ?string $birthday = null;
+    public ?float $value = null;
+    public ?string $payment_method = null;
+    public ?string $local = null;
+    public ?string $delivery = null;
     public ?int $group_id = null;
     
     protected $rules = [
 
-        'name' => 'required|min:4|max:150',
+        'full_name' => 'required|min:4|max:150',
         'number_phone' => 'required|max:16',
-        'number_phone_alternative' => 'nullable|max:16',
-        'cpf' => 'required|min:4|max:16',
-        'birthday' => 'string',
+        'value' => 'required',
+        'payment_method' => 'required|min:4|max:16',
+        'delivery' => 'required|min:4|max:16',
+        'local' => 'string',
     ];
 
     public function __construct()
@@ -43,9 +45,7 @@ class Create extends ModalComponent
         
         $validated = $this->validate();
 
-        
-        $validated['birthday'] = DateTime::createFromFormat('d/m/Y', $validated['birthday'])->format('Y-m-d');
-        $this->user->company->users()->create($validated)->groups()->attach($this->group_id);
+        $this->user->company->clients()->create($validated)->groups()->attach($this->group_id);
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::created');
         $this->closeModal();
