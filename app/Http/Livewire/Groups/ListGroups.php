@@ -64,10 +64,9 @@ final class ListGroups extends PowerGridComponent
     public function setUp(): array
     {
         return [
-            Header::make()
-             ->showSearchInput(),
+            
             Header::make()->withoutLoading(),
-            Header::make()->showToggleColumns(),
+            Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
         ];
     }
