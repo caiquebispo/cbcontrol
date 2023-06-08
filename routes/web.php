@@ -19,6 +19,7 @@ Route::redirect('/', '/login');
 Route::prefix('app')->group(base_path('routes/web/app/dashboard.php'));
 Route::prefix('app')->group(base_path('routes/web/app/profiles.php'));
 Route::prefix('app')->group(base_path('routes/web/app/groups.php'));
+Route::prefix('app')->group(base_path('routes/web/app/clients.php'));
 
 
 require __DIR__.'/auth.php';
