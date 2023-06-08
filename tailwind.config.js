@@ -5,6 +5,12 @@ const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
+
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        "./node_modules/flowbite/**/*.js",
+
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
@@ -39,5 +45,6 @@ export default {
         require("@tailwindcss/forms")({
           strategy: 'class',
         }),
+        require('flowbite/plugin')
       ]
 };
