@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors')
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  
+
     darkMode: 'class',
     content: [
 
@@ -26,9 +26,9 @@ export default {
         './vendor/wireui/wireui/src/View/**/*.php'
     ],
     presets: [
-        "./vendor/wireui/wireui/tailwind.config.js",
-        "./vendor/power-components/livewire-powergrid/tailwind.config.js",
-        require('./vendor/wireui/wireui/tailwind.config.js')
+        require('./vendor/wireui/wireui/tailwind.config.js'),
+        require("./vendor/wireui/wireui/tailwind.config.js"),
+        require("./vendor/power-components/livewire-powergrid/tailwind.config.js"),
     ],
     options: {
         safelist: [
