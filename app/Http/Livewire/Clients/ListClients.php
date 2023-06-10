@@ -62,6 +62,7 @@ final class ListClients extends PowerGridComponent
                 ->openModal('clients.increase-or-decrease', []),
                 
                 
+                
         ];
     }
     /*
@@ -76,7 +77,7 @@ final class ListClients extends PowerGridComponent
         // $this->showCheckBox();
 
         return [
-            
+           
             Header::make()->withoutLoading(),
             Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
@@ -150,4 +151,5 @@ final class ListClients extends PowerGridComponent
             ->openModal('clients.update',['client' => 'id']),
         ];
     }
+    
 }
