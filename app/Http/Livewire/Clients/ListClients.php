@@ -53,11 +53,11 @@ final class ListClients extends PowerGridComponent
     {
         return [
             Button::add('view')
-                ->caption('Create new Client')
+                ->caption('Cadastar Cliente')
                 ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('clients.create', []),
             Button::add('view')
-                ->caption('Increase and/or Decrease')
+                ->caption('Acréscimo / Decréscimo')
                 ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('clients.increase-or-decrease', []),
                 
@@ -126,14 +126,14 @@ final class ListClients extends PowerGridComponent
         return [
 
             Column::make('ID', 'id')->searchable()->sortable(),
-            Column::make('Name', 'full_name')->searchable()->sortable(),
-            Column::make('Group', 'group_formatted')->searchable()->sortable(),
-            Column::make('Number Phone', 'number_phone')->searchable()->sortable(),
-            Column::make('Value', 'value_formatted')->sortable(),
-            Column::make('Payment Method', 'payment_method_formatted')->sortable(),
+            Column::make('Nome', 'full_name')->searchable()->sortable(),
+            Column::make('Grupo', 'group_formatted')->searchable()->sortable(),
+            Column::make('Nª Telefone', 'number_phone')->searchable()->sortable(),
+            Column::make('Valor', 'value_formatted')->sortable(),
+            Column::make('Forma de Pagamento', 'payment_method_formatted')->sortable(),
             Column::make('Local', 'local_formatted')->sortable(),
-            Column::make('Delivery', 'delivery_formatted')->sortable(),
-            Column::make('Created', 'created_at_formatted'),
+            Column::make('Entrega', 'delivery_formatted')->sortable(),
+            Column::make('Criando em', 'created_at_formatted'),
         ];
     }
     public function actions(): array
@@ -141,12 +141,12 @@ final class ListClients extends PowerGridComponent
         return [
             
             Button::add('view')
-            ->caption('Delete')
+            ->caption('Apagar')
             ->class('float-right inline-flex ml-4 items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150')
             ->openModal('clients.delete',['client' => 'id']),
             
             Button::add('view')
-            ->caption('Update')
+            ->caption('Atualizar')
             ->class('float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
             ->openModal('clients.update',['client' => 'id']),
         ];

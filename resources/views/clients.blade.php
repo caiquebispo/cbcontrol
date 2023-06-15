@@ -15,19 +15,5 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
-    <script>
-        let buttonExport = document.querySelector('.export')
-        buttonExport.addEventListener('click', exportToExcel1)
-
-        function exportToExcel1() {
-            let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
-            TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
-                name: `Lista de Clientes.xlsx`, // fileName you could use any name
-                sheet: {
-                    name: 'Sheet 1' // sheetName
-                }
-            });
-        }
-    </script>
+    <script src="{{asset('js/exportFileExcel.js')}}"></script>
 </x-app-layout>
