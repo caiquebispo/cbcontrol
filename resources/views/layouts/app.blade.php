@@ -16,7 +16,14 @@
     <wireui:scripts />
     {{--livewire --}}
     @livewireStyles
-
+    <style>
+        .pg-actions {
+            display: flex !important;
+        }
+        .pg-actions a{
+            margin: 0px 5px;
+        }
+    </style>
     {{-- dependece dateRangerPicker --}}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>

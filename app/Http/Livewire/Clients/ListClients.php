@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Clients;
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Footer;
@@ -20,6 +22,8 @@ final class ListClients extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
+    public Client $clients;
+
     protected function getListeners(): array
     {
         return array_merge(
@@ -53,12 +57,12 @@ final class ListClients extends PowerGridComponent
     {
         return [
             Button::add('view')
-                ->caption('Cadastar Cliente')
-                ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+                ->caption('Cadastrar Cliente')
+                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('clients.create', []),
             Button::add('view')
                 ->caption('Acréscimo / Decréscimo')
-                ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('clients.increase-or-decrease', []),
                 
                 
@@ -140,15 +144,19 @@ final class ListClients extends PowerGridComponent
     {
         return [
             
-            Button::add('view')
-            ->caption('Apagar')
-            ->class('float-right inline-flex ml-4 items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('clients.delete',['client' => 'id']),
+            Button::add('button-trash')
+            ->render(function (Client $client) {
+                return Blade::render(<<<HTML
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.delete', {{ json_encode(['client' => $client->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-update')
+            ->render(function (Client $client) {
+                return Blade::render(<<<HTML
+                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.update', {{ json_encode(['client' => $client->id]) }})" />
+                HTML);
+            }),
             
-            Button::add('view')
-            ->caption('Atualizar')
-            ->class('float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('clients.update',['client' => 'id']),
         ];
     }
     

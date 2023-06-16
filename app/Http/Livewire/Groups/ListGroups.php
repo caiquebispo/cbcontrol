@@ -29,6 +29,7 @@ final class ListGroups extends PowerGridComponent
 
 
     public User $user;
+    public Group $group;
     
     protected function getListeners(): array
     {
@@ -55,7 +56,7 @@ final class ListGroups extends PowerGridComponent
         return [
             Button::add('view')
                 ->caption('Create new Group')
-                ->class('inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
                 ->openModal('groups.create', []),
                 
         ];
@@ -97,15 +98,18 @@ final class ListGroups extends PowerGridComponent
     {
         return [
             
-            Button::add('view')
-            ->caption('Delete')
-            ->class('float-right inline-flex ml-4 items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('groups.delete',['group' => 'id']),
-            
-            Button::add('view')
-            ->caption('Update')
-            ->class('float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-            ->openModal('groups.update',['group' => 'id']),
+            Button::add('button-trash')
+            ->render(function (Group $group) {
+                return Blade::render(<<<HTML
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'groups.delete', {{ json_encode(['group' => $group->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-update')
+            ->render(function (Group $group) {
+                return Blade::render(<<<HTML
+                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'groups.update', {{ json_encode(['group' => $group->id]) }})" />
+                HTML);
+            }),
         ];
     }
 }
