@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Users;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
@@ -32,7 +33,7 @@ class Create extends ModalComponent
     {
         $this->user = Auth::user();
     }
-    public function render()
+    public function render(): View
     {
         return view('livewire.users.create');
     }

@@ -29,6 +29,7 @@ final class ListUsers extends PowerGridComponent
                 'users::index::created' => '$refresh',
                 'users::index::deleted' => '$refresh',
                 'users::index::updated' => '$refresh',
+                'users::index::updated-password' => '$refresh',
             ]
         );
     }
@@ -137,7 +138,7 @@ final class ListUsers extends PowerGridComponent
             Button::add('button-change-password')
             ->render(function (User $user) {
                 return Blade::render(<<<HTML
-                <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update', {{ json_encode(['user' => $user->id]) }})" />
+                <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update-password', {{ json_encode(['user' => $user->id]) }})" />
                 HTML);
             }),
             Button::add('button-trash')
