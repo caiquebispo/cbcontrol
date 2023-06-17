@@ -20,6 +20,7 @@ Route::prefix('app')->group(base_path('routes/web/app/dashboard.php'));
 Route::prefix('app')->group(base_path('routes/web/app/profiles.php'));
 Route::prefix('app')->group(base_path('routes/web/app/groups.php'));
 Route::prefix('app')->group(base_path('routes/web/app/clients.php'));
+Route::prefix('app')->group(base_path('routes/web/app/users.php'));
 
 
 require __DIR__.'/auth.php';
