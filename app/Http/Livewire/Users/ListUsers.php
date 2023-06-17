@@ -21,6 +21,17 @@ final class ListUsers extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
+    protected function getListeners(): array
+    {
+        return array_merge(
+            parent::getListeners(),
+            [
+                'users::index::created' => '$refresh',
+                'users::index::deleted' => '$refresh',
+                'users::index::updated' => '$refresh',
+            ]
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     |  Datasource
@@ -28,6 +39,7 @@ final class ListUsers extends PowerGridComponent
     | Provides data to your Table using a Model or Collection
     |
     */
+
     public function boot()
     {
         $this->user = Auth::user();
@@ -50,7 +62,7 @@ final class ListUsers extends PowerGridComponent
             Button::add('view')
                 ->caption('Cadastrar Usuário')
                 ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-                ->openModal('user.create', []),
+                ->openModal('users.create', []),
                 
         ];
     }
@@ -125,7 +137,7 @@ final class ListUsers extends PowerGridComponent
             Button::add('button-change-password')
             ->render(function (User $user) {
                 return Blade::render(<<<HTML
-                <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'groups.update', {{ json_encode(['group' => $user->id]) }})" />
+                <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update', {{ json_encode(['user' => $user->id]) }})" />
                 HTML);
             }),
             Button::add('button-trash')
