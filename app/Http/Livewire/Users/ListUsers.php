@@ -82,7 +82,7 @@ final class ListUsers extends PowerGridComponent
             ->addColumn('number_phone', fn($entry) => $entry->number_phone != null ? $entry->number_phone : 'NAO CADASTRADO')
             ->addColumn('birthday_at_formatted', fn($entry) => $entry->birthday != null ? Carbon::parse($entry->birthday)->format('d/m/Y') : 'NAO CADASTRADO'  )
             ->addColumn('company', fn($entry) => $entry->company->corporate_reason)
-            ->addColumn('status', fn($entry) => $entry->status === true ? 'ATIVO': 'INATIVO')
+            ->addColumn('status', fn($entry) => $entry->status == true ? 'ATIVO': 'INATIVO')
             ->addColumn('created_at_formatted', fn ($entry) => Carbon::parse($entry->created_at)->format('d/m/Y'));
     }
 
