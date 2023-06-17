@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Clients;
 use App\Models\Client;
 use App\Models\User;
 use DateTime;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -42,7 +43,7 @@ class Update extends ModalComponent
         $this->client = new Client;
         $this->user = Auth::user();
     }
-    public function render()
+    public function render():View
     {
         $groups = $this->user->company->groups;
         return view('livewire.clients.update', compact('groups'));
