@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Clients;
 use App\Models\Client;
 use App\Models\User;
 use DateTime;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -22,6 +23,7 @@ class Update extends ModalComponent
     public ?string $payment_method = null;
     public ?string $local = null;
     public ?string $delivery = null;
+    public ?string $birthday = null;
     public ?int $group_id = null;
     
     
@@ -35,6 +37,7 @@ class Update extends ModalComponent
             'client.payment_method' => 'required|min:4|max:16',
             'client.delivery' => 'required|min:4|max:16',
             'client.local' => 'string',
+            'client.birthday' => 'required|date',
         ];
     }
     public function __construct()
@@ -42,7 +45,7 @@ class Update extends ModalComponent
         $this->client = new Client;
         $this->user = Auth::user();
     }
-    public function render()
+    public function render():View
     {
         $groups = $this->user->company->groups;
         return view('livewire.clients.update', compact('groups'));

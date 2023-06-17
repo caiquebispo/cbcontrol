@@ -1,5 +1,5 @@
 <div aria-hidden="true" class="content-modal backdrop-opacity-10 backdrop-invert  bg-black/50 fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center">
-    <div class="relative w-full max-w-2xl max-h-full">
+    <div class="relative w-full max-w-7xl max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->

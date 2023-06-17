@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Livewire\Clients;
+namespace App\Http\Livewire\Users;
 
-use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,21 +17,19 @@ use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
-final class ListClients extends PowerGridComponent
+final class ListUsers extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
-    public Client $clients;
-
     protected function getListeners(): array
     {
         return array_merge(
             parent::getListeners(),
             [
-                'clients::index::created' => '$refresh',
-                'clients::index::deleted' => '$refresh',
-                'clients::index::updated' => '$refresh',
-                'clients::index::increase-or-decrease' => '$refresh',
+                'users::index::created' => '$refresh',
+                'users::index::deleted' => '$refresh',
+                'users::index::updated' => '$refresh',
+                'users::index::updated-password' => '$refresh',
             ]
         );
     }
@@ -43,32 +40,16 @@ final class ListClients extends PowerGridComponent
     | Provides data to your Table using a Model or Collection
     |
     */
-    public function boot(): void
+
+    public function boot()
     {
         $this->user = Auth::user();
     }
     public function datasource(): ?Collection
     {
-        
-        return $this->user->company->clients;
-        
+        return $this->user->company->users;
     }
-    public function header(): array
-    {
-        return [
-            Button::add('view')
-                ->caption('Cadastrar Cliente')
-                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-                ->openModal('clients.create', []),
-            Button::add('view')
-                ->caption('Acréscimo / Decréscimo')
-                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-                ->openModal('clients.increase-or-decrease', []),
-                
-                
-                
-        ];
-    }
+
     /*
     |--------------------------------------------------------------------------
     |  Relationship Search
@@ -76,19 +57,27 @@ final class ListClients extends PowerGridComponent
     | Configure here relationships to be used by the Search and Table Filters.
     |
     */
+    public function header(): array
+    {
+        return [
+            Button::add('view')
+                ->caption('Cadastrar Usuário')
+                ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
+                ->openModal('users.create', []),
+                
+        ];
+    }
     public function setUp(): array
     {
-        // $this->showCheckBox();
-
+        
         return [
-           
+            
             Header::make()->withoutLoading(),
             Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
-            
         ];
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     |  Add Column
@@ -101,15 +90,13 @@ final class ListClients extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('id')
-            ->addColumn('full_name')
-            ->addColumn('group_formatted', function($entry){return $entry->groups->value('name');})
-            ->addColumn('number_phone')
-            ->addColumn('value_formatted',fn($entry) => "R$ ".number_format($entry->value,'2',',','.'))
-            ->addColumn('payment_method_formatted', fn($entry) => $entry->payment_method =="" ? "UNINFORMED":  $entry->payment_method)
-            ->addColumn('local_formatted', fn($entry) => $entry->local =="" ? "UNINFORMED":  $entry->local)
-            ->addColumn('delivery_formatted', fn($entry) => $entry->delivery =="" ? "UNINFORMED":  $entry->delivery)
+            ->addColumn('name')
+            ->addColumn('email')
+            ->addColumn('number_phone', fn($entry) => $entry->number_phone != null ? $entry->number_phone : 'NAO CADASTRADO')
             ->addColumn('birthday_at_formatted', fn($entry) => $entry->birthday != null ? Carbon::parse($entry->birthday)->format('d/m/Y') : 'NAO CADASTRADO'  )
-            ->addColumn('created_at_formatted', function ($entry) {return Carbon::parse($entry->created_at)->format('d/m/Y');});
+            ->addColumn('company', fn($entry) => $entry->company->corporate_reason)
+            ->addColumn('status', fn($entry) => $entry->status == true ? 'ATIVO': 'INATIVO')
+            ->addColumn('created_at_formatted', fn ($entry) => Carbon::parse($entry->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -129,37 +116,37 @@ final class ListClients extends PowerGridComponent
     public function columns(): array
     {
         return [
-
             Column::make('ID', 'id')->searchable()->sortable(),
-            Column::make('Nome', 'full_name')->searchable()->sortable(),
-            Column::make('Grupo', 'group_formatted')->searchable()->sortable(),
-            Column::make('Nª Telefone', 'number_phone')->searchable()->sortable(),
+            Column::make('Nome', 'name')->searchable()->sortable(),
+            Column::make('E-mail', 'email')->searchable()->sortable(),
+            Column::make('Telefone', 'number_phone')->searchable()->sortable(),
             Column::make('Data de Aniverário', 'birthday_at_formatted')->searchable()->sortable(),
-            Column::make('Valor', 'value_formatted')->sortable(),
-            Column::make('Forma de Pagamento', 'payment_method_formatted')->sortable(),
-            Column::make('Local', 'local_formatted')->sortable(),
-            Column::make('Entrega', 'delivery_formatted')->sortable(),
-            Column::make('Criando em', 'created_at_formatted'),
+            Column::make('Empresa', 'company')->searchable()->sortable(),
+            Column::make('Status', 'status')->searchable()->sortable(),
+            Column::make('Created', 'created_at_formatted'),
         ];
     }
     public function actions(): array
     {
         return [
-            
-            Button::add('button-trash')
-            ->render(function (Client $client) {
-                return Blade::render(<<<HTML
-                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.delete', {{ json_encode(['client' => $client->id]) }})" />
-                HTML);
-            }),
             Button::add('button-update')
-            ->render(function (Client $client) {
+            ->render(function (User $user) {
                 return Blade::render(<<<HTML
-                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.update', {{ json_encode(['client' => $client->id]) }})" />
+                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update', {{ json_encode(['user' => $user->id]) }})" />
                 HTML);
             }),
-            
+            Button::add('button-change-password')
+            ->render(function (User $user) {
+                return Blade::render(<<<HTML
+                <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update-password', {{ json_encode(['user' => $user->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-trash')
+            ->render(function (User $user) {
+                return Blade::render(<<<HTML
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'users.delete', {{ json_encode(['user' => $user->id]) }})" />
+                HTML);
+            }),
         ];
     }
-    
 }
