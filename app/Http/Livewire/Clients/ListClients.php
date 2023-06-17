@@ -108,6 +108,7 @@ final class ListClients extends PowerGridComponent
             ->addColumn('payment_method_formatted', fn($entry) => $entry->payment_method =="" ? "UNINFORMED":  $entry->payment_method)
             ->addColumn('local_formatted', fn($entry) => $entry->local =="" ? "UNINFORMED":  $entry->local)
             ->addColumn('delivery_formatted', fn($entry) => $entry->delivery =="" ? "UNINFORMED":  $entry->delivery)
+            ->addColumn('birthday_at_formatted', fn($entry) => $entry->birthday != null ? Carbon::parse($entry->birthday)->format('d/m/Y') : 'NAO CADASTRADO'  )
             ->addColumn('created_at_formatted', function ($entry) {return Carbon::parse($entry->created_at)->format('d/m/Y');});
     }
 
@@ -133,6 +134,7 @@ final class ListClients extends PowerGridComponent
             Column::make('Nome', 'full_name')->searchable()->sortable(),
             Column::make('Grupo', 'group_formatted')->searchable()->sortable(),
             Column::make('Nª Telefone', 'number_phone')->searchable()->sortable(),
+            Column::make('Data de Aniverário', 'birthday_at_formatted')->searchable()->sortable(),
             Column::make('Valor', 'value_formatted')->sortable(),
             Column::make('Forma de Pagamento', 'payment_method_formatted')->sortable(),
             Column::make('Local', 'local_formatted')->sortable(),
