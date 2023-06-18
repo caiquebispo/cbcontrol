@@ -11,9 +11,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class Update extends ModalComponent
 {
+    use Actions;
     public Client $client;
     public User $user;
 
@@ -45,7 +47,7 @@ class Update extends ModalComponent
         $this->client = new Client;
         $this->user = Auth::user();
     }
-    public function render():View
+    public function render(): View
     {
         $groups = $this->user->company->groups;
         return view('livewire.clients.update', compact('groups'));
@@ -57,6 +59,11 @@ class Update extends ModalComponent
         $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
+
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Cliente Editado com sucesso!'
+        ); 
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::updated');
         $this->closeModal();

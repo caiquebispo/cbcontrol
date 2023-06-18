@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('payment_method')->nullable();
             $table->string('local')->nullable();
             $table->string('delivery')->nullable();
+            $table->date('birthday')->nullable();
             $table->timestamps();
         });
     }

@@ -7,9 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class IncreaseOrDecrease extends ModalComponent
 {
+    use Actions;
     public User $user;
     public ?int $type_increase_or_decrease = null;
     public ?float $value = null;
@@ -35,6 +37,10 @@ class IncreaseOrDecrease extends ModalComponent
                     break;
             }
         }
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Valor Alterado com sucesso!'
+        ); 
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::increase-or-decrease');
         $this->closeModal();

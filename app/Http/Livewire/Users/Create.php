@@ -7,9 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class Create extends ModalComponent
 {
+    use Actions;
     public User $user;
     public ?string $name = null;
     public ?string $number_phone = null;
@@ -41,6 +43,10 @@ class Create extends ModalComponent
     public function create(): void
     {   
         $this->validate();
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Usuário Cadstrado com sucesso!'
+        ); 
         $data = [
             'name' => $this->name,
             'number_phone' =>  $this->number_phone,

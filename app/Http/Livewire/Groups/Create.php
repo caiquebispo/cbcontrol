@@ -8,8 +8,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
+
 class Create extends ModalComponent
 {
+    use Actions;
     public User $user;
     public ?string $name = null;
     
@@ -29,6 +32,10 @@ class Create extends ModalComponent
     public function create(): void
     {
         $validated = $this->validate();
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Grupo Criado com sucesso!'
+        ); 
         $this->user->company->groups()->updateOrCreate($validated,$validated);
         $this->reset();
         $this->emitTo(ListGroups::class, 'groups::index::created');

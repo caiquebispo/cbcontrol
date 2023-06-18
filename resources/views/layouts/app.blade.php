@@ -12,10 +12,15 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewire('livewire-ui-modal') 
     <wireui:scripts />
+    @livewireScripts
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+   
     {{--livewire --}}
     @livewireStyles
+     
     <style>
         .pg-actions {
             display: flex !important;
@@ -97,13 +102,13 @@
             </li>
         </ul>
     </x-aside>
+     <x-notifications />
     <!-- Page Content -->
+   
     <div class="p-4 sm:ml-64 min-h-screen bg-gray-100 dark:bg-gray-900">
         {{ $slot }}
     </div>
-       @livewireScripts
-       @livewire('livewire-ui-modal') 
-        <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+       
 
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
