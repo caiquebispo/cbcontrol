@@ -5,12 +5,15 @@ namespace App\Http\Livewire\Clients;
 
 use App\Models\User;
 use DateTime;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class Create extends ModalComponent
 {
+    use Actions;
     public User $user;
 
     public ?string $full_name = null;
@@ -37,7 +40,7 @@ class Create extends ModalComponent
     {
         $this->user = Auth::user();
     }
-    public function render()
+    public function render(): View
     {
         $groups = $this->user->company->groups;
         return view('livewire.clients.create', compact('groups'));
@@ -48,6 +51,10 @@ class Create extends ModalComponent
         $validated = $this->validate();
 
         $this->user->company->clients()->create($validated)->groups()->attach($this->group_id);
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Cliente Cadastrado com sucesso!'
+        ); 
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::created');
         $this->closeModal();

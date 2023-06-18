@@ -26,6 +26,7 @@
                 <x-input label="Confirmação da Senha" type="date" placeholder="Confirmação da Senha" type="password" wire:model.defer="password_confirm" />
             </div>
         </div>
+        
         <x-button type="submit" icon="pencil" primary label="Cadastrar" class="my-2" />
     </form>
 

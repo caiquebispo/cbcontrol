@@ -7,9 +7,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class UpdatePassword extends ModalComponent
 {
+    use Actions;
     public User $user;
     public ?string $password = null;
     public ?string $password_confirm = null;
@@ -33,6 +35,10 @@ class UpdatePassword extends ModalComponent
     public function update(): void
     {
         $this->validate();
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Senha Alterada com sucesso!'
+        ); 
         $this->user->update($this->validateOnly('password'));
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::updated-password');

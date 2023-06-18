@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('number_phone')->nullable()->unique();
             $table->string('number_phone_alternative')->nullable();
             $table->string('cpf')->nullable();
-            $table->string('birthday')->nullable();
+            $table->date('birthday')->nullable();
             $table->string('password')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->rememberToken();

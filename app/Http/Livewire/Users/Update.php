@@ -6,10 +6,12 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use WireUi\Traits\Actions;
 use LivewireUI\Modal\ModalComponent;
 
 class Update extends ModalComponent
 {
+    use Actions;
     public User $user;
     public ?string $name = null;
     public ?string $number_phone = null;
@@ -41,10 +43,16 @@ class Update extends ModalComponent
     public function update(): void
     {
         
+
         $this->validate();
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Usuário Editado com sucesso!'
+        ); 
         $this->user->save();
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::updated');
         $this->closeModal();
+        
     }
 }

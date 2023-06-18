@@ -6,10 +6,12 @@ use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class Delete extends ModalComponent
-
-{   public Client $client;
+{   
+    use Actions;
+    public Client $client;
     public function __construct()
     {
         
@@ -23,6 +25,10 @@ class Delete extends ModalComponent
     {
 
         $this->client->delete();
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Cliente Deletado com sucesso!'
+        ); 
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::deleted');
         $this->closeModal();
