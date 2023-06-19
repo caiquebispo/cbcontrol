@@ -32,14 +32,27 @@ class Create extends ModalComponent
     public function create(): void
     {
         $validated = $this->validate();
-        $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Grupo Criado com sucesso!'
-        ); 
+        $this->notifications(); 
         $this->user->company->groups()->updateOrCreate($validated,$validated);
         $this->reset();
         $this->emitTo(ListGroups::class, 'groups::index::created');
         $this->closeModal();
+    }
+    public function notifications(){
+
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description =  'Grupo Criado com sucesso!'
+        ); 
+        foreach($this->user->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Cadastro de Grupo!',
+                'O usuário(a) '.$this->user->name.' cadatrou um novo grupo na empresa '.$this->user->company->corporate_reason,
+                
+            );
+            $user->notify($notification);
+        }
     }
     
 }

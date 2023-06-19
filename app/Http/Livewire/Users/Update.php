@@ -45,14 +45,27 @@ class Update extends ModalComponent
         
 
         $this->validate();
-        $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Usuário Editado com sucesso!'
-        ); 
         $this->user->save();
+        $this->notifications();
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::updated');
         $this->closeModal();
         
+    }
+    public function notifications(){
+
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description =  'Usuário Editado com sucesso!'
+        ); 
+        foreach(Auth::user()->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Atualização de Usuário!',
+                'O usuário(a) '.Auth::user()->name.' editou as informações de um usuário na empresa '.$this->user->company->corporate_reason,
+                
+            );
+            $user->notify($notification);
+        }
     }
 }

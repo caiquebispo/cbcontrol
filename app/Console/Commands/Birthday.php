@@ -33,13 +33,16 @@ class Birthday extends Command
        
         foreach ($clients as $client) {
 
-            foreach($client->companies[0]->users as $user){
-                $notification = new \MBarlow\Megaphone\Types\Important(
-                    'Felicitação!',
-                    'O cliente '.$client->full_name.' está completando idade hoje, deseje-o(a) felicitações', // Notification Body
+            foreach($client->companies as  $company){
+                foreach($company->users as $user){
                     
-                );
-                $user->notify($notification);
+                    $notification = new \MBarlow\Megaphone\Types\General(
+                        'Felicitação!',
+                        'O cliente '.$client->full_name.' está completando idade hoje, deseje-o(a) felicitações', // Notification Body
+                        
+                    );
+                    $user->notify($notification);
+                }
             };
         }
     }

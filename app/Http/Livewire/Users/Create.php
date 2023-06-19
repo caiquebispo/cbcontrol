@@ -43,10 +43,7 @@ class Create extends ModalComponent
     public function create(): void
     {   
         $this->validate();
-        $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Usuário Cadstrado com sucesso!'
-        ); 
+        
         $data = [
             'name' => $this->name,
             'number_phone' =>  $this->number_phone,
@@ -57,9 +54,26 @@ class Create extends ModalComponent
         ];
     
         $this->user->company->users()->create($data);
+        $this->notifications();
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::created');
         $this->closeModal();   
         
+    }
+    public function notifications(){
+
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Usuário Cadastrado com sucesso!'
+        ); 
+        foreach(Auth::user()->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Cadastro de Usuário!',
+                'O usuário(a) '.Auth::user()->name.' cadastrou um usuário na empresa '.$this->user->company->corporate_reason,
+                
+            );
+            $user->notify($notification);
+        }
     }
 }

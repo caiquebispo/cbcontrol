@@ -59,13 +59,26 @@ class Update extends ModalComponent
         $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
+        
+        $this->notifications();
+        $this->reset();
+        $this->emitTo(ListClients::class, 'clients::index::updated');
+        $this->closeModal();
+    }
+    public function notifications(){
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Cliente Editado com sucesso!'
         ); 
-        $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::updated');
-        $this->closeModal();
+        foreach($this->user->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Atualização de cliente!',
+                'O usuário(a) '.$this->user->name.' editou as informações do cliente '.$this->client->full_name.' na empresa '.$this->user->company->corporate_reason, // Notification Body
+                
+            );
+            $user->notify($notification);
+        }
     }
 }
