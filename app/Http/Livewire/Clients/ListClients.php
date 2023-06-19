@@ -103,7 +103,7 @@ final class ListClients extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('full_name')
             ->addColumn('group_formatted', function($entry){return $entry->groups->value('name');})
-            ->addColumn('number_phone')
+            ->addColumn('number_phone', fn($entry) => $entry->number_phone == "" ? 'NAO CADASTRADO' : $entry->number_phone )
             ->addColumn('value_formatted',fn($entry) => "R$ ".number_format($entry->value,'2',',','.'))
             ->addColumn('payment_method_formatted', fn($entry) => $entry->payment_method =="" ? "UNINFORMED":  $entry->payment_method)
             ->addColumn('local_formatted', fn($entry) => $entry->local =="" ? "UNINFORMED":  $entry->local)

@@ -23,9 +23,9 @@ class Create extends ModalComponent
     protected $rules = [
 
         'name' => 'required|min:4|max:150',
-        'number_phone' => 'required|max:16|unique:users',
+        'number_phone' => 'nullable|max:16|unique:users',
         'email' => 'required|email|unique:users',
-        'birthday' => 'required|date',
+        'birthday' => 'nullable|date',
         'password' => 'required|min:8|max:16',
         'password_confirm' => 'required|min:8|max:16|same:password'
 

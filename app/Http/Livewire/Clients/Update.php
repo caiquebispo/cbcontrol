@@ -34,12 +34,12 @@ class Update extends ModalComponent
         return [
 
             'client.full_name' => 'required|min:4|max:150',
-            'client.number_phone' => 'required|string|min:4|unique:clients,number_phone,' . $this->client->id,
+            'client.number_phone' => 'nullable|string|min:4|unique:clients,number_phone,' . $this->client->id,
             'client.value' => 'required',
             'client.payment_method' => 'required|min:4|max:16',
             'client.delivery' => 'required|min:4|max:16',
             'client.local' => 'string',
-            'client.birthday' => 'required|date',
+            'client.birthday' => 'nullable|date',
         ];
     }
     public function __construct()
