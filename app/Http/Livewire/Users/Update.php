@@ -24,9 +24,9 @@ class Update extends ModalComponent
         return [
 
             'user.name' => 'required|min:4|max:150',
-            'user.number_phone' => 'required|string|min:4|unique:users,number_phone,' . $this->user->id,
+            'user.number_phone' => 'nullable|string|min:4|unique:users,number_phone,' . $this->user->id,
             'user.email' => 'required|email|unique:users,email,' . $this->user->id,
-            'user.birthday' => 'required|date',
+            'user.birthday' => 'nullable|date',
             'user.status' => 'required',
     
         ];

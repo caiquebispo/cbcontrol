@@ -28,12 +28,12 @@ class Create extends ModalComponent
     protected $rules = [
 
         'full_name' => 'required|min:4|max:150',
-        'number_phone' => 'required|max:16',
+        'number_phone' => 'nullable|max:16',
         'value' => 'required',
         'payment_method' => 'required|min:4|max:16',
         'delivery' => 'required|min:4|max:16',
         'local' => 'string',
-        'birthday' => 'required|date',
+        'birthday' => 'nullable|date',
     ];
 
     public function __construct()
