@@ -29,7 +29,7 @@ class Birthday extends Command
      */
     public function handle()
     {
-        $clients = Client::where('birthday', date('Y-m-d'))->get();
+        $clients = Client::where('birthday', 'like', '%'.date('m-d').'%')->get();
        
         foreach ($clients as $client) {
 
