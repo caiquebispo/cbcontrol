@@ -12,6 +12,7 @@
         "laravel/telescope": "^4.14",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.12",
+        "mbarlow/megaphone": "^1.2",
         "power-components/livewire-powergrid": "^4.6",
         "wire-elements/modal": "^1.0",
         "wireui/wireui": "^1.17"
