@@ -35,6 +35,7 @@
 
 <body class="font-sans antialiased">
     <x-nav-bar>
+        <livewire:megaphone></livewire:megaphone>
         <x-toggle-dark-mode />
         <div class="flex items-center ml-3">
             <x-dropdown-toggle-user />

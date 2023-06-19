@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Client;
+use App\Models\Notify;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 
@@ -28,9 +30,17 @@ class Birthday extends Command
     public function handle()
     {
         $clients = Client::where('birthday', date('Y-m-d'))->get();
+       
         foreach ($clients as $client) {
 
-          
+            foreach($client->companies[0]->users as $user){
+                $notification = new \MBarlow\Megaphone\Types\Important(
+                    'Felicitação!',
+                    'O cliente '.$client->full_name.' está completando idade hoje, deseje-o(a) felicitações', // Notification Body
+                    
+                );
+                $user->notify($notification);
+            };
         }
     }
 }
