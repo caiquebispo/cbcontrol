@@ -51,12 +51,26 @@ class Create extends ModalComponent
         $validated = $this->validate();
 
         $this->user->company->clients()->create($validated)->groups()->attach($this->group_id);
-        $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Cliente Cadastrado com sucesso!'
-        ); 
+        $this->notifications();
         $this->reset();
         $this->emitTo(ListClients::class, 'clients::index::created');
         $this->closeModal();
     }
+    public function notifications(){
+
+        $this->notification()->success(
+            $title = 'Parabéns!',
+            $description = 'Cliente Cadastrado com sucesso!'
+        ); 
+        foreach($this->user->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Cadastro de cliente!',
+                'O usuário(a) '.$this->user->name.' cadastrou um novo cliente na empresa '.$this->user->company->corporate_reason, // Notification Body
+                
+            );
+            $user->notify($notification);
+        }
+    }
+
 }

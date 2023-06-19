@@ -15,6 +15,7 @@ class IncreaseOrDecrease extends ModalComponent
     public User $user;
     public ?int $type_increase_or_decrease = null;
     public ?float $value = null;
+    public ?string $type =  null;
 
     public function __construct()
     {
@@ -27,22 +28,39 @@ class IncreaseOrDecrease extends ModalComponent
 
     public function update(): void
     {
+        
         foreach ($this->user->company->clients as $client) {
             switch ($this->type_increase_or_decrease) {
                 case 0:
+                    $this->type = "Decréscimo";
                     $client->update(['value' => ($client->value - $this->value)]);
                     break;
                 case 1:
+                    $this->type = "Acréscimo";
                     $client->update(['value' => ($client->value + $this->value)]);
                     break;
             }
         }
+
+        $this->notifications($this->type, $this->value);
+        $this->reset();
+        $this->emitTo(ListClients::class, 'clients::index::increase-or-decrease');
+        $this->closeModal();
+    }
+    public function notifications($type, $value){
+
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Valor Alterado com sucesso!'
         ); 
-        $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::increase-or-decrease');
-        $this->closeModal();
+        foreach($this->user->company->users as $user){
+            
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Atualização de Preço!',
+                'O usuário(a) '.$this->user->name.' fez um '.$type. ' de R$ '. number_format($value, 2, ',','.').'  na empresa '.$this->user->company->corporate_reason,
+                
+            );
+            $user->notify($notification);
+        }
     }
 }
