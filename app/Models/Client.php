@@ -16,4 +16,8 @@ class Client extends Model
     {
        return $this->belongsToMany(Group::class, 'group_clients');
     }
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'company_clients');
+    }
 }
