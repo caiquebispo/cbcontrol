@@ -42,7 +42,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    
+    public function image(){
+        
+        return $this->morphMany(Image::class, 'images');
+    }
     public function company()
     {
         return $this->hasOne(Company::class, 'id', 'company_id');
