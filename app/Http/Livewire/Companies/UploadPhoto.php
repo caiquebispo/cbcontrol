@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Users;
+namespace App\Http\Livewire\Companies;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +29,12 @@ class UploadPhoto extends Component
         
         $filename = str_replace(" ", "", date('YmdHi').$this->photo->getClientOriginalName());
         
-        if($this->user->image()->value('path') != null){
-            Storage::delete($this->user->image()->value('path'));
+        if($this->user->company->image()->value('path') != null){
+            Storage::delete($this->user->company->image()->value('path'));
         }
-        $imagePath = $this->photo->storeAs('public/images/user', $filename);
-        $this->user->image()->updateOrCreate(['images_id' => $this->user->id],['path' => $imagePath]);
+
+        $imagePath = $this->photo->storeAs('public/images/company', $filename);
+        $this->user->company->image()->updateOrCreate(['images_id' => $this->user->company->id],['path' => $imagePath]);
         $this->notifications();
     }
     public function notifications(){

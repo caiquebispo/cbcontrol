@@ -96,8 +96,8 @@
                         <a href="{{route('users.list')}}"
                             class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg pl-11 group hover:text-blue-600 dark:text-white dark:hover:bg-gray-700">Usuários</a>
                     </li>
-                    <li class="hidden">
-                        <a href="{{route('clients')}}"
+                    <li>
+                        <a href="{{route('company.update')}}"
                             class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg pl-11 group hover:text-blue-600 dark:text-white dark:hover:bg-gray-700">Empresa</a>
                     </li>
                 </ul>
