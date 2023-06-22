@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Categories;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Footer;
@@ -20,7 +22,19 @@ final class ListCategories extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
+    public Category $category;
 
+    protected function getListeners(): array
+    {
+        return array_merge(
+            parent::getListeners(),
+            [
+                'categories::index::created' => '$refresh',
+                'categories::index::deleted' => '$refresh',
+                'categories::index::updated' => '$refresh',
+            ]
+        );
+    }
     public function boot()
     {
         $this->user = Auth::user();
@@ -44,7 +58,7 @@ final class ListCategories extends PowerGridComponent
             Button::add('view')
                 ->caption('Cadastrar Categoria')
                 ->class('inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150')
-                ->openModal('clients.create', []),
+                ->openModal('categories.create', []),
         ];
     }
     /*
@@ -78,7 +92,7 @@ final class ListCategories extends PowerGridComponent
         return PowerGrid::columns()
             ->addColumn('id')
             ->addColumn('name')
-            ->addColumn('status',fn($entry) => $entry->status === true ? 'ATIVA' : 'INATIVA')
+            ->addColumn('status',fn($entry) => $entry->status == true ? 'ATIVA' : 'INATIVA')
             ->addColumn('created_at_formatted', function ($entry) {
                 return Carbon::parse($entry->created_at)->format('d/m/Y');
             });
@@ -105,6 +119,25 @@ final class ListCategories extends PowerGridComponent
             Column::make('Name', 'name')->searchable()->sortable(),
             Column::make('Status', 'status')->sortable(),
             Column::make('Criado em', 'created_at_formatted'),
+        ];
+    }
+    public function actions(): array
+    {
+        return [
+            
+            Button::add('button-trash')
+            ->render(function (Category $category) {
+                return Blade::render(<<<HTML
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.delete', {{ json_encode(['client' => $category->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-update')
+            ->render(function (Category $category) {
+                return Blade::render(<<<HTML
+                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.update', {{ json_encode(['client' => $category->id]) }})" />
+                HTML);
+            }),
+            
         ];
     }
 }
