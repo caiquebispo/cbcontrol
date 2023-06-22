@@ -11,9 +11,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Company extends Model
 {
     use HasFactory;
+    
+    public function categories(): MorphMany
+    {    
+        return $this->morphMany(Category::class, 'categories');
+    }
     public function image(): MorphMany
     {
-        
         return $this->morphMany(Image::class, 'images');
     }
     public function users(): BelongsToMany

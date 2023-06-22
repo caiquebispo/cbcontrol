@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->morphs('category_morph');
+            $table->morphs('categories');
             $table->string('name')->null();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

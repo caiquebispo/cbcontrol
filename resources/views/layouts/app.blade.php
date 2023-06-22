@@ -70,7 +70,7 @@
                 </button>
                 <ul id="dropdown-product" class="hidden py-2 space-y-2">
                     <li class="list-disc">
-                        <a href="{{route('users.list')}}"
+                        <a href="{{route('categories.list')}}"
                             class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg pl-11 group hover:text-blue-600 dark:text-white dark:hover:bg-gray-700">Categoria</a>
                     </li>
                     <li>
