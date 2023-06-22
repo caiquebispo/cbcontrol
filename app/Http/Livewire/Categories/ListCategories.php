@@ -128,13 +128,13 @@ final class ListCategories extends PowerGridComponent
             Button::add('button-trash')
             ->render(function (Category $category) {
                 return Blade::render(<<<HTML
-                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.delete', {{ json_encode(['client' => $category->id]) }})" />
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.delete', {{ json_encode(['category' => $category->id]) }})" />
                 HTML);
             }),
             Button::add('button-update')
             ->render(function (Category $category) {
                 return Blade::render(<<<HTML
-                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.update', {{ json_encode(['client' => $category->id]) }})" />
+                <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.update', {{ json_encode(['category' => $category->id]) }})" />
                 HTML);
             }),
             
