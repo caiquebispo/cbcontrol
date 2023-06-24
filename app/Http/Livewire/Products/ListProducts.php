@@ -144,7 +144,7 @@ final class ListProducts extends PowerGridComponent
             Button::add('button-add-photo')
             ->render(function (Product $product) {
                 return Blade::render(<<<HTML
-                <x-button-add-photo primary icon="pencil" onclick="Livewire.emit('openModal', 'products.update', {{ json_encode(['product' => $product->id]) }})" />
+                <x-button-add-photo primary icon="pencil" onclick="Livewire.emit('openModal', 'products.update-or-insert-photo-product', {{ json_encode(['product' => $product->id]) }})" />
                 HTML);
             }),
         ];
