@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Products;
 
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -9,10 +10,11 @@ use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class Create extends ModalComponent
+class Update extends ModalComponent
 {   
     use Actions;
     public User $user;
+    public Product $product;
     public ?string $name = null;
     public ?string $description = null;
     public ?int $category_id = null;
@@ -21,43 +23,42 @@ class Create extends ModalComponent
 
     protected $rules = [
 
-        'name' => 'required|min:4|max:150',
-        'description' => 'nullable|string',
-        'category_id' => 'required',
-        'price' => 'required',
-        'quantity' => 'required|min:1',
+        'product.name' => 'required|min:4|max:150',
+        'product.description' => 'nullable|string',
+        'product.category_id' => 'required',
+        'product.price' => 'required',
+        'product.quantity' => 'required|min:1',
 
     ];
     public function __construct()
     {
         $this->user = Auth::user();
+        $this->product = new Product;
     }
     public function render(): View
     {
-        return view('livewire.products.create', ['categories' => $this->user->company->categories]);
+        return view('livewire.products.update', ['categories' => $this->user->company->categories]);
     }
-    public function create(): void
+    public function update(): void
     {
-        
-        $validated = $this->validate();
-
-        $this->user->company->products()->create($validated);
-        $this->notifications();
+        $this->validate();
+        $this->product->save();
+        $this->notifications(); 
         $this->reset();
-        $this->emitTo(ListProducts::class, 'products::index::created');
+        $this->emitTo(ListProducts::class, 'products::index::updated');
         $this->closeModal();
     }
     public function notifications(){
 
         $this->notification()->success(
             $title = 'Parabéns!',
-            $description = 'Produto Cadastrado com sucesso!'
+            $description =  'Produto Editado com sucesso!'
         ); 
         foreach($this->user->company->users as $user){
             
             $notification = new \MBarlow\Megaphone\Types\General(
-                'Cadastro de Produto!',
-                'O usuário(a) '.$this->user->name.' cadastrou um novo produto na empresa '.$this->user->company->corporate_reason, // Notification Body
+                'Atualização de Produto!',
+                'O usuário(a) '.$this->user->name.' editou as informações de um Produto na empresa '.$this->user->company->corporate_reason,
                 
             );
             $user->notify($notification);
