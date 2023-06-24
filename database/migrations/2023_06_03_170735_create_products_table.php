@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('category_id')->unsigned()
-            ->references('id')->on('categories')
-            ->nullable()
-            ->onDelete('set null');
-            $table->morphs('product_morph');
+
+            $table->id('id');
+            $table->foreignId('company_id')->constrained('companies');
+            $table->foreignIdFor(Category::class);
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('price')->nullable();
+            $table->longText('description')->nullable();
+            $table->float('price')->nullable();
+            $table->integer('quantity')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

@@ -25,6 +25,7 @@ Route::prefix('app')->group(base_path('routes/web/app/users.php'));
 Route::prefix('app')->group(base_path('routes/web/app/notify.php'));
 Route::prefix('app')->group(base_path('routes/web/app/company.php'));
 Route::prefix('app')->group(base_path('routes/web/app/category.php'));
+Route::prefix('app')->group(base_path('routes/web/app/product.php'));
 
 
 require __DIR__.'/auth.php';

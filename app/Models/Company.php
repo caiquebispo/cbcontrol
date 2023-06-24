@@ -32,6 +32,10 @@ class Company extends Model
     {
         return $this->hasMany(Group::class);
     }
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
     public function notifies(): HasMany
     {
         return $this->hasMany(Notify::class);
