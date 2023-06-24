@@ -9,7 +9,7 @@
                 :options="$groups"
                 option-label="name"
                 option-value="id"
-                wire:model="group_id"
+                wire:model="client.group_id"
             />
             <div class="grid md:grid-cols-3 md:gap-6 my-3">
                 <div>
