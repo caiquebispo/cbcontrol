@@ -91,7 +91,7 @@ final class ListProducts extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
             ->addColumn('category', fn($entry) => $entry->categories->name)
-            ->addColumn('price', fn($entry) => 'R$ '.number_format($entry->categories->name, 2 ,',','.'))
+            ->addColumn('price', fn($entry) => "R$ ".number_format($entry->price,'2',',','.'))
             ->addColumn('quantity')
             ->addColumn('status', fn($entry) => $entry->status == true ? 'ATIVO': 'INATIVO')
             ->addColumn('created_at_formatted', function ($entry) {
@@ -139,6 +139,12 @@ final class ListProducts extends PowerGridComponent
             ->render(function (Product $product) {
                 return Blade::render(<<<HTML
                 <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'products.update', {{ json_encode(['product' => $product->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-add-photo')
+            ->render(function (Product $product) {
+                return Blade::render(<<<HTML
+                <x-button-add-photo primary icon="pencil" onclick="Livewire.emit('openModal', 'products.update', {{ json_encode(['product' => $product->id]) }})" />
                 HTML);
             }),
         ];
