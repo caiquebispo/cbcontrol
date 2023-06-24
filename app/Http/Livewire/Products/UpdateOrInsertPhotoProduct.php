@@ -51,7 +51,7 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
             $title = 'Parabéns!',
             $description =  'Imagem adicionada com sucesso!'
         ); 
-        foreach(Aurh::user()->company->users as $user){
+        foreach(Auth::user()->company->users as $user){
             
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de Produto!',
