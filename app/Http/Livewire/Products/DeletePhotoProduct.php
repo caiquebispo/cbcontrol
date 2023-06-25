@@ -25,6 +25,7 @@ class DeletePhotoProduct extends Component
         Storage::delete($this->img->path);
         $this->img->delete();
         $this->notifications();
+        $this->emitTo(UpdateOrInsertPhotoProduct::class, 'products::index::deleted');
 
         
     }

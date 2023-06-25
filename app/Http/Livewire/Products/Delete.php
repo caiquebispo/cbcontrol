@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
@@ -28,11 +29,20 @@ class Delete extends ModalComponent
     }
     public function delete():void
     {
-        
+        $this->deletePhotos($this->product->image);
         $this->product->delete();
         $this->notifications();
         $this->emitTo(ListProducts::class, 'products::index::deleted');
         $this->closeModal();
+    }
+    public function deletePhotos($images): void
+    {
+
+        foreach($images as $image){
+            Storage::delete($image->path);
+            $image->delete();
+        }
+        
     }
     public function notifications(){
 
