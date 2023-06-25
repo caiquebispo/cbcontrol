@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Products;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -20,7 +21,8 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
     use WithFileUploads;
  
     public $photos = [];
-    public $arrayPhoto  = [];
+
+    protected $listeners = ['products::index::deleted' => 'getPhotos'];
     public function __construct()
     {
         $this->user = Auth::user();
@@ -28,8 +30,9 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
     }
     public function render(): View
     {
-        return view('livewire.products.update-or-insert-photo-product', ['images' => $this->product->image]);
+        return view('livewire.products.update-or-insert-photo-product', ['images' => $this->getPhotos()]);
     }
+
     public function save()
     {
         $this->validate([
@@ -43,9 +46,10 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
             $this->product->image()->create(['images_id' => $this->product->id, 'path' => $imagePath]);
         }
        $this->closeModal();
-        $this->notifications(sizeof($this->photos));
+       $this->notifications(sizeof($this->photos));
     }
-    public function notifications($totalImages){
+    public function notifications($totalImages):void
+    {
 
         $this->notification()->success(
             $title = 'Parabéns!',
@@ -60,5 +64,9 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
             );
             $user->notify($notification);
         }
+    }
+    public function getPhotos(): Collection
+    {
+        return  $this->product->image;
     }
 }
