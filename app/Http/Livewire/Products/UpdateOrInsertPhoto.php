@@ -13,7 +13,7 @@ use Livewire\WithFileUploads;
 use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class UpdateOrInsertPhotoProduct extends ModalComponent
+class UpdateOrInsertPhoto extends ModalComponent
 {
     use Actions;
     public User $user;
@@ -22,7 +22,11 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
  
     public $photos = [];
 
-    protected $listeners = ['products::index::deleted' => 'getPhotos'];
+    protected $rules = [
+        
+        'photos.*' => 'required|image|max:1024'
+    ];
+    
     public function __construct()
     {
         $this->user = Auth::user();
@@ -30,14 +34,12 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
     }
     public function render(): View
     {
-        return view('livewire.products.update-or-insert-photo-product', ['images' => $this->getPhotos()]);
+        return view('livewire.products.update-or-insert-photo');
     }
 
     public function save()
     {
-        $this->validate([
-            'photos.*' => 'image|max:1024', // 1MB Max
-        ]);
+        $this->validate();
         
         foreach ($this->photos as $img) {
             
@@ -45,8 +47,8 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
             $imagePath = $img->storeAs('public/images/product', $filename);
             $this->product->image()->create(['images_id' => $this->product->id, 'path' => $imagePath]);
         }
-       $this->closeModal();
-       $this->notifications(sizeof($this->photos));
+        $this->emitTo(ListPhotos::class, 'products::index::created');
+        $this->notifications(sizeof($this->photos));
     }
     public function notifications($totalImages):void
     {
@@ -64,9 +66,5 @@ class UpdateOrInsertPhotoProduct extends ModalComponent
             );
             $user->notify($notification);
         }
-    }
-    public function getPhotos(): Collection
-    {
-        return  $this->product->image;
     }
 }
