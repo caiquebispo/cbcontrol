@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 
-class DeletePhotoProduct extends Component
+class DeletePhoto extends Component
 {
     use Actions;
     public Image $img;
@@ -18,14 +18,14 @@ class DeletePhotoProduct extends Component
     }
     public function render()
     {
-        return view('livewire.products.delete-photo-product');
+        return view('livewire.products.delete-photo');
     }
     public function delete(){
         
         Storage::delete($this->img->path);
         $this->img->delete();
         $this->notifications();
-        $this->emitTo(UpdateOrInsertPhotoProduct::class, 'products::index::deleted');
+        $this->emitTo(ListPhotos::class, 'products::index::deleted');
 
         
     }
