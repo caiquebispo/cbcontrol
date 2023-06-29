@@ -146,16 +146,23 @@ final class ListClients extends PowerGridComponent
     {
         return [
             
-            Button::add('button-trash')
-            ->render(function (Client $client) {
-                return Blade::render(<<<HTML
-                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.delete', {{ json_encode(['client' => $client->id]) }})" />
-                HTML);
-            }),
+           
             Button::add('button-update')
             ->render(function (Client $client) {
                 return Blade::render(<<<HTML
                 <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.update', {{ json_encode(['client' => $client->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-address')
+            ->render(function (Client $client) {
+                return Blade::render(<<<HTML
+                <x-button-address primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.create-address', {{ json_encode(['client' => $client->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-trash')
+            ->render(function (Client $client) {
+                return Blade::render(<<<HTML
+                <x-button-trash primary icon="pencil" onclick="Livewire.emit('openModal', 'clients.delete', {{ json_encode(['client' => $client->id]) }})" />
                 HTML);
             }),
             

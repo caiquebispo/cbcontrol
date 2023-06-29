@@ -48,6 +48,11 @@ class User extends Authenticatable
         
         return $this->morphMany(Image::class, 'images');
     }
+    public function address(): MorphMany
+    {
+        
+        return $this->morphMany(Address::class, 'address');
+    }
     public function company()
     {
         return $this->hasOne(Company::class, 'id', 'company_id');

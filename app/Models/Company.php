@@ -36,6 +36,11 @@ class Company extends Model
     {
         return $this->hasMany(Product::class);
     }
+    public function address(): MorphMany
+    {
+        
+        return $this->morphMany(Address::class, 'address');
+    }
     public function notifies(): HasMany
     {
         return $this->hasMany(Notify::class);

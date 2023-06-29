@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Client extends Model
 {
@@ -15,6 +16,16 @@ class Client extends Model
     public function groups(): BelongsToMany
     {
        return $this->belongsToMany(Group::class, 'group_clients');
+    }
+    public function image(): MorphMany
+    {
+        
+        return $this->morphMany(Image::class, 'images');
+    }
+    public function address(): MorphMany
+    {
+        
+        return $this->morphMany(Address::class, 'address');
     }
     public function companies(): BelongsToMany
     {
