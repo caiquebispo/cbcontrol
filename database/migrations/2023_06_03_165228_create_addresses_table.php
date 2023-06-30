@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->morphs('addres_morph');
+            $table->morphs('address');
             $table->string('states');
-            $table->integer('zipe_code');
+            $table->string('zipe_code');
             $table->string('city');
             $table->string('distric');
             $table->string('road');
