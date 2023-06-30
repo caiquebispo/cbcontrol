@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('states');
             $table->string('zipe_code');
             $table->string('city');
-            $table->string('distric');
+            $table->string('neighborhood');
             $table->string('road');
             $table->integer('number')->nullable();
             $table->text('complement')->nullable();
