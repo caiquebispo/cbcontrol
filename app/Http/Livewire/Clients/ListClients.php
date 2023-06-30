@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Detail;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
 use PowerComponents\LivewirePowerGrid\Exportable;
@@ -33,6 +34,9 @@ final class ListClients extends PowerGridComponent
                 'clients::index::deleted' => '$refresh',
                 'clients::index::updated' => '$refresh',
                 'clients::index::increase-or-decrease' => '$refresh',
+                'address::index::deleted' => '$refresh',
+                'address::index::created' => '$refresh',
+                'address::index::updated' => '$refresh',
             ]
         );
     }
@@ -81,7 +85,7 @@ final class ListClients extends PowerGridComponent
         // $this->showCheckBox();
 
         return [
-           
+            Detail::make()->view('livewire.utils.address.show')->showCollapseIcon(),
             Header::make()->withoutLoading(),
             Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
