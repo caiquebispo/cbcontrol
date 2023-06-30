@@ -2,7 +2,7 @@
 @if(count($row->address) > 0)
 <div class="relative overflow-x-auto">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-400 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
                    ESTADO
@@ -31,33 +31,37 @@
             </tr>
         </thead>
         <tbody>
+        @foreach ($row->address as  $address)
+            
+        
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                   {{$row->address[0]->states}}
+                   {{$address->states}}
                 </th>
                 <td class="px-6 py-4">
-                     {{$row->address[0]->zipe_code}}
+                     {{$address->zipe_code}}
                 </td>
                 <td class="px-6 py-4">
-                    {{$row->address[0]->city}}
+                    {{$address->city}}
                 </td>
                 <td class="px-6 py-4">
-                     {{$row->address[0]->neighborhood}}
+                     {{$address->neighborhood}}
                 </td>
                 <td class="px-6 py-4">
-                     {{$row->address[0]->road}}
+                     {{$address->road}}
                 </td>
                 <td class="px-6 py-4">
-                     {{$row->address[0]->number}}
+                     {{$address->number}}
                 </td>
                 <td class="px-6 py-4">
-                     {{$row->address[0]->complement}}
+                     {{$address->complement}}
                 </td>
                 <td class="px-6 py-4 flex">
-                    <x-button-update onclick="Livewire.emit('openModal', 'utils.address.update', {{json_encode(['address' => $row->address[0]])}})"/>
-                    <livewire:utils.address.delete :address="$row->address[0]"/>
+                    <x-button-update onclick="Livewire.emit('openModal', 'utils.address.update', {{json_encode(['address' => $address])}})"/>
+                    <livewire:utils.address.delete :address="$address"/>
                 </td>
             </tr>
+        @endforeach
         </tbody>
     </table>
 </div>   

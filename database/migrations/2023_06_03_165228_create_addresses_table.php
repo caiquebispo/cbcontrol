@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->morphs('address');
             $table->string('states');
-            $table->integer('zipe_code');
+            $table->string('zipe_code');
             $table->string('city');
             $table->string('distric');
             $table->string('road');
