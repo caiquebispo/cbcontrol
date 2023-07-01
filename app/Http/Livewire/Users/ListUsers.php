@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Detail;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
 use PowerComponents\LivewirePowerGrid\Exportable;
@@ -30,6 +31,9 @@ final class ListUsers extends PowerGridComponent
                 'users::index::deleted' => '$refresh',
                 'users::index::updated' => '$refresh',
                 'users::index::updated-password' => '$refresh',
+                'address::index::deleted' => '$refresh',
+                'address::index::created' => '$refresh',
+                'address::index::updated' => '$refresh',
             ]
         );
     }
@@ -71,7 +75,8 @@ final class ListUsers extends PowerGridComponent
     {
         
         return [
-            
+
+            Detail::make()->view('livewire.utils.address.show')->showCollapseIcon(),
             Header::make()->withoutLoading(),
             Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
@@ -139,6 +144,12 @@ final class ListUsers extends PowerGridComponent
             ->render(function (User $user) {
                 return Blade::render(<<<HTML
                 <x-button-change-password primary icon="pencil" onclick="Livewire.emit('openModal', 'users.update-password', {{ json_encode(['user' => $user->id]) }})" />
+                HTML);
+            }),
+            Button::add('button-address')
+            ->render(function (User $user) {
+                return Blade::render(<<<HTML
+                <x-button-address primary icon="pencil" onclick="Livewire.emit('openModal', 'users.create-address', {{ json_encode(['user' => $user->id]) }})" />
                 HTML);
             }),
             Button::add('button-trash')
