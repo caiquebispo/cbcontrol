@@ -8,7 +8,7 @@
                     <x-input label="Estado" placeholder="Estado" wire:model.defer="states"/>
                 </div>
                 <div>
-                    <x-input label="CEP" placeholder="CEP" wire:model.defer="zipe_code" />
+                    <x-inputs.maskable mask="#####-###" label="CEP" placeholder="CEP" wire:model.defer="zipe_code" />
                 </div>
                 <div>
                     <x-input label="Cidade"  placeholder="Cidade" wire:model.defer="city" />
