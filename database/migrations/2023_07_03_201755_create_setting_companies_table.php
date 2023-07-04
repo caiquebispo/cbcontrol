@@ -21,6 +21,7 @@ return new class extends Migration
             $table->float('delivery_price')->nullable();
             $table->string('primary_color')->nullable();
             $table->string('second_color')->nullable();
+            $table->string('font_color')->nullable();
             $table->timestamps();
         });
     }
