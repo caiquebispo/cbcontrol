@@ -66,7 +66,6 @@
                 />
             </div>
         </div>
-       
         <x-button type="submit" icon="pencil" primary label="ATULIZAR" class="my-2"/>
     </form>
 </div>
