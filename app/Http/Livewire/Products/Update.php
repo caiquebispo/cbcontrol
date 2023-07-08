@@ -45,7 +45,7 @@ class Update extends ModalComponent
         $this->product->save();
         $this->notifications(); 
         $this->reset();
-        $this->emitTo(ListProducts::class, 'products::index::updated');
+        $this->emit('products::index::updated');
         $this->closeModal();
     }
     public function notifications(){

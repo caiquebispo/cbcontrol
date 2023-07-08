@@ -44,7 +44,7 @@ class Create extends ModalComponent
         $this->user->company->products()->create($validated);
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListProducts::class, 'products::index::created');
+        $this->emit('products::index::created');
         $this->closeModal();
     }
     public function notifications(){
