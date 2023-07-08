@@ -32,7 +32,7 @@ class Delete extends ModalComponent
         $this->deletePhotos($this->product->image);
         $this->product->delete();
         $this->notifications();
-        $this->emitTo(ListProducts::class, 'products::index::deleted');
+        $this->emit('products::index::deleted');
         $this->closeModal();
     }
     public function deletePhotos($images): void
