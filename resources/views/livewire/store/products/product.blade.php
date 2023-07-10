@@ -1,8 +1,8 @@
 <div>
     <div >
-        <a href="#" style="text-decoration: none" class="hover:text-gray-600" onclick="Livewire.emit('openModal', 'store.products.modal-product', {{ json_encode(['product' => $product->id]) }})">
+        <a href="#" style="text-decoration: none" class="hover:text-gray-600" onclick="event.preventDefault(); Livewire.emit('openModal', 'store.products.modal-product', {{ json_encode(['product' => $product->id]) }})">
             <section
-                class="cart-item-model relative mt-3 mr-3 shadow my-3 sm:mr-3 sm:ml-3 p-2 min-h-[250px] cursor-pointer rounded-xl"
+                class="cart-item-model relative mt-3 mx-3 shadow my-3 sm:mr-3 sm:ml-3 p-2 min-h-[250px] cursor-pointer rounded-xl"
                 value="{{$product->id}}">
                 <div class="content-info-product grid sm:grid-cols-2 col-span-2 min-h-[200px]">
                     <section>
