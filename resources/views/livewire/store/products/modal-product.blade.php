@@ -1,9 +1,19 @@
 <div>
-    
     <div >
         <div class="content-product-item bg-white w-full sm:max-w-[750px] rounded-lg mx-auto pb-4 sm:mt-[75px]">
-            <livewire:store.products.slide-show-modal-product :images="$product->image" />
-            
+                @if(count($product->image) > 1)
+                    <livewire:store.products.slide-show-modal-product :images="$product->image"  :wire:key="'images-product-'.$product->id"/>
+                @else
+                    <div class="relative" style="padding: 0 10px">
+                        <div class="img-product w-full min-h-[300px] mb-4  bg-cover bg-no-repeat bg-center flex items-center rounded-t-lg"
+                            @if(count($product->image) > 0)
+                                style="background-image:url('{{url(Storage::url($product->image->first()->path))}}')" 
+                            @else
+                                style="background-image:url('/img/product_photo/default/default.jpg')"
+                            @endif
+                        >
+                    </div>
+                @endif
                 <div class="content-product-name mr-3 ml-3 my-3">
                     <h1 class="text-xl sm:text-4xl font-bold text-black-600 product-name">{{$product->name}}</h1>
                     <div class="content-produc-category flex mt-3">
@@ -29,9 +39,6 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-300 mr-3 ml-3">Esse Produto não possue descrição.
                 </h1>
                 @endif
-
-
-
                 <div
                     class=" ml-3 mb-3 flex flex-col justify-start text-xl sm:text-1xl mr-3 mt-3 ">
                     <h1 class="text-xl sm:text-2xl font-bold text-black-600 my-3">Valor/Quantidade </h1>
@@ -43,10 +50,10 @@
 
                         <div class="flex items-center  h-[30px] rounded-[10px] px-[10px]">
                             <button
-                                class="px-[10px] text-lg  @if($quantity == 1) disabled bg-gray-300   text-gray-600  cursor-not-allowed @else bg-orange-300   text-orange-600  @endif font-bold rounded-lg" wire:click="decrement">-</button>
+                                class="px-[10px] text-lg  @if($quantity == 1) disabled bg-gray-300   text-gray-600  cursor-not-allowed @else bg-orange-300   text-orange-600  @endif font-bold rounded-lg" wire:click="$emit('decrementQuantity')">-</button>
                             <div class="mx-3 font-bold">{{$quantity}}</div>
                             <button
-                                class="px-[10px] text-lg   bg-orange-300   text-orange-600  font-bold rounded-lg" wire:click="increment">+</button>
+                                class="px-[10px] text-lg   bg-orange-300   text-orange-600  font-bold rounded-lg" wire:click="$emit('incrementQuantity')">+</button>
 
                         </div>
                     </div>

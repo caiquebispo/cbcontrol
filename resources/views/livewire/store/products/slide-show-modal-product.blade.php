@@ -70,27 +70,27 @@
     };
    
         
-            document.querySelectorAll('.content-slide').forEach(function (element, index) {
-                items.push({
-                    position: index,
-                    el: document.getElementById('carousel-item-' + index)
-                })
-                options.indicators.items.push({
-                    position: index,
-                    el: document.getElementById('carousel-indicator-' + index)
-                })
-            });
+        document.querySelectorAll('.content-slide').forEach(function (element, index) {
+            items.push({
+                position: index,
+                el: document.getElementById('carousel-item-' + index)
+            })
+            options.indicators.items.push({
+                position: index,
+                el: document.getElementById('carousel-indicator-' + index)
+            })
+        });
 
-            const carousel = new Carousel(items, options);
-            const prevButton = document.getElementById('data-carousel-prev');
-            const nextButton = document.getElementById('data-carousel-next');
+        const carousel = new Carousel(items, options);
+        const prevButton = document.getElementById('data-carousel-prev');
+        const nextButton = document.getElementById('data-carousel-next');
 
-            prevButton.addEventListener('click', () => {
-                carousel.prev();
-            });
+        prevButton.addEventListener('click', () => {
+            carousel.prev();
+        });
 
-            nextButton.addEventListener('click', () => {
-                carousel.next();
-            });
+        nextButton.addEventListener('click', () => {
+            carousel.next();
+        });
     }
 </script>
