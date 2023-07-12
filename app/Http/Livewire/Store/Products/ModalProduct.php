@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Store\Products;
 
 use App\Models\Product;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 
@@ -10,18 +11,26 @@ class ModalProduct extends ModalComponent
 {
     public Product $product;
     public ?int $quantity = 1;
+    // protected function getListeners(): array
+    // {
+    //     return ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
+    // }
+    protected $listeners = ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
 
-    public function mount(Product $product): void
+
+    public function mount(Product $product, $quantity = 1): void
     {
         $this->product = $product;
+        $this->quantity = $quantity;
     }
-    public function render()
+    public function render():View
     {
         return view('livewire.store.products.modal-product');
     }
     public function increment(): int
     {
         return $this->quantity++;
+        // $this->emitSelf('incrementQuantity');
     }
     public function decrement(): int
     {
@@ -30,5 +39,7 @@ class ModalProduct extends ModalComponent
         }else{
             return $this->quantity;
         }
+
+        // $this->emitSelf('decrementQuantity');
     }
 }

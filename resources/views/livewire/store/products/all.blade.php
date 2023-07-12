@@ -3,7 +3,7 @@
         @if(count($products) > 0)
             <div class="grid grid-cols-1 gap-1 sm:grid-cols-4  sm:gap-2 py-4">
                 @foreach ($products as $product)
-                <livewire:store.products.product :product="$product" />
+                <livewire:store.products.product :product="$product" :wire:key="'product-item-'.$product->id"/>
                 @endforeach
             </div>
         @else
