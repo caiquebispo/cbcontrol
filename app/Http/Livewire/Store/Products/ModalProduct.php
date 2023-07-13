@@ -11,10 +11,7 @@ class ModalProduct extends ModalComponent
 {
     public Product $product;
     public ?int $quantity = 1;
-    // protected function getListeners(): array
-    // {
-    //     return ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
-    // }
+    
     protected $listeners = ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
 
 
@@ -30,7 +27,6 @@ class ModalProduct extends ModalComponent
     public function increment(): int
     {
         return $this->quantity++;
-        // $this->emitSelf('incrementQuantity');
     }
     public function decrement(): int
     {
@@ -39,7 +35,5 @@ class ModalProduct extends ModalComponent
         }else{
             return $this->quantity;
         }
-
-        // $this->emitSelf('decrementQuantity');
     }
 }
