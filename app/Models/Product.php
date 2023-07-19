@@ -21,4 +21,8 @@ class Product extends Model
     {
         return $this->hasOne(Category::class,'id', 'category_id');
     }
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class,'id', 'company_id');
+    }
 }

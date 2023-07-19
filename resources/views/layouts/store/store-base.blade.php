@@ -161,6 +161,7 @@
         </div>
         @endif
     </div>
+     <x-notifications />
     <section class="w-full h-full">
         <div class="container mx-auto mb-3">
             @yield('content-page')

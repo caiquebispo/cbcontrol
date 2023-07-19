@@ -8,14 +8,16 @@ use Livewire\Component;
 
 class TotalItensCart extends Component
 {
-    public ?int $totalCartItems = 0;
-    public function mount(): void
-    {
-        
-        $this->totalCartItems = \Cart::count();
-    }
+
+    protected $listeners = ['cartItem::index::addToCart' => 'getTotalItemsCart'];
+
     public function render(): View
     {
-        return view('livewire.store.cart.total-itens-cart');
+        return view('livewire.store.cart.total-itens-cart', ['totalCartItems' => $this->getTotalItemsCart()]);
+    }
+    public function getTotalItemsCart(): int
+    {  
+        //  \Cart::destroy();
+        return sizeof(\Cart::content());
     }
 }

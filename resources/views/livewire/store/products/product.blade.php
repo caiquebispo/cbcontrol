@@ -8,11 +8,8 @@
                     <section>
                         <div class="title-product text-black font-bold text-sm mb-2">{{$product->name}}</div>
                         <div class="title-product  font-bold text-sm text-gray-400">
-                            @if($product->description != null)
-                                {{$product->description}}                                 
-                            @else
-                                Não temos mais informações disponível sobre esse produto
-                            @endif
+                        {{$product->description ?? 'Não temos mais informações disponível sobre esse produto' }}
+                            
                         </div>
                     </section>
                     <section class="bg-cover bg-no-repeat bg-center" 
