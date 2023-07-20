@@ -4,8 +4,11 @@
             <livewire:store.products.slide-show-modal-product :images="$product->image" :wire:key="'images-product-'.$product->id"/>
         @else
             <div class="relative" style="padding: 0 10px">
+             @php
+            $path = $product->image->first()->path != null || ''? url(Storage::url($product->image->first()?->path)) :'/img/product_photo/default/default.jpg';
+            @endphp
                 <div class="img-product w-full min-h-[300px] mb-4 bg-cover bg-no-repeat bg-center flex items-center rounded-t-lg"
-                    style="background-image:url('{{ $product->image->first()?->path ?? '/img/product_photo/default/default.jpg' }}')">
+                    style="background-image:url('{{ $path }}')">
                 </div>
             </div>
         @endif
