@@ -52,7 +52,8 @@ class ModalProduct extends ModalComponent
                 'path_img' =>  $product->image->first()?->path ?? null,
                 'description' =>  $product->description ?? null
             ]
-        ]);
+        ])->associate('App\Models\Product');
+
         $this->notifications();
         $this->closeModal();
         $this->emit('cartItem::index::addToCart');
