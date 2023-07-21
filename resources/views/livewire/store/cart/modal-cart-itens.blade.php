@@ -61,7 +61,7 @@
                     {{number_format(\Cart::subtotal(),2,',','.')}}</span></p>
             <p class="text-sm text-gray-600">Desconto: <span class="text-green-500">- R$ 0,00</span></p>
         </div>
-        <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded animate-bounce">Finalizar
+        <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">Finalizar
             Compra</button>
     </div>
 </div>

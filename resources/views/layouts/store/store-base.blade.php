@@ -48,7 +48,7 @@
                 </div>
     
                 <div class="name-comapny mt-3 text-white font-medium text-1xl flex">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         class="bi bi-pin-map-fill hidden sm:flex" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z" />
@@ -92,7 +92,7 @@
                   
                 @endif
                
-                <a href="#" class="relative hidden sm:block open-shopping-cart" onclick="Livewire.emit('openModal', 'store.cart.modal-cart-itens')">
+                <a href="#" class="relative hidden open-shopping-cart" >
                     <svg class="w-5 h-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                      </svg>
@@ -167,10 +167,41 @@
             @yield('content-page')
         </div>
     </section>
-     <div onclick="Livewire.emit('openModal', 'store.cart.modal-cart-itens')" class="bg-orange-300 text-orange-600  w-[40px] h-[40px] fixed top-[140px] right-[10px] leading-[40px] text-center text-2xl rounded-full cursor-pointer animate-bounce z-40 flex sm:hidden justify-center items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-        </svg>
+    <div class="w-full h-[100px] sm:h-[50px] shadow-lg fixed bottom-[-2px] z-50">
+        <section class="bg-orange-600 h-12 ">
+            <div class="container mx-auto flex  justify-between ">
+                <article class="h-12 flex items-center justify-center font-bold text-white cursor-pointer" onclick="Livewire.emit('openModal', 'store.cart.modal-cart-itens')" >
+                    <i class="bi bi-cart-fill mx-2"></i>
+                    <p class="text-sm bg-orange-300 p-2 rounded-lg"> VER CARRINHO</p>
+                </article>
+                <article class="h-12 flex items-center " >
+                    <livewire:store.cart.total-itens-cart />
+                    <livewire:store.cart.total-price-cart />
+                    
+                </article>
+            </div>
+        </section>
+        <section class="menu-mobile h-12 bg-white sm:hidden flex items-center">
+            <div class="container mx-auto flex justify-evenly text-2xl">
+                <p class=" cursor-pointer" onClick="window.location.reload()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                    </svg>
+                </p>
+                <p class=" cursor-pointer show-modal-user">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                </p>
+                <p class=" cursor-pointer my-bag">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
+                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
+                    </svg>
+                </p>
+            </div>   
+        </section>
     </div>
     <footer class="w-full h-full bg-black flex  justify-center items-center">
         <div class="container mx-auto flex flex-col justify-center items-center">
@@ -178,7 +209,7 @@
                 <div class="information-company w-full text-center text-gray-500 mt-4">
                     <p class="text-4xl">{{$company->corporate_reason}}</p>
                     <p class="text-sm w-full flex items-center justify-center mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-map-fill mr-2" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pin-map-fill mr-2" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z"/>
                             <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
                         </svg>
