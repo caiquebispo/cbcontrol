@@ -14,7 +14,7 @@ class Product extends Model
 
     public function image(): MorphMany
     {
-        
+
         return $this->morphMany(Image::class, 'images');
     }
     public function categories(): HasOne

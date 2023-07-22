@@ -2,7 +2,8 @@
     <div class="flex justify-between">
         <h2 class="text-2xl font-bold my-4">Carrinho de Compras</h2>
         <button wire:click.prevent="clearCart"
-            class="w-10 h-10 mt-3 flex items-center justify-center rounded-full mx-3 mb-4 bg-red-400 text-red-600 dark:text-red-200">
+            class="w-10 h-10 mt-3 flex items-center justify-center rounded-full mx-3 mb-4 bg-red-400 text-red-600
+            dark:text-red-200">
             <x-button-trash />
         </button>
     </div>
@@ -61,7 +62,9 @@
                     {{number_format(\Cart::subtotal(),2,',','.')}}</span></p>
             <p class="text-sm text-gray-600">Desconto: <span class="text-green-500">- R$ 0,00</span></p>
         </div>
-        <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">Finalizar
-            Compra</button>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded"
+                onclick="Livewire.emit('openModal', 'store.checkout.checkout',{{json_encode(['product' => \Cart::content()->first()->id])}})">
+            Finalizar Compra
+        </button>
     </div>
 </div>
