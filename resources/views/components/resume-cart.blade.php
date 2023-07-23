@@ -10,7 +10,7 @@
                 @foreach($items as $item)
                     <div>
                         <div class="font-semibold">{{$item->name}}</div>
-                        <div class="text-gray-600 text-sm">{{$item->options['description']  ?? 'SEM DESCRIAÇÃO'}}</div>
+                        <div class="text-gray-600 text-sm">{{$item->options['description'] ?? 'SEM DESCRIAÇÃO'}}</div>
                         <div class="flex items-center justify-between">
                             <div class="text-gray-600">{{$item->qty}} x R$ {{number_format($item->price,2,',','.')}}</div>
                             <div class="text-gray-600">R$ {{number_format(($item->qty*$item->price),2,',','.')}}</div>

@@ -12,10 +12,10 @@ use WireUi\Traits\Actions;
 
 class ModalProduct extends ModalComponent
 {
-    use Actions;   
+    use Actions;
     public Product $product;
     public ?int $quantity = 1;
-    
+
     protected $listeners = ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
 
 
@@ -42,10 +42,10 @@ class ModalProduct extends ModalComponent
     }
     public function addToCart(Product $product, $quantity): void
     {
-        
+
         \Cart::add([
-            'id' => $product->id, 
-            'name'=> $product->name, 
+            'id' => $product->id,
+            'name'=> $product->name,
             'price' => $product->price,
             'qty' => $quantity,
             'options' =>[
@@ -57,13 +57,13 @@ class ModalProduct extends ModalComponent
         $this->notifications();
         $this->closeModal();
         $this->emit('cartItem::index::addToCart');
-        
+
     }
     public function notifications(): void
     {
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Produto addicionado ao carrinho'
-        ); 
+        );
     }
 }
