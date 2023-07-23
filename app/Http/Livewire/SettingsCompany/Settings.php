@@ -10,7 +10,7 @@ use WireUi\Traits\Actions;
 
 class Settings extends Component
 {
-    
+
     use Actions;
     public ?SettingCompany $settings;
     public ?string $slung = null;
@@ -20,7 +20,7 @@ class Settings extends Component
     public ?bool $has_delivery = null;
     public ?float $delivery_price = null;
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'settings.slung' => 'required|min:4|max:150',
@@ -32,7 +32,7 @@ class Settings extends Component
             'settings.delivery_price' => 'nullable',
         ];
     }
-    public function mount()
+    public function mount(): void
     {
         $this->settings = Auth::user()->company->settings;
     }
@@ -47,7 +47,7 @@ class Settings extends Component
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Aterações realizadas com sucesso!'
-        ); 
+        );
 
     }
     public function toCleanPaletteColors(): void
@@ -56,6 +56,6 @@ class Settings extends Component
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Aterações realizadas com sucesso!'
-        ); 
+        );
     }
 }
