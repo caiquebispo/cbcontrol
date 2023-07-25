@@ -63,7 +63,7 @@
             <p class="text-sm text-gray-600">Desconto: <span class="text-green-500">- R$ 0,00</span></p>
         </div>
         <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded"
-                onclick="Livewire.emit('openModal', 'store.checkout.checkout',{{json_encode(['product' => \Cart::content()->first()->id])}})">
+               @if(\Cart::content()->first()?->id) onclick="Livewire.emit('openModal', 'store.checkout.checkout',{{json_encode(['product' => \Cart::content()->first()?->id])}})" @endif>
             Finalizar Compra
         </button>
     </div>

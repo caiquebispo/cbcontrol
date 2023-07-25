@@ -40,10 +40,16 @@ Agora vamos pupular nossa tabela de usuário e empresa para que você já consig
 ````
 $ php artisan db::seed
 ````
+É necessário rodar também o seguinte comando
+
+````
+$ php artisan storage:link
+````
 Prontinho, agora com tudo configurado é só roda o comando e usar a aplicação
 ````
 $ php artisan serve
 ````
+
 ## Credencial de acesso
 ```
   E-mail: demo@cbcontrol.com
