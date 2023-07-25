@@ -2,8 +2,8 @@
 <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-8 text-center">Resumo do Carrinho de Compras</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-white rounded-lg shadow-lg p-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+        <div class="bg-white rounded-lg shadow-lg p-4 max-h-52 overflow-y-auto">
             <h2 class="text-2xl font-bold mb-4">Produtos</h2>
 
             <div class="space-y-4">
