@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4">
     <div class="flex justify-between">
         <h2 class="text-2xl font-bold my-4">Carrinho de Compras</h2>
-        <button wire:click.prevent="clearCart"
+        <button @if(sizeof(\Cart::content()) > 0) wire:click.prevent="clearCart" @endif
             class="w-10 h-10 mt-3 flex items-center justify-center rounded-full mx-3 mb-4 bg-red-400 text-red-600
             dark:text-red-200">
             <x-button-trash />

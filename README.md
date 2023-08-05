@@ -53,5 +53,5 @@ $ php artisan serve
 ## Credencial de acesso
 ```
   E-mail: demo@cbcontrol.com
-  Senha: 123456
+  Senha: 12345678
 ```

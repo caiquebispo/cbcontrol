@@ -1,6 +1,6 @@
 @props(['items','value','delivery_price'])
 <div class="container mx-auto p-4">
-    <h1 class="text-3xl font-bold mb-8 text-center">Resumo do Carrinho de Compras</h1>
+    <h1 class="text-lg sm:text-2xl font-bold mb-8 text-left text-gray-700">Resumo do Carrinho de Compras</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ">
         <div class="bg-white rounded-lg shadow-lg p-4 max-h-52 overflow-y-auto">
@@ -26,8 +26,8 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="text-gray-600">Subtotal:</div>
                 <div class="text-right">R$ {{number_format($value, 2,',','.')}}</div>
-                <div class="text-gray-600">Frete:</div>
-                <div class="text-right">R$ {{number_format($delivery_price,2,',','.')}}</div>
+                <div class="text-gray-600 hidden">Frete:</div>
+                <div class="text-right hidden">R$ {{number_format($delivery_price,2,',','.')}}</div>
             </div>
             <div class="flex justify-between border-t-2 pt-4 mt-4">
                 <span class="text-xl font-bold">Total:</span>

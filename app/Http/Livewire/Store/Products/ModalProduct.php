@@ -15,9 +15,10 @@ class ModalProduct extends ModalComponent
     use Actions;
     public Product $product;
     public ?int $quantity = 1;
+    public ?string $observation = null;
 
     protected $listeners = ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
-
+    protected array $rules  = ['observation' => 'nullable|min:10|max:150'];
 
     public function mount(Product $product, int $quantity = 1): void
     {
@@ -50,7 +51,8 @@ class ModalProduct extends ModalComponent
             'qty' => $quantity,
             'options' =>[
                 'path_img' =>  $product->image->first()?->path ?? null,
-                'description' =>  $product->description ?? null
+                'description' =>  $product->description ?? null,
+                'observation' =>  $this->observation ?? null,
             ]
         ])->associate('App\Models\Product');
 

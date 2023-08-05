@@ -5,10 +5,22 @@
             <h4 class="mb-3 font-bold text-gray-900 text-lg my-5">Olá {{Auth::user()->name}}, Bem-vindo de volta.</h4>
             <hr class="mb-4">
         </div>
-        <x-resume-cart :items="\Cart::content()" :value="\Cart::subtotal()" :delivery_price="$company->settings->delivery_price"/>
-        <x-form-of-payment :has_delivery="$company->settings->has_delivery" :has_limit_price_delivery="$company->settings->has_limit_price_delivery" :value="\Cart::subtotal()" />
-    @else
-        <h3>Não está logado</h3>
-        <x-resume-cart :items="\Cart::content()" :value="\Cart::subtotal()" :delivery_price="$company->settings->delivery_price" />
     @endif
+
+    <div>
+        @if ($step === 1)
+           <x-resume-cart :value="\Cart::subtotal()" :items="\Cart::content()" :delivery_price="$product->company->settings->delivery_price" />
+        @elseif ($step === 2)
+            <x-store.checkout.form-create-acount />
+        @elseif ($step === 3)
+            <x-store.checkout.payment-method :paymentMethod="$paymentMethod" :delivery_method="$delivery_method" />
+        @elseif ($step === 4)
+           <x-store.checkout.register-address />
+        @endif
+        @if ($step === 5)
+            <x-store.checkout.thaks-for-buy-with-we />
+        @endif
+       <x-store.checkout.next-steps-buttons :step="$step" />
+    </div>
+
 </div>
