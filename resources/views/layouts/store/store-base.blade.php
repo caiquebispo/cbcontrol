@@ -167,7 +167,7 @@
             @yield('content-page')
         </div>
     </section>
-    <div class="w-full h-[100px] sm:h-[50px] shadow-lg fixed bottom-[-2px] z-50">
+    <div class="w-full h-[100px] sm:h-[50px] shadow-lg fixed bottom-[-2px] z-1">
         <section class="bg-orange-600 h-12 ">
             <div class="container mx-auto flex  justify-between ">
                 <article class="h-12 flex items-center justify-center font-bold text-white cursor-pointer" onclick="Livewire.emit('openModal', 'store.cart.modal-cart-itens')" >

@@ -4,10 +4,13 @@ namespace App\Http\Livewire\Store\Checkout;
 
 
 use App\Models\Company;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductOrder;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Livewire\Component;
+use Illuminate\Support\Arr;
 use LivewireUI\Modal\ModalComponent;
 
 class Checkout extends ModalComponent
@@ -22,12 +25,13 @@ class Checkout extends ModalComponent
         'password' => '',
     ];
     public array $address = [
+        'states' => '',
+        'zipe_code' => '',
         'city' => '',
-        'cep' => '',
         'neighborhood' => '',
-        'street' => '',
+        'road' => '',
         'number' => '',
-        'proximity' => '',
+        'complement' => '',
     ];
     public $paymentMethod = '';
     public $delivery_method = 'delivery';
@@ -60,9 +64,30 @@ class Checkout extends ModalComponent
         if ($this->step < 5) {
             $this->step++;
         } else {
-//            $this->user = array_pop($this->user['user']);
-//            dd($this->user);
-//           User::create();
+
+           $user = User::create(Arr::except($this->user, ['password_confirm']));
+           $user->address()->create(Arr::except($this->address,['cep']));
+
+          $order = Order::create([
+                'user_id'               => $user->id,
+                'company_id'            => $this->product->company->id,
+                'day'                   => (new \DateTime('now'))->format('Y-m-d'),
+                'total_amount'          => \Cart::subtotal(),
+                'payment_method'        => $this->paymentMethod,
+                'delivery_method'       => $this->delivery_method,
+                'hasExchange'           => $this->hasExchange,
+                'quantityItem'          => sizeof(\Cart::content()),
+                'status_order'          => 'received',
+            ]);
+            foreach(\Cart::content() as $key => $item){
+                OrderProduct::create([
+                  'order_id' => $order->id,
+                  'product_id' => $item->id,
+                  'price' =>  $item->price,
+                  'quantity' => $item->qty,
+                  'observation' => $item->options['observation'] ?? 'SEM DESCRIAÇÃO'
+                ]);
+            }
             $this->successMessage = 'Pedido concluído com sucesso!';
         }
     }
@@ -119,7 +144,6 @@ class Checkout extends ModalComponent
     public function validateStep4()
     {
         $this->validate([
-
             'address.states' => 'required|max:150',
             'address.zipe_code' => 'required',
             'address.city' => 'required',
