@@ -35,6 +35,7 @@ class ModalCartItens extends ModalComponent
     {
         \Cart::remove($rowId);
         $this->emit('cartItem::index::removeItemCart');
+        $this->emit('cartItem::index::addToCart');
     }
 
     public function clearCart(): void

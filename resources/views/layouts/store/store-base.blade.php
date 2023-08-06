@@ -11,11 +11,11 @@
     <meta property="og:image" itemprop="image" content="https://i.postimg.cc/wv0DWcx8/Group-1.png">
     <meta property="og:image" content="https://i.postimg.cc/wv0DWcx8/Group-1.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @stack('styles')
     <title>Store - @yield('title')</title>
-    @if($company->image()->value('path') != null) 
+    @if($company->image()->value('path') != null)
         <link rel="icon" href="{{url(Storage::url($company->image()->value('path')))}}" />
-     @else 
+     @else
          <link rel="icon" href="/img/logo/cb-logo.png" />
      @endif
 
@@ -31,7 +31,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{--livewire --}}
     @livewireStyles
-    
+
 </head>
 
 <body class="font-sans antialiased">
@@ -40,13 +40,13 @@
         <div class="w-full h-full mx-auto flex justify-center items-center"
             style="background-image: radial-gradient(hsl(0deg 0% 0% / 70%), transparent)">
             <div class="conten-ifon-company flex flex-col items-center">
-                
-                <img alt=""  
+
+                <img alt=""
                     @if($company->image()->value('path') != null) src="{{url(Storage::url($company->image()->value('path')))}}" @else src="/img/logo/cb-logo.png" @endif width="150px" height="150px" class="rounded-full">
                 <div class="name-comapny mt-3 text-white font-medium text-4xl uppercase text-center">
                     <h4>{{$company->corporate_reason}}</h4>
                 </div>
-    
+
                 <div class="name-comapny mt-3 text-white font-medium text-1xl flex">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         class="bi bi-pin-map-fill hidden sm:flex" viewBox="0 0 16 16">
@@ -69,13 +69,13 @@
     <section class="bar-alert w-full h-[50px] shadow-lg">
         <div class="container mx-auto h-[50px] flex items-center justify-between font-bold text-gray-600">
             <section class="text-orange-600 text-2xl">
-                
+
             </section>
-           
+
             <div class="content-alert-bar-menu flex ">
                 @if (!Auth::guest())
-                    
-                
+
+
                     <div class="btn-group ">
                         <button type="button" class="dropdown-toggle flex items-center mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <p class="mr-2">Olá {{Auth::user()->name}}</p>
@@ -89,9 +89,9 @@
                         <x-svg-icon :icon="'bi-bag-fill'"/>
                 @else
                     <a href="#" class="show-modal-login-user mr-2" type="button" style="text-decoration:none">Login</a>
-                  
+
                 @endif
-               
+
                 <a href="#" class="relative hidden open-shopping-cart" >
                     <svg class="w-5 h-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -102,25 +102,25 @@
                 </a>
             </div>
         </div>
-       
+
     </section>
     <div class="mx-auto w-[78%] mt-4 flex justify-end">
         <article
             class="flex items-center font-bold @if($company->settings->second_color != null) text-[{{$company->settings->second_color}}] @else text-orange-600 @endif">
             <p class="mr-3">Fale Conosco</p>
             <p>
-                
+
                 <a href="https://api.whatsapp.com/send?phone={{preg_replace( '/[^0-9]/','',$company->phone)}}&text=Óla ! Vim pelo site."
                     class="btn btn-success" target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-whatsapp text-green-600" viewBox="0 0 16 16">
                         <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
                     </svg>
-                      
+
                 </a>
             </p>
         </article>
     </div>
-    
+
     <div class="container mx-auto">
         @if(!$company->status)
         <div class=" mt-4">
@@ -167,7 +167,7 @@
             @yield('content-page')
         </div>
     </section>
-    <div class="w-full h-[100px] sm:h-[50px] shadow-lg fixed bottom-[-2px] z-50">
+    <div class="w-full h-[100px] sm:h-[50px] shadow-lg fixed bottom-[-2px] z-1">
         <section class="bg-orange-600 h-12 ">
             <div class="container mx-auto flex  justify-between ">
                 <article class="h-12 flex items-center justify-center font-bold text-white cursor-pointer" onclick="Livewire.emit('openModal', 'store.cart.modal-cart-itens')" >
@@ -177,7 +177,7 @@
                 <article class="h-12 flex items-center " >
                     <livewire:store.cart.total-itens-cart />
                     <livewire:store.cart.total-price-cart />
-                    
+
                 </article>
             </div>
         </section>
@@ -200,7 +200,7 @@
                         <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
                     </svg>
                 </p>
-            </div>   
+            </div>
         </section>
     </div>
     <footer class="w-full h-full bg-black flex  justify-center items-center">

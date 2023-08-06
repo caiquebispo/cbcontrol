@@ -5,7 +5,7 @@
         @else
             <div class="relative" style="padding: 0 10px">
              @php
-            $path = $product->image->first()->path != null || ''? url(Storage::url($product->image->first()?->path)) :'/img/product_photo/default/default.jpg';
+            $path = $product->image->first()?->path  ? url(Storage::url($product->image->first()?->path)) :'/img/product_photo/default/default.jpg';
             @endphp
                 <div class="img-product w-full min-h-[300px] mb-4 bg-cover bg-no-repeat bg-center flex items-center rounded-t-lg"
                     style="background-image:url('{{ $path }}')">
@@ -59,7 +59,7 @@
                 <h3>Observações</h3>
             </div>
             <div class="mx-3 grid md:grid-cols-1 md:gap-6">
-                <textarea wire:model.defer="description" id="message" rows="4"
+                <textarea wire:model.defer="observation" id="message" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder=""></textarea>
             </div>
