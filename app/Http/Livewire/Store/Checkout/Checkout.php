@@ -17,14 +17,20 @@ class Checkout extends ModalComponent
 {
     public  Product $product;
     public  Company $company;
-    public int $step = 1;
-    public array $user = [
+    public ?int $step = 1;
+    public ?string $paymentMethod = '';
+    public ?string $delivery_method = '';
+    public ?float $amount;
+    public ?bool $hasExchange = false;
+
+    public ?string $successMessage = '';
+    public ?array $user = [
         'name' => '',
         'email' => '',
         'number_phone' => '',
         'password' => '',
     ];
-    public array $address = [
+    public ?array $address = [
         'states' => '',
         'zipe_code' => '',
         'city' => '',
@@ -33,12 +39,6 @@ class Checkout extends ModalComponent
         'number' => '',
         'complement' => '',
     ];
-    public $paymentMethod = '';
-    public $delivery_method = 'delivery';
-    public $amount;
-    public $hasExchange = false;
-
-    public $successMessage = '';
 
     public  function  mount(Product $product): void
     {
@@ -79,16 +79,23 @@ class Checkout extends ModalComponent
                 'quantityItem'          => sizeof(\Cart::content()),
                 'status_order'          => 'received',
             ]);
+            $order_products = [];
             foreach(\Cart::content() as $key => $item){
-                OrderProduct::create([
+               $order_products[] = [
                   'order_id' => $order->id,
                   'product_id' => $item->id,
                   'price' =>  $item->price,
                   'quantity' => $item->qty,
-                  'observation' => $item->options['observation'] ?? 'SEM DESCRIAÇÃO'
-                ]);
+                  'observation' => $item->options['observation'] ?? 'SEM DESCRIAÇÃO',
+                  'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
+                  'updated_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
+                ];
             }
-            $this->successMessage = 'Pedido concluído com sucesso!';
+
+            OrderProduct::insert($order_products);
+            $this->forceClose()->closeModal();
+            \Cart::destroy();
+            $this->emit('cartItem::index::cleanCart');
         }
     }
 
@@ -119,7 +126,7 @@ class Checkout extends ModalComponent
     {
          $this->validate([
             'user.name' => 'required|min:3',
-            'user.email' => 'nullable|email',
+            'user.email' => 'required|email',
             'user.number_phone' => 'required',
             'user.password' => 'required|min:8|max:16',
             'user.password_confirm' => 'required|min:8|max:16|same:user.password'

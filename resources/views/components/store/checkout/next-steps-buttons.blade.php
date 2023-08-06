@@ -7,6 +7,8 @@
     @if ($step < 4)
         <button wire:click="nextStep" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">Avançar</button>
     @else
-        <button wire:click="nextStep" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">Concluir Pedido</button>
+        <button wire:click="nextStep" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">
+            @if($step == 4) Avançar @else Concluir Pedido @endif
+        </button>
     @endif
 </div>

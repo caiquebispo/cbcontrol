@@ -13,7 +13,7 @@
         @elseif ($step === 2)
             <x-store.checkout.form-create-acount />
         @elseif ($step === 3)
-            <x-store.checkout.payment-method :paymentMethod="$paymentMethod" :delivery_method="$delivery_method" />
+            <x-store.checkout.payment-method :paymentMethod="$paymentMethod" :delivery_method="$delivery_method" :delivery_price="$product->company->settings->delivery_price"/>
         @elseif ($step === 4)
            <x-store.checkout.register-address />
         @endif
