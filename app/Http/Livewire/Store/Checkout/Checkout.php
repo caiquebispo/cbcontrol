@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Store\Checkout;
 
 
 use App\Class\Store\Checkout\ProcessingCheckout;
+use App\Http\Livewire\Store\Cart\TotalItensCart;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
@@ -51,12 +52,10 @@ class Checkout extends ModalComponent
 
             $user = Auth::check() ? Auth::user() : User::create(Arr::except($this->user['user'], ['password_confirm']));
             $address = is_string($this->address) ? collect(json_decode($this->address, true)) :  $user->address()->create($this->address['address']);
-
             (new ProcessingCheckout($this->product->company,$user, $address,$this->paymentMethod, $this->delivery_method,$this->hasExchange, $this->amount))->processing();
-
-            //dispatch events
             $this->forceClose()->closeModal();
             $this->emit('cartItem::index::cleanCart');
+            $this->emitTo(TotalItensCart::class, 'cartItem::index::addToCart');
         }
     }
     public function previousStep(): void
