@@ -3,14 +3,13 @@
 namespace App\Http\Livewire\Store\Checkout;
 
 
+use App\Class\Store\Checkout\ProcessingCheckout;
 use App\Models\Company;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Models\ProductOrder;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use LivewireUI\Modal\ModalComponent;
 
 class Checkout extends ModalComponent
@@ -20,25 +19,12 @@ class Checkout extends ModalComponent
     public ?int $step = 1;
     public ?string $paymentMethod = '';
     public ?string $delivery_method = '';
-    public ?float $amount;
+    public ?float $amount = null;
     public ?bool $hasExchange = false;
 
     public ?string $successMessage = '';
-    public ?array $user = [
-        'name' => '',
-        'email' => '',
-        'number_phone' => '',
-        'password' => '',
-    ];
-    public ?array $address = [
-        'states' => '',
-        'zipe_code' => '',
-        'city' => '',
-        'neighborhood' => '',
-        'road' => '',
-        'number' => '',
-        'complement' => '',
-    ];
+    public ?array $user = [];
+    public  $address = [];
 
     public  function  mount(Product $product): void
     {
@@ -49,93 +35,55 @@ class Checkout extends ModalComponent
     {
         return view('livewire.store.checkout.checkout');
     }
-    public function nextStep()
+    public function nextStep(): void
     {
-        if ($this->step === 1) {
-            $this->validateStep1();
-        } elseif ($this->step === 2) {
-            $this->validateStep2();
-        } elseif ($this->step === 3) {
-            $this->validateStep3();
-        } elseif ($this->step === 4) {
-            $this->validateStep4();
-        }
+        match($this->step){
+           1 =>  $this->step,
+           2 =>  $this->validateDataUser(),
+           3 =>   $this->validatePaymentMethod(),
+           4 =>  $this->validateAddressUser(),
+           default => $this->step++,
+        };
 
         if ($this->step < 5) {
             $this->step++;
         } else {
 
-           $user = User::create(Arr::except($this->user, ['password_confirm']));
-           $user->address()->create(Arr::except($this->address,['cep']));
+            $user = Auth::check() ? Auth::user() : User::create(Arr::except($this->user['user'], ['password_confirm']));
+            $address = is_string($this->address) ? collect(json_decode($this->address, true)) :  $user->address()->create($this->address['address']);
 
-          $order = Order::create([
-                'user_id'               => $user->id,
-                'company_id'            => $this->product->company->id,
-                'day'                   => (new \DateTime('now'))->format('Y-m-d'),
-                'total_amount'          => \Cart::subtotal(),
-                'payment_method'        => $this->paymentMethod,
-                'delivery_method'       => $this->delivery_method,
-                'hasExchange'           => $this->hasExchange,
-                'quantityItem'          => sizeof(\Cart::content()),
-                'status_order'          => 'received',
-            ]);
-            $order_products = [];
-            foreach(\Cart::content() as $key => $item){
-               $order_products[] = [
-                  'order_id' => $order->id,
-                  'product_id' => $item->id,
-                  'price' =>  $item->price,
-                  'quantity' => $item->qty,
-                  'observation' => $item->options['observation'] ?? 'SEM DESCRIAÇÃO',
-                  'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
-                  'updated_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
-                ];
-            }
+            (new ProcessingCheckout($this->product->company,$user, $address,$this->paymentMethod, $this->delivery_method,$this->hasExchange, $this->amount))->processing();
 
-            OrderProduct::insert($order_products);
+            //dispatch events
             $this->forceClose()->closeModal();
-            \Cart::destroy();
             $this->emit('cartItem::index::cleanCart');
         }
     }
-
-    public function previousStep()
+    public function previousStep(): void
     {
-        $this->step--;
+        if($this->step > 1){
+            $this->step--;
+        }
     }
-
-    public function resetCheckout()
+    public function resetCheckoutField(): void
     {
-        $this->reset([
-            'step',
-            'user',
-            'address',
-            'paymentMethod',
-            'amount',
-            'hasExchange',
-            'successMessage',
-        ]);
+        $this->reset();
     }
-
-    public function validateStep1()
+    public function validateDataUser(): void
     {
-        // Validações para a etapa 1 (resumo do carrinho), se necessário
-    }
-
-    public function validateStep2()
-    {
-         $this->validate([
-            'user.name' => 'required|min:3',
-            'user.email' => 'required|email',
-            'user.number_phone' => 'required',
-            'user.password' => 'required|min:8|max:16',
-            'user.password_confirm' => 'required|min:8|max:16|same:user.password'
-        ]);
+        if(!Auth::check()){
+         $this->user =  $this->validate([
+                'user.name' => 'required|min:3',
+                'user.email' => 'required|email',
+                'user.number_phone' => 'required',
+                'user.password' => 'required|min:8|max:16',
+                'user.password_confirm' => 'required|min:8|max:16|same:user.password'
+            ]);
+        }
 
 
     }
-
-    public function validateStep3()
+    public function validatePaymentMethod(): void
     {
         $this->validate([
             'paymentMethod' => 'required',
@@ -147,17 +95,18 @@ class Checkout extends ModalComponent
             ]);
         }
     }
-
-    public function validateStep4()
+    public function validateAddressUser(): void
     {
-        $this->validate([
-            'address.states' => 'required|max:150',
-            'address.zipe_code' => 'required',
-            'address.city' => 'required',
-            'address.neighborhood' => 'required',
-            'address.road' => 'required',
-            'address.number' => 'nullable',
-            'address.complement' => 'nullable',
-        ]);
+        if(!Auth::check()) {
+            $this->address = $this->validate([
+                'address.states' => 'required|max:150',
+                'address.zipe_code' => 'required',
+                'address.city' => 'required',
+                'address.neighborhood' => 'required',
+                'address.road' => 'required',
+                'address.number' => 'nullable',
+                'address.complement' => 'nullable',
+            ]);
+        }
     }
 }
