@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Product extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function image(): MorphMany

@@ -5,7 +5,8 @@
         <ul class="grid w-full gap-6 grid-cols-1">
             @foreach($address as $ad)
             <li>
-                <input type="radio" id="hosting-small-{{$ad->id}}" name="address" value="hosting-small-{{$ad->id}}" class="hidden peer">
+                <input wire:model.defer="address" type="radio" id="hosting-small-{{$ad->id}}" name="address" value="{{$ad}}" class="hidden peer">
+
                 <label for="hosting-small-{{$ad->id}}" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-orange-500 peer-checked:border-orange-600 peer-checked:text-orange-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div class="block">
                         <div class="w-full text-lg font-semibold hidden">0-50 MB</div>
