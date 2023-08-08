@@ -8,9 +8,11 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
+use WireUi\Traits\Actions;
 
 class ProcessingCheckout
 {
+    use Actions;
     public function __construct(
         protected ?object $company = null,
         protected ?object $user = null,
@@ -59,6 +61,19 @@ class ProcessingCheckout
             ];
         }
         OrderProduct::insert($order_products);
+        $this->notifications();
         \Cart::destroy();
+    }
+    public function notifications(): void
+    {
+        foreach($this->company->users as $user){
+
+            $notification = new \MBarlow\Megaphone\Types\General(
+                'Parabéns Você VENDEUUUU!',
+                'O usuário(a) '.$this->user->name.' realizou uma compra nova, corre e já corefere.',
+
+            );
+            $user->notify($notification);
+        }
     }
 }
