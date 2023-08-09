@@ -51,7 +51,7 @@ class Dashboard
             }
             foreach($last_month as $key_order_last => $order_last){
                 if($d['last_day'] == $order_last->day){
-                    if($order_last->status !== 0){
+                    if($order_last->status != 'canceled'){
                         $data[$key]['last_sales'] += $order_last->total_amount;
                     }else{
                         $data[$key]['last_canceled_sales'] += $order_last->total_amount;
