@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Company extends Model
 {
     use HasFactory;
-    
+
     public function categories(): MorphMany
-    {    
+    {
         return $this->morphMany(Category::class, 'categories');
     }
     public function image(): MorphMany
@@ -44,11 +44,15 @@ class Company extends Model
     }
     public function address(): MorphMany
     {
-        
+
         return $this->morphMany(Address::class, 'address');
     }
     public function notifies(): HasMany
     {
         return $this->hasMany(Notify::class);
+    }
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }

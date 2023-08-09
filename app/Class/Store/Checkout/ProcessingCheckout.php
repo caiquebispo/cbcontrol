@@ -19,8 +19,8 @@ class ProcessingCheckout
         protected ?object $address = null,
         protected ?string $paymentMethod = null,
         protected ?string $delivery_method = null,
-        protected ?float $amount = null,
         protected ?bool $hasExchange = null,
+        protected ?float $amount = null,
     ){}
     public  function  processing(): void
     {
