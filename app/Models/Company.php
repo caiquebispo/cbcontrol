@@ -55,4 +55,8 @@ class Company extends Model
     {
         return $this->hasMany(Order::class);
     }
+    public function controlAccessSalePage(): HasMany
+    {
+        return $this->hasMany(AccessSalesPage::class);
+    }
 }

@@ -55,6 +55,7 @@ class ProcessingCheckout
                 'product_id' => $item->id,
                 'price' =>  $item->price,
                 'quantity' => $item->qty,
+                'origin' =>  'SITE',
                 'observation' => $item->options['observation'] ?? 'SEM DESCRIAÇÃO',
                 'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
                 'updated_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
