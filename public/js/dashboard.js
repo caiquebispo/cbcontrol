@@ -1,16 +1,40 @@
 let Dashboard = {
     init(){
 
-        Dashboard.getDataGraphSales();
-        Dashboard.getDataTableSales();
-        Dashboard.getDataGraphSalesForCategories();
-        Dashboard.getDataTableSalesForCategories();
+        var start = moment().startOf('month');
+        var end = moment().endOf('month');
+
+        $('#date-rangedatepicker-dashboard').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Dia Atual': [moment(), moment()],
+                'Dia Anterior': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+                'Mês Atual': [moment().startOf('month'), moment().endOf('month')],
+                'Mês Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        },function (start, end,){
+
+            start = moment(start).format('YYYY-MM-DD')
+            end = moment(end).format('YYYY-MM-DD')
+            Dashboard.getDataGraphSales(start, end);
+            Dashboard.getDataTableSales(start, end);
+            Dashboard.getDataGraphSalesForCategories(start, end);
+            Dashboard.getDataTableSalesForCategories(start, end);
+
+        });
+
+        Dashboard.getDataGraphSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataTableSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataGraphSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataTableSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
     },
-    getDataGraphSales(){
+    getDataGraphSales(start, end){
         axios({
             method: 'GET',
             url: `${window.location.href}/getDataGraphSales?`,
-            params: {'start': '2023-08-01', 'end':'2023-08-31'}
+            params: {start, end}
         }).then((response) =>{
 
             Dashboard.drawGraphSales(response.data)
@@ -20,11 +44,11 @@ let Dashboard = {
             console.log('error', error)
         })
     },
-    getDataGraphSalesForCategories(){
+    getDataGraphSalesForCategories(start, end){
         axios({
             method: 'GET',
             url: `${window.location.href}/getDataGraphSalesForCategories?`,
-            params: {'start': '2023-08-01', 'end':'2023-08-31'}
+            params: {start, end}
         }).then((response) =>{
 
             Dashboard.drawGraphSalesForCategories(response.data)
@@ -33,11 +57,11 @@ let Dashboard = {
             console.log('error', error)
         })
     },
-    getDataTableSalesForCategories(){
+    getDataTableSalesForCategories(start, end){
         axios({
             method: 'GET',
             url: `${window.location.href}/getDataTableSalesForCategories?`,
-            params: {'start': '2023-08-01', 'end':'2023-08-31'}
+            params: {start, end}
         }).then((response) =>{
 
             Dashboard.drawTableSalesForCategories(response.data)
@@ -46,11 +70,11 @@ let Dashboard = {
             console.log('error', error)
         })
     },
-    getDataTableSales(){
+    getDataTableSales(start, end){
         axios({
             method: 'GET',
             url: `${window.location.href}/getDataTableSales?`,
-            params: {'start': '2023-08-01', 'end':'2023-08-31'}
+            params: {start, end}
         }).then((response) =>{
 
             Dashboard.drawTableSales(response.data)
