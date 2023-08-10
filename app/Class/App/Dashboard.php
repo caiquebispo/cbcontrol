@@ -17,7 +17,24 @@ class Dashboard
         $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
         return  $this->mountedStructureGraphSales($daterange, $start, $end);
+    }
+    public  function  getDataGraphSalesForCategories($start, $end): ?array
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
+        return  $this->mountedStructureGraphSalesForCategories($daterange, $start, $end);
+    }
+    public  function  getDataTableSalesForCategories($start, $end): ?array
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
+
+        return  $this->mountedStructureTableSalesForCategories($daterange, $start, $end);
     }
     public  function  getDataTableSales($start, $end): ?array
     {
@@ -27,7 +44,6 @@ class Dashboard
         $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
         return  $this->mountedStructureTableSales($daterange, $start, $end);
-
     }
     private  function  mountedStructureGraphSales($daterange,$start, $end): ?array
     {
@@ -42,7 +58,7 @@ class Dashboard
         foreach($data as $key => $d){
             foreach($actual_month as $key_order_actual => $order_actual){
                 if($d['day'] == $order_actual->day){
-                    if($order_actual->status != 'canceled'){
+                    if($order_actual->status_order != 'canceled'){
                         $data[$key]['sales'] += $order_actual->total_amount;
                     }else{
                         $data[$key]['cancel_sales'] += $order_actual->total_amount;
@@ -51,7 +67,7 @@ class Dashboard
             }
             foreach($last_month as $key_order_last => $order_last){
                 if($d['last_day'] == $order_last->day){
-                    if($order_last->status != 'canceled'){
+                    if($order_last->status_order != 'canceled'){
                         $data[$key]['last_sales'] += $order_last->total_amount;
                     }else{
                         $data[$key]['last_canceled_sales'] += $order_last->total_amount;
@@ -89,5 +105,54 @@ class Dashboard
         }
 
         return $data;
+    }
+    private  function mountedStructureGraphSalesForCategories($daterange, $start, $end): ?array
+    {
+        $data = [];
+        $categories = Auth::user()->company->categories;
+        $orders = Auth::user()->company->orders()->with('order_product.product.categories')->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])->get();
+
+        foreach ($categories as $key_category => $category){
+            $data[] = ['id' => $category->id, 'name' => $category->name, 'total' => 0];
+        }
+        foreach($orders as $key_order => $order){
+            foreach ($order->order_product as $key_order_product => $order_product){
+                foreach ($data as $key_d => $d){
+                    if($data[$key_d]['id'] == $order_product->product->first()->category_id){
+                        $data[$key_d]['total']++;
+                    }
+                }
+            }
+
+        }
+        return  $data;
+    }
+    private  function mountedStructureTableSalesForCategories($daterange, $start, $end): ?array
+    {
+        $data = [];
+        $categories = Auth::user()->company->categories;
+        $orders = Auth::user()->company->orders()->with('order_product.product.categories')->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])->get();
+
+        foreach ($categories as $key_category => $category){
+            $data[] = ['id' => $category->id, 'name' => $category->name, 'total' => 0, 'total_amount' => 0, 'category_details' => []];
+        }
+        foreach($orders as $key_order => $order){
+            foreach ($order->order_product as $key_order_product => $order_product){
+                foreach ($data as $key_d => $d){
+                    if($data[$key_d]['id'] == $order_product->product->first()->category_id){
+                        $data[$key_d]['total']++;
+                        $data[$key_d]['total_amount'] += ($order_product->quantity*$order_product->price);
+                        $data[$key_d]['category_details'][] = [
+                            'name' => $order_product->product->first()->name,
+                            'category' => $order_product->product->first()->categories->name,
+                            'qty_product' => $order_product->quantity,
+                            'price' =>  $order_product->price
+                        ];
+                    }
+                }
+            }
+
+        }
+        return  $data;
     }
 }
