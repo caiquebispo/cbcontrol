@@ -19,6 +19,7 @@ let Dashboard = {
             start = moment(start).format('YYYY-MM-DD')
             end = moment(end).format('YYYY-MM-DD')
             Dashboard.getDataGraphSales(start, end);
+            Dashboard.getDataGraphAccess(start, end);
             Dashboard.getDataTableSales(start, end);
             Dashboard.getDataGraphSalesForCategories(start, end);
             Dashboard.getDataTableSalesForCategories(start, end);
@@ -27,6 +28,7 @@ let Dashboard = {
         });
 
         Dashboard.getDataGraphSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataGraphAccess(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataTableSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataGraphSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataTableSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
@@ -40,7 +42,21 @@ let Dashboard = {
         }).then((response) =>{
 
             Dashboard.drawGraphSales(response.data)
-            Dashboard.drawGraphSalesForCategories(response.data)
+            // Dashboard.drawGraphSalesForCategories(response.data)
+
+        }).catch((error) =>{
+            console.log('error', error)
+        })
+    },
+    getDataGraphAccess(start, end){
+        axios({
+            method: 'GET',
+            url: `${window.location.href}/getDataGraphAccess?`,
+            params: {start, end}
+        }).then((response) =>{
+
+            Dashboard.drawGraphAccess(response.data)
+
 
         }).catch((error) =>{
             console.log('error', error)
@@ -201,6 +217,79 @@ let Dashboard = {
         let chart = new ApexCharts(document.querySelector("#chart-sales"), options);
         chart.render();
     },
+    drawGraphAccess(data){
+
+        let labelsAux = [];
+        let actualAccess =  []
+        let lastAccess =  []
+        for (var i in data) {
+            labelsAux.push(data[i].day)
+            actualAccess .push(data[i].access)
+            lastAccess .push(data[i].last_access)
+        }
+        let options = {
+            series: [
+                {
+                    name: 'Visitas Mes Atual',
+                    data: actualAccess ,
+                    type:'line'
+                },{
+                    name: 'Visitas Mes Anterior',
+                    data:  lastAccess,
+                    type:'line'
+                }
+            ],
+            chart: {
+                height: 450,
+                type: 'line',
+
+            },
+            dataLabels: {
+                enabled: false,
+                formatter: function(val, opt) {
+                    return  val
+                },
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            title: {
+                text: 'Comparativo de Visitas, Mês Atual X Mês Anterior',
+                align: 'left'
+            },
+            markers: {
+                size: 1
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: labelsAux,
+                labels: {
+                    format: 'dd/MM',
+                },
+
+
+            },
+            yaxis: {
+                title: {
+                    text: 'Visitas do Mês atual/Ultimo MêS'
+                },
+                labels: {
+                    formatter: function (value) {
+                        return value
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            }
+        };
+        let chart = new ApexCharts(document.querySelector("#chart-access"), options);
+        chart.render();
+    },
     drawGraphSalesForCategories(data){
 
         const label_categories = [];
@@ -229,8 +318,8 @@ let Dashboard = {
             }]
         };
 
-        let chart_sales_for_categories = new ApexCharts(document.querySelector("#chart-sales-for-categories"), options);
-        chart_sales_for_categories.render();
+        var chart = new ApexCharts(document.querySelector("#chart-sales-for-categories"), options);
+        chart.render();
 
     },
     drawTableSales(data){

@@ -20,6 +20,15 @@ class Dashboard
 
         return  $this->mountedStructureGraphSales($daterange, $start, $end);
     }
+    public  function  getDataGraphAccess($start, $end): ?array
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
+
+        return  $this->mountedStructureGraphAccess($daterange, $start, $end);
+    }
     public  function  getDataGraphSalesForCategories($start, $end): ?array
     {
         $start = new DateTime($start);
@@ -81,6 +90,31 @@ class Dashboard
                     }else{
                         $data[$key]['last_canceled_sales'] += $order_last->total_amount;
                     }
+                }
+            }
+        }
+
+        return $data;
+    }
+    private  function  mountedStructureGraphAccess($daterange,$start, $end): ?array
+    {
+        $data = [];
+        foreach($daterange as $key_r => $r){
+            $data[] = ["day" => $r->format('Y-m-d'), "access" => '0','last_day' => $r->modify('-1 month')->format('Y-m-d'), "last_access" => 0];
+        }
+
+        $actual_month =  Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])->get();
+        $last_month = Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->modify('-1 month')->format('Y-m-d'), $end->modify('-1 month')->format('Y-m-d')])->get();
+
+        foreach($data as $key => $d){
+            foreach($actual_month as $key_order_actual => $order_actual){
+                if($d['day'] == $order_actual->day){
+                    $data[$key]['access']++;
+                }
+            }
+            foreach($last_month as $key_order_last => $order_last){
+                if($d['last_day'] == $order_last->day){
+                    $data[$key]['last_access']++;
                 }
             }
         }

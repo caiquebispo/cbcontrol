@@ -62,6 +62,14 @@
            </div>
         </x-card>
     </div>
+        <div class="mt-10">
+            <x-card title="RESUMO DE VISITAS NA PAGINA">
+                <div>
+                    <div id="chart-access"></div>
+                </div>
+            </x-card>
+        </div>
+
     @section('script')
     <script src="{{asset('js/dashboard.js')}}"></script>
     <script type="text/javascript">
