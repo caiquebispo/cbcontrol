@@ -2,10 +2,12 @@
 
 namespace App\Class\App;
 
+use App\Models\AccessSalesPage;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard
 {
@@ -17,6 +19,15 @@ class Dashboard
         $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
         return  $this->mountedStructureGraphSales($daterange, $start, $end);
+    }
+    public  function  getDataGraphAccess($start, $end): ?array
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($start, $interval, $end->modify('+1 day'));
+
+        return  $this->mountedStructureGraphAccess($daterange, $start, $end);
     }
     public  function  getDataGraphSalesForCategories($start, $end): ?array
     {
@@ -45,6 +56,13 @@ class Dashboard
 
         return  $this->mountedStructureTableSales($daterange, $start, $end);
     }
+    public  function  getDataIndicators($start, $end): ?array
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+
+        return  $this->mountedStructureIndicatorsDashboard($start, $end);
+    }
     private  function  mountedStructureGraphSales($daterange,$start, $end): ?array
     {
         $data = [];
@@ -72,6 +90,31 @@ class Dashboard
                     }else{
                         $data[$key]['last_canceled_sales'] += $order_last->total_amount;
                     }
+                }
+            }
+        }
+
+        return $data;
+    }
+    private  function  mountedStructureGraphAccess($daterange,$start, $end): ?array
+    {
+        $data = [];
+        foreach($daterange as $key_r => $r){
+            $data[] = ["day" => $r->format('Y-m-d'), "access" => '0','last_day' => $r->modify('-1 month')->format('Y-m-d'), "last_access" => 0];
+        }
+
+        $actual_month =  Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])->get();
+        $last_month = Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->modify('-1 month')->format('Y-m-d'), $end->modify('-1 month')->format('Y-m-d')])->get();
+
+        foreach($data as $key => $d){
+            foreach($actual_month as $key_order_actual => $order_actual){
+                if($d['day'] == $order_actual->day){
+                    $data[$key]['access']++;
+                }
+            }
+            foreach($last_month as $key_order_last => $order_last){
+                if($d['last_day'] == $order_last->day){
+                    $data[$key]['last_access']++;
                 }
             }
         }
@@ -154,5 +197,44 @@ class Dashboard
 
         }
         return  $data;
+    }
+    private  function mountedStructureIndicatorsDashboard($start, $end)
+    {
+
+        $actual_month = Auth::user()->company->orders()->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->select(DB::raw('sum(total_amount) as revenue, count(*) as total_sales'))
+            ->where('status_order', '!=', 'canceled')
+            ->first();
+
+        $actual_month_canceled = Auth::user()->company->orders()->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->select(DB::raw('sum(total_amount) as revenue_canceled, count(*) as total_sales_canceled'))
+            ->where('status_order', 'canceled')
+            ->first();
+
+        $actual_access = Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->format('Y-m-d'), $end->format('Y-m-d')])->count();
+        $last_access = Auth::user()->company->controlAccessSalePage()->whereBetween('day', [$start->modify('-1 month')->format('Y-m-d'), $end->modify('-1 month')->format('Y-m-d')])->count();
+
+        $last_month = Auth::user()->company->orders()->whereBetween('day', [$start->modify('-1 month')->format('Y-m-d'), $end->modify('-1 month')->format('Y-m-d')])
+            ->select(DB::raw('sum(total_amount) as last_revenue, count(*) as last_total_sales'))
+            ->where('status_order', '!=', 'canceled')
+            ->first();
+
+        $last_month_canceled = Auth::user()->company->orders()->whereBetween('day', [$start->modify('-1 month')->format('Y-m-d'), $end->modify('-1 month')->format('Y-m-d')])
+            ->select(DB::raw('sum(total_amount) as last_revenue_canceled, count(*) as last_total_sales_canceled'))
+            ->where('status_order', 'canceled')
+            ->first();
+
+        $data = [];
+        $percentage_actual_month_revenue = $actual_month->revenue != 0 ? (($actual_month->revenue-$last_month->last_revenue)/$actual_month->revenue)*100 : 0;
+        $percentage_actual_month_sales = $actual_month->total_sales != 0 ? (($actual_month->total_sales-$last_month->last_total_sales)/$actual_month->total_sales)*100 : 0;
+        $percentage_actual_month_sales_canceled = $actual_month_canceled->total_sales_canceled != 0 ? (($actual_month_canceled->total_sales_canceled-$last_month_canceled->last_total_sales_canceled)/$actual_month_canceled->total_sales_canceled)*100 : 0;
+        $percentage_actual_access = $actual_access != 0 ? (($actual_access-$last_access)/$actual_access)*100 : 0;
+
+        $data['indicator_revenue'] = ['revenue' => $actual_month->revenue,'last_revenue' => $last_month->last_revenue, 'percentage' => $percentage_actual_month_revenue];
+        $data['indicator_sales'] = ['sales' => $actual_month->total_sales, 'last_sales' => $last_month->last_total_sales,'percentage' => $percentage_actual_month_sales];
+        $data['indicator_sales_canceled'] = ['sales_canceled' => $actual_month_canceled->total_sales_canceled, 'last_sales_canceled' => $last_month_canceled->last_total_sales_canceled,'percentage' => $percentage_actual_month_sales_canceled];
+        $data['indicator_access'] = ['access' => $actual_access, 'last_access' => $last_access, 'percentage' => $percentage_actual_access];
+        return $data;
+
     }
 }

@@ -22,6 +22,10 @@ class DashboardController extends Controller
     {
         return (new Dashboard)->getDataGraphSales($request->start, $request->end);
     }
+    protected function getDataGraphAccess(Request $request): ?array
+    {
+        return (new Dashboard)->getDataGraphAccess($request->start, $request->end);
+    }
     protected function getDataTableSales(Request $request): ?array
     {
         return (new Dashboard)->getDataTableSales($request->start, $request->end);
@@ -33,5 +37,9 @@ class DashboardController extends Controller
     protected function getDataTableSalesForCategories(Request $request): ?array
     {
         return (new Dashboard)->getDataTableSalesForCategories($request->start, $request->end);
+    }
+    protected function getDataIndicators(Request $request): ?array
+    {
+        return (new Dashboard)->getDataIndicators($request->start, $request->end);
     }
 }

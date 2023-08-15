@@ -19,16 +19,20 @@ let Dashboard = {
             start = moment(start).format('YYYY-MM-DD')
             end = moment(end).format('YYYY-MM-DD')
             Dashboard.getDataGraphSales(start, end);
+            Dashboard.getDataGraphAccess(start, end);
             Dashboard.getDataTableSales(start, end);
             Dashboard.getDataGraphSalesForCategories(start, end);
             Dashboard.getDataTableSalesForCategories(start, end);
+            Dashboard.getDataIndicators(start, end);
 
         });
 
         Dashboard.getDataGraphSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataGraphAccess(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataTableSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataGraphSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataTableSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataIndicators(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
     },
     getDataGraphSales(start, end){
         axios({
@@ -38,7 +42,21 @@ let Dashboard = {
         }).then((response) =>{
 
             Dashboard.drawGraphSales(response.data)
-            Dashboard.drawGraphSalesForCategories(response.data)
+            // Dashboard.drawGraphSalesForCategories(response.data)
+
+        }).catch((error) =>{
+            console.log('error', error)
+        })
+    },
+    getDataGraphAccess(start, end){
+        axios({
+            method: 'GET',
+            url: `${window.location.href}/getDataGraphAccess?`,
+            params: {start, end}
+        }).then((response) =>{
+
+            Dashboard.drawGraphAccess(response.data)
+
 
         }).catch((error) =>{
             console.log('error', error)
@@ -78,6 +96,35 @@ let Dashboard = {
         }).then((response) =>{
 
             Dashboard.drawTableSales(response.data)
+
+        }).catch((error) =>{
+            console.log('error', error)
+        })
+    },
+    getDataIndicators(start, end){
+        axios({
+            method: 'GET',
+            url: `${window.location.href}/getDataIndicators?`,
+            params: {start, end}
+        }).then((response) =>{
+            console.log('response', response.data)
+            //Revenue
+            $('.total-receita').html('R$ '+ new Intl.NumberFormat({ style: 'currency', currency: 'BRL' }).format(response.data.indicator_revenue.revenue))
+            $('.share-receita').html(`<strong style="color:${response.data.indicator_revenue.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_revenue.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_receita').html(`MÊS ANTERIOR (R$ ${new Intl.NumberFormat({ style: 'currency', currency: 'BRL' }).format(response.data.indicator_revenue.last_revenue)})`)
+            //Sales
+            $('.total-vendas').html(response.data.indicator_sales.sales)
+            $('.share-vendas').html(`<strong style="color:${response.data.indicator_sales.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_sales.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_vendas').html(`MÊS ANTERIOR ( ${response.data.indicator_sales.last_sales} )`)
+            //Canceled
+            $('.total-cancelamento').html(response.data.indicator_sales_canceled.sales_canceled)
+            $('.share-cancelamento').html(`<strong style="color:${response.data.indicator_sales_canceled.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_sales_canceled.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_cancelamento').html(`MÊS ANTERIOR ( ${response.data.indicator_sales_canceled.last_sales_canceled} )`)
+            //Access
+            $('.total-visitas-na-pagina').html(response.data.indicator_access.access)
+            $('.share-visitas_na_pagina').html(`<strong style="color:${response.data.indicator_access.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_access.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_visitas-na-pagina').html(`MÊS ANTERIOR ( ${response.data.indicator_access.last_access} )`)
+            // Dashboard.drawTableSales(response.data)
 
         }).catch((error) =>{
             console.log('error', error)
@@ -170,6 +217,79 @@ let Dashboard = {
         let chart = new ApexCharts(document.querySelector("#chart-sales"), options);
         chart.render();
     },
+    drawGraphAccess(data){
+
+        let labelsAux = [];
+        let actualAccess =  []
+        let lastAccess =  []
+        for (var i in data) {
+            labelsAux.push(data[i].day)
+            actualAccess .push(data[i].access)
+            lastAccess .push(data[i].last_access)
+        }
+        let options = {
+            series: [
+                {
+                    name: 'Visitas Mes Atual',
+                    data: actualAccess ,
+                    type:'line'
+                },{
+                    name: 'Visitas Mes Anterior',
+                    data:  lastAccess,
+                    type:'line'
+                }
+            ],
+            chart: {
+                height: 450,
+                type: 'line',
+
+            },
+            dataLabels: {
+                enabled: false,
+                formatter: function(val, opt) {
+                    return  val
+                },
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            title: {
+                text: 'Comparativo de Visitas, Mês Atual X Mês Anterior',
+                align: 'left'
+            },
+            markers: {
+                size: 1
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: labelsAux,
+                labels: {
+                    format: 'dd/MM',
+                },
+
+
+            },
+            yaxis: {
+                title: {
+                    text: 'Visitas do Mês atual/Ultimo MêS'
+                },
+                labels: {
+                    formatter: function (value) {
+                        return value
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            }
+        };
+        let chart = new ApexCharts(document.querySelector("#chart-access"), options);
+        chart.render();
+    },
     drawGraphSalesForCategories(data){
 
         const label_categories = [];
@@ -198,8 +318,8 @@ let Dashboard = {
             }]
         };
 
-        let chart_sales_for_categories = new ApexCharts(document.querySelector("#chart-sales-for-categories"), options);
-        chart_sales_for_categories.render();
+        var chart = new ApexCharts(document.querySelector("#chart-sales-for-categories"), options);
+        chart.render();
 
     },
     drawTableSales(data){

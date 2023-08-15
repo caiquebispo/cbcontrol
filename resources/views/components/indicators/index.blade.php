@@ -5,8 +5,13 @@
             <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2 total-{{str_replace(' ', '-',strtolower($name))}}">----</h5>
             <p class="text-base font-normal text-gray-500 dark:text-gray-400">{{$name}}</p>
         </div>
-        <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-center share-{{str_replace(' ', '_',strtolower($name))}}">
-            ----
+        <div class="flex flex-col justify-end items-end px-2.5 py-0.5 text-base font-semibold text-center ">
+            <div class="share-{{str_replace(' ', '_',strtolower($name))}}">
+                ----
+            </div>
+            <div class="last_month_{{str_replace(' ', '-',strtolower($name))}} text-sm font-normal text-gray-500 dark:text-gray-400">
+                (MÊS ANTERIOR  ---)
+            </div>
         </div>
     </div>
 
