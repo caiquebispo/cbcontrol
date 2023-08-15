@@ -19,8 +19,13 @@ class HomeController extends Controller
 
             return response()->json(['success' => false, 'message' => 'Empresa não encontrada', 'code' => 404],404);
         }
+
         $company = $settingCompany->company;
-        $company->controlAccessSalePage()->create(['ip_address' => $request->ip(), 'day' => (new \DateTime('now'))->format('Y-m-d H:i:s')]);
+        $exist_access =$company->controlAccessSalePage()->where('ip_address' , $request->ip())->whereDate('day' , (new \DateTime('now'))->format('Y-m-d'))->exists();
+
+        if(!$exist_access){
+            $company->controlAccessSalePage()->create(['ip_address' => $request->ip(), 'day' => (new \DateTime('now'))->format('Y-m-d H:i:s')]);
+        }
 
         return view('store.home.index', compact('company'));
 

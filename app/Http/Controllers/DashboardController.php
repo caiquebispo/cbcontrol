@@ -34,4 +34,8 @@ class DashboardController extends Controller
     {
         return (new Dashboard)->getDataTableSalesForCategories($request->start, $request->end);
     }
+    protected function getDataIndicators(Request $request): ?array
+    {
+        return (new Dashboard)->getDataIndicators($request->start, $request->end);
+    }
 }

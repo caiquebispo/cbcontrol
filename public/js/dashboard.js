@@ -22,6 +22,7 @@ let Dashboard = {
             Dashboard.getDataTableSales(start, end);
             Dashboard.getDataGraphSalesForCategories(start, end);
             Dashboard.getDataTableSalesForCategories(start, end);
+            Dashboard.getDataIndicators(start, end);
 
         });
 
@@ -29,6 +30,7 @@ let Dashboard = {
         Dashboard.getDataTableSales(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataGraphSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
         Dashboard.getDataTableSalesForCategories(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
+        Dashboard.getDataIndicators(moment(start).format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'));
     },
     getDataGraphSales(start, end){
         axios({
@@ -78,6 +80,35 @@ let Dashboard = {
         }).then((response) =>{
 
             Dashboard.drawTableSales(response.data)
+
+        }).catch((error) =>{
+            console.log('error', error)
+        })
+    },
+    getDataIndicators(start, end){
+        axios({
+            method: 'GET',
+            url: `${window.location.href}/getDataIndicators?`,
+            params: {start, end}
+        }).then((response) =>{
+            console.log('response', response.data)
+            //Revenue
+            $('.total-receita').html('R$ '+ new Intl.NumberFormat({ style: 'currency', currency: 'BRL' }).format(response.data.indicator_revenue.revenue))
+            $('.share-receita').html(`<strong style="color:${response.data.indicator_revenue.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_revenue.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_receita').html(`MÊS ANTERIOR (R$ ${new Intl.NumberFormat({ style: 'currency', currency: 'BRL' }).format(response.data.indicator_revenue.last_revenue)})`)
+            //Sales
+            $('.total-vendas').html(response.data.indicator_sales.sales)
+            $('.share-vendas').html(`<strong style="color:${response.data.indicator_sales.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_sales.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_vendas').html(`MÊS ANTERIOR ( ${response.data.indicator_sales.last_sales} )`)
+            //Canceled
+            $('.total-cancelamento').html(response.data.indicator_sales_canceled.sales_canceled)
+            $('.share-cancelamento').html(`<strong style="color:${response.data.indicator_sales_canceled.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_sales_canceled.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_cancelamento').html(`MÊS ANTERIOR ( ${response.data.indicator_sales_canceled.last_sales_canceled} )`)
+            //Access
+            $('.total-visitas-na-pagina').html(response.data.indicator_access.access)
+            $('.share-visitas_na_pagina').html(`<strong style="color:${response.data.indicator_access.percentage.toFixed(2) < 0 ? 'red': 'green'}">${response.data.indicator_access.percentage.toFixed(2)} %</strong>`)
+            $('.last_month_visitas-na-pagina').html(`MÊS ANTERIOR ( ${response.data.indicator_access.last_access} )`)
+            // Dashboard.drawTableSales(response.data)
 
         }).catch((error) =>{
             console.log('error', error)

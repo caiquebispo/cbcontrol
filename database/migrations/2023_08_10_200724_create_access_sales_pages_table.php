@@ -16,7 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->ipAddress()->nullable();
-            $table->dateTime('day')->nullable();
+            $table->date('day')->nullable();
             $table->timestamps();
 
         });
