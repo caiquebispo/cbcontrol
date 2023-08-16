@@ -18,7 +18,6 @@ return new class extends Migration
             $table->ipAddress()->nullable();
             $table->date('day')->nullable();
             $table->timestamps();
-
         });
     }
 
