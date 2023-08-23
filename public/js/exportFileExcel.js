@@ -1,13 +1,13 @@
 let buttonExport = document.querySelector('.export')
-buttonExport.addEventListener('click', exportExcel)
+buttonExport.addEventListener('click', exportPDF)
 
-function exportExcel() {
-    
-    let table = document.getElementsByTagName("table");
-    TableToExcel.convert(table[0], {
-        name: `Lista de Clientes.xlsx`,
-        sheet: {
-            name: 'Sheet 1'
-        }
-    });
+function exportPDF() {
+    axios({
+        method:'GET',
+        url: window.location.href + '/exportPDF'
+    }).then((response) =>{
+        console.log('response', response)
+    }).catch((error) =>{
+        console.log('error', error.response)
+    })
 }
