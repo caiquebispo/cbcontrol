@@ -12,5 +12,5 @@
             </div>
         </div>
     </div>
-    <script src="{{asset('js/exportFileExcel.js')}}"></script>
+{{--    <script src="{{asset('js/exportFileExcel.js')}}"></script>--}}
 </x-app-layout>
