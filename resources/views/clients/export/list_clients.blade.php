@@ -5,34 +5,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Details</title>
+    <title>Listagem de Clientes</title>
 
     <style>
         table {
-            width: 95%;
+            width:100%;
+            font-family:sans-serif;
             border-collapse: collapse;
-            margin: 50px auto;
+            font-size: 70%;
+
         }
 
-        /* Zebra striping */
-        tr:nth-of-type(odd) {
-            background: #eee;
+        td, thead {
+            border: 1px solid black;
+            text-align: center;
         }
-
-        th {
-            background: #3498db;
+        thead, th {
+            border: 1px solid black;
+            background-color: #0080c1;
+            text-align: center;
             color: white;
-            font-weight: bold;
         }
-
-        td,
-        th {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-            font-size: 18px;
+        @page {
+            margin: 10px 5px;
         }
-
 
     </style>
 
@@ -44,15 +40,16 @@
 {{--    <div style="width: 10%; float:left; margin-right: 20px;">--}}
 {{--        <img src="{{ public_path('img/logo/cb-logo.png') }}" width="100%"  alt="">--}}
 {{--    </div>--}}
-    <div style="width: 50%; float: left;">
-        <h1>Relação de Clientes</h1>
-    </div>
+{{--    <div style="width: 50%; float: left;">--}}
+{{--        <h1>Relação de Clientes</h1>--}}
+{{--    </div>--}}
 </div>
 
-<table style="position: relative; top: 50px;">
+<table>
     <thead>
     <tr>
         <th>CLIENTE</th>
+        <th>TELEFONE</th>
         <th>VALOR</th>
         <th>LOCAL</th>
         <th>PAGAMENTO</th>
@@ -63,6 +60,7 @@
     @foreach ($clients as $client)
         <tr>
             <td>{{ $client->full_name }}</td>
+            <td>{{ $client->number_phone }}</td>
             <td>R$ {{ number_format($client->value, 2,'.',',')}}</td>
             <td>{{ $client->local }}</td>
             <td>{{ $client->payment_method }}</td>
@@ -71,7 +69,19 @@
     @endforeach
     </tbody>
 </table>
+<script type="text/php">
+    if (isset($pdf)) {
 
+    $text = "{PAGE_NUM}/{PAGE_COUNT}";
+    $font = null;
+    $size = 10;
+    $color = array(0, 0, 0);
+    $word_space = 0.0;
+    $char_space = 0.0;
+    $angle = 0.0;
+    $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
+  }
+</script>
 </body>
 
 </html>
