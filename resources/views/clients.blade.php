@@ -2,7 +2,7 @@
 
     <div class="py-24">
         <div class="container mx-auto sm:px-6 lg:px-8">
-            <x-button class="export flex bg-green-400 text-white hover:bg-green-700 mb-4">
+            <x-button class="export flex bg-green-400 text-white hover:bg-green-700 mb-4" href="{{route('exportPDF')}}">
                 EXPORT PDF
             </x-button>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
