@@ -19,7 +19,7 @@ use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
-final class ListClients extends PowerGridComponent
+final class ListClientsOld extends PowerGridComponent
 {
     use ActionButton;
     public User $user;

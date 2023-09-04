@@ -27,10 +27,10 @@ class Update extends ModalComponent
     public ?string $delivery = null;
     public ?string $birthday = null;
     public ?int $group_id = null;
-    
-    
+
+
     public function rules(){
-        
+
         return [
 
             'client.full_name' => 'required|min:4|max:150',
@@ -54,15 +54,15 @@ class Update extends ModalComponent
     }
     public function update(): void
     {
-        
+
         $this->validate();
         $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
-        
+
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::updated');
+        $this->emitTo(ListClientsOld::class, 'clients::index::updated');
         $this->closeModal();
     }
     public function notifications(){
@@ -70,13 +70,13 @@ class Update extends ModalComponent
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Cliente Editado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de cliente!',
                 'O usuário(a) '.$this->user->name.' editou as informações do cliente '.$this->client->full_name.' na empresa '.$this->user->company->corporate_reason, // Notification Body
-                
+
             );
             $user->notify($notification);
         }
