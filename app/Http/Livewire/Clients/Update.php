@@ -13,12 +13,13 @@ use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class Update extends ModalComponent
+class Update extends Component
 {
     use Actions;
     public Client $client;
     public User $user;
 
+    public ?bool $showModal = false;
     public ?string $full_name = null;
     public ?string $number_phone = null;
     public ?float $value = null;
@@ -62,8 +63,7 @@ class Update extends ModalComponent
 
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListClientsOld::class, 'clients::index::updated');
-        $this->closeModal();
+        $this->emitTo(ListClient::class, 'client::index::updated');
     }
     public function notifications(){
 

@@ -28,12 +28,8 @@
                             <x-table.th class="text-center">{{$client->payment_method ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="text-center">{{$client->delivery ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex items-center justify-end">
-                                <x-table.td-actions>
-                                    <x-table.td-action-li>
-{{--                                        <livewire:clients.create />--}}
-                                    </x-table.td-action-li>
-                                    <x-table.td-action-li>Excluir - <x-button-trash /></x-table.td-action-li>
-                                </x-table.td-actions>
+                                <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id"/>
+
                             </x-table.th>
                         </x-table.tr>
                     @endforeach

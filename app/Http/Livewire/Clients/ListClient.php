@@ -13,7 +13,10 @@ class ListClient extends Component
     use WithPagination;
     public ?string $search = '';
     public User $user;
-    protected $listeners = ['client::index::created' => '$refresh'];
+    protected $listeners = [
+        'client::index::created' => '$refresh',
+        'client::index::updated' => '$refresh',
+    ];
     public function __construct()
     {
         $this->user = Auth::user();
