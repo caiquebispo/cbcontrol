@@ -8,7 +8,6 @@ use DateTime;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
 class Create extends Component

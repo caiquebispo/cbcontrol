@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
 class Update extends Component

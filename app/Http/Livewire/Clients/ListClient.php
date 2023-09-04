@@ -16,6 +16,7 @@ class ListClient extends Component
     protected $listeners = [
         'client::index::created' => '$refresh',
         'client::index::updated' => '$refresh',
+        'client::index::deleted' => '$refresh',
     ];
     public function __construct()
     {
