@@ -3,7 +3,6 @@
 
     <x-modal.main :title="'Cadastrar Cliente'" :show="$showModal">
         <x-slot:body>
-            <x-errors />
             <form wire:submit.prevent="create" class="my-2">
             @csrf
             <x-native-select class="my-2"

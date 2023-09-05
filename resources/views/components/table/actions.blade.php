@@ -1,8 +1,21 @@
 @props(['nameButton' => null])
 
 <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-    <div class="w-full md:w-1/2">
-        <form class="flex items-center">
+    <div class="w-full flex md:w-1/2">
+        <x-select
+            class="mr-2"
+            placeholder="Itens por pagina"
+            :options="[
+                ['name' => '10',  'id' => 10],
+                ['name' => '20', 'id' => 20],
+                ['name' => '50',   'id' => 50],
+                ['name' => '100',    'id' => 100],
+            ]"
+            option-label="name"
+            option-value="id"
+            wire:model.defer="qtyItemsForPage"
+        />
+        <form class="flex items-center w-full">
             <label for="simple-search" class="sr-only">Search</label>
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

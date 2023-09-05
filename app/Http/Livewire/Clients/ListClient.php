@@ -12,13 +12,14 @@ class ListClient extends Component
 {
     use WithPagination;
     public ?string $search = '';
+    public ?int $qtyItemsForPage = 10;
     public User $user;
     protected $listeners = [
         'client::index::created' => '$refresh',
         'client::index::updated' => '$refresh',
         'client::index::deleted' => '$refresh',
     ];
-    public function __construct()
+    public function mount(): void
     {
         $this->user = Auth::user();
     }
@@ -31,6 +32,6 @@ class ListClient extends Component
 
         return $this->user->company->clients()
             ->when($this->search != "", fn($query) => $query->where('full_name', 'like', '%'.$this->search."%"))
-            ->paginate(10);
+            ->paginate($this->qtyItemsForPage);
     }
 }
