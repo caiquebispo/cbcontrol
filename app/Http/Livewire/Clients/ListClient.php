@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Clients;
 
+use App\Http\Controllers\ClientController;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -33,5 +34,10 @@ class ListClient extends Component
         return $this->user->company->clients()
             ->when($this->search != "", fn($query) => $query->where('full_name', 'like', '%'.$this->search."%"))
             ->paginate($this->qtyItemsForPage);
+    }
+    public function  exportPDF(): void
+    {
+//        dd('is here');
+        ClientController::exportPDF();
     }
 }
