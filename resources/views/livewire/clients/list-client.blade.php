@@ -1,7 +1,7 @@
 <div>
     <div class="container mx-auto sm:px-6 lg:px-8">
         <x-table.content-table>
-            <x-table.actions >
+            <x-table.actions :modelExport="'clients'" :showButtonExport="true">
                 <x-slot name="buttonCreate">
                     <livewire:clients.create />
                 </x-slot>

@@ -35,9 +35,8 @@ class ListClient extends Component
             ->when($this->search != "", fn($query) => $query->where('full_name', 'like', '%'.$this->search."%"))
             ->paginate($this->qtyItemsForPage);
     }
-    public function  exportPDF(): void
+    public function  exportPDF($model)
     {
-//        dd('is here');
-        ClientController::exportPDF();
+        return ClientController::exportPDF();
     }
 }
