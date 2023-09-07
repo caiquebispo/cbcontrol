@@ -8,13 +8,13 @@
             </x-table.actions>
             <x-table>
                 <x-table.thead>
-                    <x-table.th>NOME</x-table.th>
-                    <x-table.th class="text-center">GRUPO</x-table.th>
-                    <x-table.th class="text-center">TELEFONE</x-table.th>
-                    <x-table.th class="text-center">VALOR</x-table.th>
-                    <x-table.th class="text-center">LOCAL</x-table.th>
-                    <x-table.th class="text-center">PAGAMENTO</x-table.th>
-                    <x-table.th class="text-center">ENTREGA</x-table.th>
+                    <x-table.th wire:click.prevent="sortBy('full_name')" :sortable="true" :direction="$sortDirection">NOME</x-table.th>
+                    <x-table.th class="text-center" >GRUPO</x-table.th>
+                    <x-table.th class="text-center" wire:click.prevent="sortBy('number_phone')" :sortable="true" :direction="$sortDirection">TELEFONE</x-table.th>
+                    <x-table.th class="text-center" wire:click.prevent="sortBy('value')" :sortable="true" :direction="$sortDirection">VALOR</x-table.th>
+                    <x-table.th class="text-center" wire:click.prevent="sortBy('local')" :sortable="true" :direction="$sortDirection">LOCAL</x-table.th>
+                    <x-table.th class="text-center" wire:click.prevent="sortBy('payment_method')" :sortable="true" :direction="$sortDirection">PAGAMENTO</x-table.th>
+                    <x-table.th class="text-center" wire:click.prevent="sortBy('delivery')" :sortable="true" :direction="$sortDirection">ENTREGA</x-table.th>
                     <x-table.th class="text-right">ACTIONS</x-table.th>
                 </x-table.thead>
                 <x-table.tbody>
@@ -27,7 +27,7 @@
                             <x-table.th class="text-center">{{$client->local ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="text-center">{{$client->payment_method ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="text-center">{{$client->delivery ?? 'NÃO DEFINIDO'}}</x-table.th>
-                            <x-table.th class="flex items-center justify-end">
+                            <x-table.th class="flex  justify-end">
                                 <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id"/>
                                 <livewire:clients.delete :client="$client" :wire:key="'client-delete-'.$client->id"/>
                             </x-table.th>
