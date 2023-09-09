@@ -22,6 +22,7 @@ class ListClient extends Component
         'client::index::created' => '$refresh',
         'client::index::updated' => '$refresh',
         'client::index::deleted' => '$refresh',
+        'client:index::increase-or-decrease' => '$refresh',
     ];
     public function mount(): void
     {

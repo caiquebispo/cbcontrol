@@ -3,6 +3,7 @@
         <x-table.content-table>
             <x-table.actions :modelExport="'clients'" :showButtonExport="true">
                 <x-slot name="buttonCreate">
+                    <livewire:clients.increase-or-decrease />
                     <livewire:clients.create />
                 </x-slot>
             </x-table.actions>

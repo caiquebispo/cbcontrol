@@ -6,17 +6,16 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class IncreaseOrDecrease extends ModalComponent
+class IncreaseOrDecrease extends Component
 {
     use Actions;
     public User $user;
     public ?int $type_increase_or_decrease = null;
     public ?float $value = null;
     public ?string $type =  null;
-
+    public ?bool $showModal = false;
     public function __construct()
     {
         $this->user = Auth::user();
@@ -44,8 +43,7 @@ class IncreaseOrDecrease extends ModalComponent
 
         $this->notifications($this->type, $this->value);
         $this->reset();
-        $this->emitTo(ListClientsOld::class, 'clients::index::increase-or-decrease');
-        $this->closeModal();
+        $this->emitTo(ListClient::class, 'client:index::increase-or-decrease');
     }
     public function notifications($type, $value){
 

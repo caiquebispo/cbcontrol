@@ -1,9 +1,9 @@
 @props(['direction', 'sortable'=> false])
 @php
-$class = $sortable ? 'cursor-pointer' : '';
+$class = $sortable ? 'flex cursor-pointer' : '';
 @endphp
 <th {{$attributes->merge(['class' => 'px-4 py-3'])}}>
-    <p class="flex {{$class}}">
+    <p class="{{$class}}">
         {{$slot}}
         @if($sortable)
              @if($direction === 'asc')
