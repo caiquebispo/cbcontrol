@@ -23,7 +23,7 @@
                             <x-table.th class="text-center">{{$product->quantity ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex  justify-end">
 {{--                                <livewire:products.update :product="$product" :wire:key="'product-update-'.$product->id"/>--}}
-{{--                                <livewire:products.delete :product="$product" :wire:key="'product-delete-'.$product->id"/>--}}
+                                <livewire:products.delete :product="$product" :wire:key="'product-delete-'.$product->id"/>
                             </x-table.th>
                         </x-table.tr>
                     @endforeach
