@@ -23,7 +23,7 @@ class ListGroup extends Component
     {
         return view('livewire.groups.list-group', ['groups' => $this->getGroups()]);
     }
-    public function getGroups()
+    public function getGroups(): object
     {
         return Auth::user()->company->groups()
             ->when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))

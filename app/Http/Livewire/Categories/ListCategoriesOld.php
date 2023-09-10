@@ -18,7 +18,7 @@ use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
-final class ListCategories extends PowerGridComponent
+final class ListCategoriesOld extends PowerGridComponent
 {
     use ActionButton;
     public User $user;
@@ -49,7 +49,7 @@ final class ListCategories extends PowerGridComponent
     */
     public function datasource(): ?Collection
     {
-        
+
         return $this->user->company->categories;
     }
     public function header(): array
@@ -71,11 +71,11 @@ final class ListCategories extends PowerGridComponent
     public function setUp(): array
     {
         return [
-           
+
             Header::make()->withoutLoading(),
             Header::make()->showSearchInput(),
             Footer::make()->showPerPage()->showRecordCount(),
-            
+
         ];
     }
 
@@ -124,7 +124,7 @@ final class ListCategories extends PowerGridComponent
     public function actions(): array
     {
         return [
-            
+
             Button::add('button-trash')
             ->render(function (Category $category) {
                 return Blade::render(<<<HTML
@@ -137,7 +137,7 @@ final class ListCategories extends PowerGridComponent
                 <x-button-update primary icon="pencil" onclick="Livewire.emit('openModal', 'categories.update', {{ json_encode(['category' => $category->id]) }})" />
                 HTML);
             }),
-            
+
         ];
     }
 }

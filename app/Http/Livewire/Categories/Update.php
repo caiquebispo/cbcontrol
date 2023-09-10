@@ -35,9 +35,9 @@ class Update extends ModalComponent
     {
         $this->validate();
         $this->category->save();
-        $this->notifications(); 
+        $this->notifications();
         $this->reset();
-        $this->emitTo(ListCategories::class, 'categories::index::updated');
+        $this->emitTo(ListCategoriesOld::class, 'categories::index::updated');
         $this->closeModal();
     }
     public function notifications(): void
@@ -46,13 +46,13 @@ class Update extends ModalComponent
         $this->notification()->success(
             $title = 'Parabéns!',
             $description =  'Categoria Editado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de Categoria!',
                 'O usuário(a) '.$this->user->name.' editou as informações de uma categoria na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }
