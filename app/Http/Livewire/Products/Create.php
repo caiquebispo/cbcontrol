@@ -6,20 +6,21 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
+use MBarlow\Megaphone\Types\General;
 use WireUi\Traits\Actions;
 
-class Create extends ModalComponent
-{   
+class Create extends Component
+{
     use Actions;
-    public User $user;
+    public ?User $user;
     public ?string $name = null;
     public ?string $description = null;
     public ?int $category_id = null;
     public ?float $price = null;
     public ?int $quantity = null;
+    public ?bool $showModal = false;
 
-    protected $rules = [
+    protected array $rules = [
 
         'name' => 'required|min:4|max:150',
         'description' => 'nullable|string',
@@ -38,27 +39,27 @@ class Create extends ModalComponent
     }
     public function create(): void
     {
-        
+
         $validated = $this->validate();
 
         $this->user->company->products()->create($validated);
         $this->notifications();
         $this->reset();
         $this->emit('products::index::created');
-        $this->closeModal();
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Produto Cadastrado com sucesso!'
-        ); 
+            'Parabéns!',
+            'Produto Cadastrado com sucesso!'
+        );
         foreach($this->user->company->users as $user){
-            
-            $notification = new \MBarlow\Megaphone\Types\General(
+
+            $notification = new General(
                 'Cadastro de Produto!',
                 'O usuário(a) '.$this->user->name.' cadastrou um novo produto na empresa '.$this->user->company->corporate_reason, // Notification Body
-                
+
             );
             $user->notify($notification);
         }
