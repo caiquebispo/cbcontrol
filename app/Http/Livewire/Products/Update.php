@@ -7,21 +7,21 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class Update extends ModalComponent
-{   
+class Update extends Component
+{
     use Actions;
-    public User $user;
-    public Product $product;
+    public ?User $user;
+    public ?Product $product;
     public ?string $name = null;
     public ?string $description = null;
     public ?int $category_id = null;
     public ?float $price = null;
     public ?int $quantity = null;
+    public ?bool $showModal = false;
 
-    protected $rules = [
+    protected array $rules = [
 
         'product.name' => 'required|min:4|max:150',
         'product.description' => 'nullable|string',
@@ -43,23 +43,23 @@ class Update extends ModalComponent
     {
         $this->validate();
         $this->product->save();
-        $this->notifications(); 
+        $this->notifications();
         $this->reset();
         $this->emit('products::index::updated');
-        $this->closeModal();
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description =  'Produto Editado com sucesso!'
-        ); 
+            'Parabéns!',
+            'Produto Editado com sucesso!'
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de Produto!',
                 'O usuário(a) '.$this->user->name.' editou as informações de um Produto na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }
