@@ -6,16 +6,17 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use MBarlow\Megaphone\Types\General;
 use WireUi\Traits\Actions;
 
 class Create extends Component
 {
     use Actions;
-    public User $user;
+    public ?User $user;
     public ?string $name = null;
     public ?bool $showModal = false;
 
-    protected $rules = [
+    protected array $rules = [
 
         'name' => 'required|min:4|max:150'
     ];
@@ -36,15 +37,16 @@ class Create extends Component
         $this->reset();
         $this->emitTo(ListGroup::class, 'group::index::created');
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description =  'Grupo Criado com sucesso!'
+           'Parabéns!',
+            'Grupo Criado com sucesso!'
         );
         foreach($this->user->company->users as $user){
 
-            $notification = new \MBarlow\Megaphone\Types\General(
+            $notification = new General(
                 'Cadastro de Grupo!',
                 'O usuário(a) '.$this->user->name.' cadatrou um novo grupo na empresa '.$this->user->company->corporate_reason,
 

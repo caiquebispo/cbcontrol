@@ -7,15 +7,15 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
+use MBarlow\Megaphone\Types\Important;
 use WireUi\Traits\Actions;
 
-class Delete extends ModalComponent
+class Delete extends Component
 {
     use Actions;
-    public Group $group;
-    public User $user;
-
+    public ?Group $group;
+    public ?User $user;
+    public ?bool $showModal = false;
     public function __construct()
     {
         $this->group = new Group();
@@ -27,25 +27,25 @@ class Delete extends ModalComponent
     }
     public function delete():void
     {
-        
+
         $this->group->delete();
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListGroups::class, 'groups::index::deleted');
-        $this->closeModal();
+        $this->emitTo(ListGroup::class, 'group::index::deleted');
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description =   'Grupo Deletado com sucesso!'
-        ); 
+            'Parabéns!',
+            'Grupo Deletado com sucesso!'
+        );
         foreach($this->user->company->users as $user){
-            
-            $notification = new \MBarlow\Megaphone\Types\Important(
+
+            $notification = new Important(
                 'Remoção de Grupo!',
                 'O usuário(a) '.$this->user->name.' deletou um grupo na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }
