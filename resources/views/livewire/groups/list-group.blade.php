@@ -16,7 +16,7 @@
                         <x-table.tr>
                             <x-table.th>{{$group->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex  justify-end">
-{{--                                <livewire:groups.update :group="$group" :wire:key="'group-update-'.$group->id"/>--}}
+                                <livewire:groups.update :group="$group" :wire:key="'group-update-'.$group->id"/>
                                 <livewire:groups.delete :group="$group" :wire:key="'group-delete-'.$group->id"/>
                             </x-table.th>
                         </x-table.tr>
