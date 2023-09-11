@@ -2,28 +2,25 @@
 
 namespace App\Http\Livewire\Products;
 
-use App\Models\Product;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class ListPhotos extends Component
 {
-    public Product $product;
-    
+    public object $product;
+
     protected $listeners = [
-        'products::index::deleted' => 'getPhotos',
-        'products::index::created' => 'getPhotos'
+        'products::index::deleted' => '$refresh',
+        'products::index::created' => '$refresh'
     ];
-    public function __construct()
-    {
-        $this->product = new Product;
-    }
-    public function render()
+
+    public function render(): View
     {
         return view('livewire.products.list-photos',['images' => $this->getPhotos()]);
     }
-    public function getPhotos(): Collection
+    public function getPhotos(): Collection|array
     {
-        return $this->product->image;
+        return $this->product->image ?: [];
     }
 }

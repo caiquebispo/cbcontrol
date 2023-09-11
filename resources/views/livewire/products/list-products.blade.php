@@ -12,7 +12,7 @@
                     <x-table.th class="text-center" >CATEGORIA</x-table.th>
                     <x-table.th class="text-center" wire:click.prevent="sortBy('price')" :sortable="true" :direction="$sortDirection">VALOR</x-table.th>
                     <x-table.th class="text-center" wire:click.prevent="sortBy('quantity')" :sortable="true" :direction="$sortDirection">Qt Estoque</x-table.th>
-                    <x-table.th class="text-right">ACTIONS</x-table.th>
+                    <x-table.th class="text-center">ACTIONS</x-table.th>
                 </x-table.thead>
                 <x-table.tbody>
                     @foreach($products as $product)
@@ -21,8 +21,9 @@
                             <x-table.th class="text-center">{{$product->categories->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="text-center">R$ {{ number_format($product->price, 2, ',','.')}}</x-table.th>
                             <x-table.th class="text-center">{{$product->quantity ?? 'NÃO DEFINIDO'}}</x-table.th>
-                            <x-table.th class="flex  justify-end">
+                            <x-table.th class="flex  justify-evenly">
                                 <livewire:products.update :product="$product" :wire:key="'product-update-'.$product->id"/>
+                                <livewire:products.update-or-insert-photo :product="$product" :wire:key="'product-update-or-insert-photo-'.$product->id"/>
                                 <livewire:products.delete :product="$product" :wire:key="'product-delete-'.$product->id"/>
                             </x-table.th>
                         </x-table.tr>
