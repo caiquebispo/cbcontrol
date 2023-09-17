@@ -9,14 +9,14 @@
                         <div class="title-product text-black font-bold text-sm mb-2">{{$product->name}}</div>
                         <div class="title-product  font-bold text-sm text-gray-400">
                         {{$product->description ?? 'Não temos mais informações disponível sobre esse produto' }}
-                            
+
                         </div>
                     </section>
-                    <section class="bg-cover bg-no-repeat bg-center" 
-                        @if(count($product->image) > 0) 
-                            style="background-image:url({{url(Storage::url($product->image->first()->path))}})" 
-                        @else  
-                            style="background-image:url('/img/product_photo/default/default.jpg')" 
+                    <section class="bg-cover bg-no-repeat bg-center"
+                        @if(count($product->image) > 0)
+                            style="background-image:url({{url(Storage::url($product->image->first()->path))}})"
+                        @else
+                            style="background-image:url('/img/product_photo/default/default.jpg')"
                         @endif
                     </section>
                 </div>

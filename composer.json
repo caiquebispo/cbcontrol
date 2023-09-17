@@ -16,7 +16,6 @@
         "livewire/livewire": "^2.12",
         "mbarlow/megaphone": "^1.2",
         "mindscms/laravelshoppingcart": "^2.1",
-        "power-components/livewire-powergrid": "^4.6",
         "twbs/bootstrap-icons": "^1.10",
         "wire-elements/modal": "^1.0",
         "wireui/wireui": "^1.17"
