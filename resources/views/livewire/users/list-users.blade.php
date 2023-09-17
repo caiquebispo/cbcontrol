@@ -22,7 +22,7 @@
                             <x-table.th>{{$user->company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th>{{$user->status }}</x-table.th>
                             <x-table.th class="flex  justify-end">
-{{--                                <livewire:users.update :user="$user" :wire:key="'user-update-'.$user->id"/>--}}
+                                <livewire:users.update :user="$user" :wire:key="'user-update-'.$user->id"/>
 {{--                                <livewire:users.delete :user="$user" :wire:key="'user-delete-'.$user->id"/>--}}
                             </x-table.th>
                         </x-table.tr>
