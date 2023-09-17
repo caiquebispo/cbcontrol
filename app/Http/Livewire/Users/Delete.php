@@ -14,7 +14,7 @@ class Delete extends ModalComponent
     public User $user;
     public function __construct()
     {
-        
+
         $this->user = new User;
     }
     public function render()
@@ -26,7 +26,7 @@ class Delete extends ModalComponent
         $this->user->delete();
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListUsers::class, 'users::index::deleted');
+        $this->emitTo(ListUsersOls::class, 'users::index::deleted');
         $this->closeModal();
     }
     public function notifications(){
@@ -34,13 +34,13 @@ class Delete extends ModalComponent
         $this->notification()->success(
             $title = 'Parabéns!',
             $description =  'Usuário Deletado com sucesso!'
-        ); 
+        );
         foreach(Auth::user()->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\Important(
                 'Remoção de Usuário!',
                 'O usuário(a) '.Auth::user()->name.' deletou um usuário na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }

@@ -38,7 +38,7 @@ class UpdatePassword extends ModalComponent
         $this->user->update($this->validateOnly('password'));
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListUsers::class, 'users::index::updated-password');
+        $this->emitTo(ListUsersOls::class, 'users::index::updated-password');
         $this->closeModal();
     }
     public function notifications(){
@@ -46,13 +46,13 @@ class UpdatePassword extends ModalComponent
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Senha Alterada com sucesso!'
-        ); 
+        );
         foreach(Auth::user()->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de Senha!',
                 'O usuário(a) '.Auth::user()->name.' atualizou as senha de um usuário na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }
