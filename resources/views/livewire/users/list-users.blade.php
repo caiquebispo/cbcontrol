@@ -24,7 +24,7 @@
                             <x-table.th class="flex  justify-evenly">
                                 <livewire:users.update :user="$user" :wire:key="'user-update-'.$user->id"/>
                                 <livewire:users.update-password :user="$user" :wire:key="'user-update-password-'.$user->id"/>
-{{--                                <livewire:users.delete :user="$user" :wire:key="'user-delete-'.$user->id"/>--}}
+                                <livewire:users.delete :user="$user" :wire:key="'user-delete-'.$user->id"/>
                             </x-table.th>
                         </x-table.tr>
                     @endforeach
