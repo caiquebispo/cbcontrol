@@ -12,7 +12,7 @@
                     <x-table.th wire:click.prevent="sortBy('email')" :sortable="true" :direction="$sortDirection">E-MAIL</x-table.th>
                     <x-table.th wire:click.prevent="sortBy('company_id')" :sortable="true" :direction="$sortDirection">EMPRESA</x-table.th>
                     <x-table.th wire:click.prevent="sortBy('status')" :sortable="true" :direction="$sortDirection">STATUS</x-table.th>
-                    <x-table.th class="text-right">ACTIONS</x-table.th>
+                    <x-table.th class="text-center">ACTIONS</x-table.th>
                 </x-table.thead>
                 <x-table.tbody>
                     @foreach($users as $user)
@@ -21,8 +21,9 @@
                             <x-table.th>{{$user->email ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th>{{$user->company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th>{{$user->status }}</x-table.th>
-                            <x-table.th class="flex  justify-end">
+                            <x-table.th class="flex  justify-evenly">
                                 <livewire:users.update :user="$user" :wire:key="'user-update-'.$user->id"/>
+                                <livewire:users.update-password :user="$user" :wire:key="'user-update-password-'.$user->id"/>
 {{--                                <livewire:users.delete :user="$user" :wire:key="'user-delete-'.$user->id"/>--}}
                             </x-table.th>
                         </x-table.tr>
