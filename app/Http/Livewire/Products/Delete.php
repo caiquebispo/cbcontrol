@@ -8,14 +8,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
+use MBarlow\Megaphone\Types\Important;
 use WireUi\Traits\Actions;
 
-class Delete extends ModalComponent
+class Delete extends Component
 {
     use Actions;
-    public User $user;
-    public Product $product;
+    public ?User $user;
+    public ?Product $product;
+    public ?bool $showModal = false;
 
     public function __construct()
     {
@@ -33,7 +34,6 @@ class Delete extends ModalComponent
         $this->product->delete();
         $this->notifications();
         $this->emit('products::index::deleted');
-        $this->closeModal();
     }
     public function deletePhotos($images): void
     {
@@ -42,20 +42,21 @@ class Delete extends ModalComponent
             Storage::delete($image->path);
             $image->delete();
         }
-        
+
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description =   'Produto Deletado com sucesso!'
-        ); 
+            'Parabéns!',
+            'Produto Deletado com sucesso!'
+        );
         foreach($this->user->company->users as $user){
-            
-            $notification = new \MBarlow\Megaphone\Types\Important(
+
+            $notification = new Important(
                 'Remoção de Produto!',
                 'O usuário(a) '.$this->user->name.' deletou um produto na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }

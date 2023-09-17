@@ -6,17 +6,17 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
 
-class Create extends ModalComponent
+class Create extends Component
 {
     use Actions;
-    public User $user;
+    public ?User $user;
     public ?string $name = null;
+    public ?bool $showModal = false;
 
-    protected $rules = [
+    protected array $rules = [
 
         'name' => 'required|min:4|max:100'
     ];
@@ -36,22 +36,22 @@ class Create extends ModalComponent
         $this->reset();
         $this->notifications();
         $this->emitTo(ListCategories::class, 'categories::index::created');
-        $this->closeModal();
+
     }
 
     public function notifications(): void
     {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Categoria Cadastrado com sucesso!'
-        ); 
+           'Parabéns!',
+            'Categoria Cadastrado com sucesso!'
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Cadastro de Categoria!',
                 'O usuário(a) '.$this->user->name.' cadastrou uma nova categoria na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }

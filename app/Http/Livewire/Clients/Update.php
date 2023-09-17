@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class Update extends ModalComponent
+class Update extends Component
 {
     use Actions;
     public Client $client;
     public User $user;
 
+    public ?bool $showModal = false;
     public ?string $full_name = null;
     public ?string $number_phone = null;
     public ?float $value = null;
@@ -27,10 +27,10 @@ class Update extends ModalComponent
     public ?string $delivery = null;
     public ?string $birthday = null;
     public ?int $group_id = null;
-    
-    
+
+
     public function rules(){
-        
+
         return [
 
             'client.full_name' => 'required|min:4|max:150',
@@ -54,29 +54,28 @@ class Update extends ModalComponent
     }
     public function update(): void
     {
-        
+
         $this->validate();
         $this->client->save();
         $this->client->groups()->detach();
         $this->client->groups()->attach($this->group_id);
-        
+
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::updated');
-        $this->closeModal();
+        $this->emitTo(ListClient::class, 'client::index::updated');
     }
     public function notifications(){
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Cliente Editado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de cliente!',
                 'O usuário(a) '.$this->user->name.' editou as informações do cliente '.$this->client->full_name.' na empresa '.$this->user->company->corporate_reason, // Notification Body
-                
+
             );
             $user->notify($notification);
         }

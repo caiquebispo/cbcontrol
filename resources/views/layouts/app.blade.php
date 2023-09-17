@@ -14,7 +14,6 @@
 
 
     <!-- Scripts -->
-    @livewire('livewire-ui-modal')
     <wireui:scripts />
     @livewireScripts
     <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
@@ -24,14 +23,6 @@
     @livewireStyles
 
     @yield('style')
-    <style>
-        .pg-actions {
-            display: flex !important;
-        }
-        .pg-actions a{
-            margin: 0px 5px;
-        }
-    </style>
     {{-- dependece dateRangerPicker --}}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />

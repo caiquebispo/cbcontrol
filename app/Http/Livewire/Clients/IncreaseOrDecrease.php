@@ -6,17 +6,16 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class IncreaseOrDecrease extends ModalComponent
+class IncreaseOrDecrease extends Component
 {
     use Actions;
     public User $user;
     public ?int $type_increase_or_decrease = null;
     public ?float $value = null;
     public ?string $type =  null;
-
+    public ?bool $showModal = false;
     public function __construct()
     {
         $this->user = Auth::user();
@@ -28,7 +27,7 @@ class IncreaseOrDecrease extends ModalComponent
 
     public function update(): void
     {
-        
+
         foreach ($this->user->company->clients as $client) {
             switch ($this->type_increase_or_decrease) {
                 case 0:
@@ -44,21 +43,20 @@ class IncreaseOrDecrease extends ModalComponent
 
         $this->notifications($this->type, $this->value);
         $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::increase-or-decrease');
-        $this->closeModal();
+        $this->emitTo(ListClient::class, 'client:index::increase-or-decrease');
     }
     public function notifications($type, $value){
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Valor Alterado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Atualização de Preço!',
                 'O usuário(a) '.$this->user->name.' fez um '.$type. ' de R$ '. number_format($value, 2, ',','.').'  na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }

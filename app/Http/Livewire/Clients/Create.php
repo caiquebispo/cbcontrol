@@ -8,10 +8,9 @@ use DateTime;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
-class Create extends ModalComponent
+class Create extends Component
 {
     use Actions;
     public User $user;
@@ -24,7 +23,7 @@ class Create extends ModalComponent
     public ?string $delivery = null;
     public ?string $birthday = null;
     public ?int $group_id = null;
-    
+    public bool $showModal = false;
     protected $rules = [
 
         'full_name' => 'required|min:4|max:150',
@@ -47,27 +46,25 @@ class Create extends ModalComponent
     }
     public function create(): void
     {
-        
-        $validated = $this->validate();
 
+        $validated = $this->validate();
         $this->user->company->clients()->create($validated)->groups()->attach($this->group_id);
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListClients::class, 'clients::index::created');
-        $this->closeModal();
+        $this->emitTo(ListClient::class, 'client::index::created');
     }
     public function notifications(){
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Cliente Cadastrado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
+
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Cadastro de cliente!',
                 'O usuário(a) '.$this->user->name.' cadastrou um novo cliente na empresa '.$this->user->company->corporate_reason, // Notification Body
-                
+
             );
             $user->notify($notification);
         }

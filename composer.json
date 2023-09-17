@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^2.0",
+        "davidhsianturi/blade-bootstrap-icons": "^1.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.20",
         "laravel/sanctum": "^3.2",
@@ -15,7 +16,6 @@
         "livewire/livewire": "^2.12",
         "mbarlow/megaphone": "^1.2",
         "mindscms/laravelshoppingcart": "^2.1",
-        "power-components/livewire-powergrid": "^4.6",
         "twbs/bootstrap-icons": "^1.10",
         "wire-elements/modal": "^1.0",
         "wireui/wireui": "^1.17"

@@ -7,18 +7,18 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
+use MBarlow\Megaphone\Types\General;
 use WireUi\Traits\Actions;
 
-class Update extends ModalComponent
+class Update extends Component
 {
     use Actions;
-    public Group $group;
-    public User $user;
-
+    public ?Group $group;
+    public ?User $user;
+    public ?bool $showModal = false;
     public ?string $name = null;
 
-    protected $rules = [
+    protected array $rules = [
 
         'group.name' => 'required|min:4|max:150'
     ];
@@ -36,23 +36,23 @@ class Update extends ModalComponent
         $this->validate();
         $this->group->save();
 
-        $this->notifications(); 
+        $this->notifications();
         $this->reset();
-        $this->emitTo(ListGroups::class, 'groups::index::updated');
-        $this->closeModal();
+        $this->emitTo(ListGroup::class, 'group::index::updated');
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description =  'Grupo Editado com sucesso!'
-        ); 
+        );
         foreach($this->user->company->users as $user){
-            
-            $notification = new \MBarlow\Megaphone\Types\General(
+
+            $notification = new General(
                 'Atualização de Grupo!',
                 'O usuário(a) '.$this->user->name.' editou as informações de um grupo na empresa '.$this->user->company->corporate_reason,
-                
+
             );
             $user->notify($notification);
         }
