@@ -6,21 +6,22 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use LivewireUI\Modal\ModalComponent;
+use MBarlow\Megaphone\Types\General;
 use WireUi\Traits\Actions;
 
-class Create extends ModalComponent
+class Create extends Component
 {
     use Actions;
-    public User $user;
+    public ?User $user;
     public ?string $name = null;
     public ?string $number_phone = null;
     public ?string $email = null;
     public ?string $birthday = null;
     public ?string $password = null;
+    public ?bool $showModal = false;
     public ?string $password_confirm = null;
 
-    protected $rules = [
+    protected array $rules = [
 
         'name' => 'required|min:4|max:150',
         'number_phone' => 'nullable|max:16|unique:users',
@@ -56,19 +57,19 @@ class Create extends ModalComponent
         $this->user->company->users()->create($data);
         $this->notifications();
         $this->reset();
-        $this->emitTo(ListUsersOls::class, 'users::index::created');
-        $this->closeModal();
+        $this->emitTo(ListUsers::class, 'users::index::created');
 
     }
-    public function notifications(){
+    public function notifications(): void
+    {
 
         $this->notification()->success(
-            $title = 'Parabéns!',
-            $description = 'Usuário Cadastrado com sucesso!'
+            'Parabéns!',
+            'Usuário Cadastrado com sucesso!'
         );
         foreach(Auth::user()->company->users as $user){
 
-            $notification = new \MBarlow\Megaphone\Types\General(
+            $notification = new General(
                 'Cadastro de Usuário!',
                 'O usuário(a) '.Auth::user()->name.' cadastrou um usuário na empresa '.$this->user->company->corporate_reason,
 
