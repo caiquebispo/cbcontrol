@@ -26,6 +26,7 @@ Route::prefix('app')->group(base_path('routes/web/app/notify.php'));
 Route::prefix('app')->group(base_path('routes/web/app/company.php'));
 Route::prefix('app')->group(base_path('routes/web/app/category.php'));
 Route::prefix('app')->group(base_path('routes/web/app/product.php'));
+Route::prefix('app')->group(base_path('routes/web/app/networks.php'));
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
 
