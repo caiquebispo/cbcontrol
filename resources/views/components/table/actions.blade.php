@@ -13,7 +13,7 @@
             ]"
             option-label="name"
             option-value="id"
-            wire:model.defer="qtyItemsForPage"
+            wire:model="qtyItemsForPage"
         />
         <form class="flex items-center w-full">
             <label for="simple-search" class="sr-only">Search</label>
