@@ -41,15 +41,17 @@
                         <x-table>
                             <x-table.thead>
                                 <x-table.th wire:click.prevent="sortBy('name')" :sortable="true" :direction="$sortDirection">NOME</x-table.th>
-                                <x-table.th wire:click.prevent="sortBy('email')" :sortable="true" :direction="$sortDirection">E-mail</x-table.th>
-                                <x-table.th class="text-center" wire:click.prevent="sortBy('status')" :sortable="true" :direction="$sortDirection">Status</x-table.th>
+                                <x-table.th wire:click.prevent="sortBy('email')" :sortable="true" :direction="$sortDirection">E-MAIL</x-table.th>
+                                <x-table.th wire:click.prevent="sortBy('company_id')" :sortable="true" :direction="$sortDirection">EMPRESA</x-table.th>
+                                <x-table.th wire:click.prevent="sortBy('status')" :sortable="true" :direction="$sortDirection">STATUS</x-table.th>
                             </x-table.thead>
                             <x-table.tbody>
                                 @foreach($users as $user)
                                     <x-table.tr>
                                         <x-table.th>{{$user->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th>{{$user->email ?? 'NÃO DEFINIDO'}}</x-table.th>
-                                        <x-table.th class="text-center">{{$user->status ? 'Ativo' : 'Desativado'}}</x-table.th>
+                                        <x-table.th>{{$user->company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
+                                        <x-table.th>{{$user->status }}</x-table.th>
                                     </x-table.tr>
                                 @endforeach
                             </x-table.tbody>

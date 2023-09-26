@@ -17,7 +17,7 @@ class Show extends Component
     public ?bool $showModal = false;
     public ?Network $network;
 
-    public  function mount( Network $network)
+    public  function mount( Network $network): void
     {
         $this->network = $network;
     }
@@ -31,13 +31,15 @@ class Show extends Component
             ]
         );
     }
-    protected function getCompanies(){
+    protected function getCompanies(): object
+    {
 
         return $this->network->companies()->when($this->search != "", fn($query) => $query->where('corporate_reason', 'like', '%'.$this->search."%"))
             ->orderBy($this->setSortField('corporate_reason'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }
-    protected function getUsers(){
+    protected function getUsers(): object
+    {
 
         return $this->network->users()->when($this->search != "", fn($query) => $query->where('corporate_reason', 'like', '%'.$this->search."%"))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
