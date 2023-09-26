@@ -1,8 +1,11 @@
-@props(['title' => '','show'])
+@props(['title' => '','show', 'size' => 'md'])
+@php
+    $size = $size === 'md' ? 2 : 7;
+@endphp
 @if($show)
 <div class="fixed inset-0 flex items-center justify-center z-50">
     <div class="fixed inset-0 bg-cyan-600 bg-opacity-10 backdrop-blur-sm"></div>
-    <div class="relative w-full max-w-2xl max-h-full">
+    <div class="relative w-full max-w-{{$size}}xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">

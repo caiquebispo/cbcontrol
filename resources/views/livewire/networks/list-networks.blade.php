@@ -16,8 +16,8 @@
                         <x-table.tr>
                             <x-table.th>{{$network->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex  justify-end">
-{{--                                <livewire:netowrks.update :group="$network" :wire:key="'network-update-'.$network->id"/>--}}
-{{--                                <livewire:netowrks.delete :group="$network" :wire:key="'network-delete-'.$network->id"/>--}}
+                                <livewire:networks.show :group="$network" :wire:key="'network-show-'.$network->id"/>
+                                <livewire:networks.update :group="$network" :wire:key="'network-update-'.$network->id"/>
                             </x-table.th>
                         </x-table.tr>
                     @endforeach
