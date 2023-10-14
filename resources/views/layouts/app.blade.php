@@ -100,6 +100,27 @@
             </li>
             <li>
                 <button type="button"
+                        class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg group hover:bg-gray-950 hover:text-gray-200 dark:text-white dark:hover:bg-gray-700"
+                        aria-controls="dropdown-sales" data-collapse-toggle="dropdown-sales">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket-fill w-6 h-6" viewBox="0 0 16 16">
+                        <path d="M5.071 1.243a.5.5 0 0 1 .858.514L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 6h1.717L5.07 1.243zM3.5 10.5a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3z"/>
+                    </svg>
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item>Vendas</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+
+                </button>
+                <ul id="dropdown-sales" class="hidden py-2 space-y-2">
+
+                    <li>
+                        <a href="{{route('sales.list')}}"
+                           class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg pl-11 group hover:text-blue-600 dark:text-white dark:hover:bg-gray-700">Todas as Vendas</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <button type="button"
                     class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg group hover:bg-gray-950  hover:text-gray-200 dark:text-white dark:hover:bg-gray-700"
                     aria-controls="dropdown-client" data-collapse-toggle="dropdown-client">
                     <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-people-fill w-6 h-6"

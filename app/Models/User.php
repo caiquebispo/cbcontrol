@@ -62,6 +62,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'company_users');
     }
+    public function networks(): BelongsToMany
+    {
+        return $this->belongsToMany(Network::class, 'network_users');
+    }
     public function groups(): BelongsToMany
     {
        return $this->belongsToMany(Group::class, 'group_users');

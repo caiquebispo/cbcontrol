@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 
-
+//PANEL ROUTE LINKS
 Route::prefix('app')->group(base_path('routes/web/app/dashboard.php'));
 Route::prefix('app')->group(base_path('routes/web/app/profiles.php'));
 Route::prefix('app')->group(base_path('routes/web/app/groups.php'));
@@ -26,6 +26,10 @@ Route::prefix('app')->group(base_path('routes/web/app/notify.php'));
 Route::prefix('app')->group(base_path('routes/web/app/company.php'));
 Route::prefix('app')->group(base_path('routes/web/app/category.php'));
 Route::prefix('app')->group(base_path('routes/web/app/product.php'));
+Route::prefix('app')->group(base_path('routes/web/app/networks.php'));
+Route::prefix('app')->group(base_path('routes/web/app/sales.php'));
+
+//STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
 
