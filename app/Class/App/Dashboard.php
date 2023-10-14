@@ -128,7 +128,7 @@ class Dashboard
 
         foreach ($orders as $key_order => $order){
             $data[$key_order] = [
-                'type_payment' => $order->payment_method == 'credit_card' ?'CARÃO DEBITO/CREDITO' : 'Á VISTA',
+                'type_payment' => $order->payment_method == 'credit_card' ?'CARTÃO DE DEBITO/CREDITO' : 'Á VISTA',
                 'delivery_method' => $order->delivery_method == 'delivery' ?'DELIVERY' : 'RETIRAR NO LOCAL' ,
                 'status' => $order->status_order,
                 'qty_product' => $order->quantityItem,
