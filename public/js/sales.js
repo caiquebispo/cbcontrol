@@ -149,9 +149,9 @@ let Sales = {
             }
 
         }
-        $('.card-vendas-processadas').html(`R$ ${sum_sales_comfirmed}`)
-        $('.card-vendas-pendentes').html(`R$ ${sum_sales_no_processing}`)
-        $('.card-vendas-canceldas').html(`R$ ${sum_sales_canceled}`)
+        $('.card-vendas-processadas').html(`R$ ${sum_sales_comfirmed.toFixed(2)}`)
+        $('.card-vendas-pendentes').html(`R$ ${sum_sales_no_processing.toFixed(2)}`)
+        $('.card-vendas-canceldas').html(`R$ ${sum_sales_canceled.toFixed(2)}`)
 
     },
     drawning_sales_line_or_bar_summary_graphs(data){
@@ -191,7 +191,7 @@ let Sales = {
                 }
             },
             chart: {
-                height: 350,
+                height: 450,
                 type: 'area'
             },
             dataLabels: {
@@ -206,9 +206,22 @@ let Sales = {
                 labels: {
                     format: 'dd/MM',
                 },
-
-
             },
+            yaxis: {
+                title: {
+                    text: 'Faturamento do Mês atual/Ultimo MêS'
+                },
+                labels: {
+                    formatter: function (value) {
+                        return `R$ ${ value.toFixed(2)}`;
+                    }
+                }
+            },
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'center',
+                floating: false,
+            }
 
         };
         var chart = new ApexCharts(document.querySelector("#chart-day"), options);
