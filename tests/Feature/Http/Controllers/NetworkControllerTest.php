@@ -13,3 +13,9 @@ it('verifica se somente usuário logado pode acessar a rota', function(){
     ->assertOk();
 
 });
+it('verifica se o usuário não logado está sendo redirecionando para login', function(){
+
+    get('/app/networks')
+    ->assertFound()
+    ->assertRedirect('login');
+});
