@@ -10,7 +10,7 @@ beforeEach(function(){
 });
 
 it('verifica se somente usuário logado pode acessar a rota', function () {
-
+    
     actingAs($this->user)
         ->get('/app/networks')
         ->assertOk();
