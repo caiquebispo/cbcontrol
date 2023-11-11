@@ -4,7 +4,7 @@ use App\Http\Livewire\Networks\Create;
 use App\Models\User;
 use Livewire\Livewire;
 
-use function Pest\Laravel\{get, actingAs};
+use function Pest\Laravel\{get, actingAs};;
 beforeEach(function(){
     $this->user = User::factory()->createOne();
 });
