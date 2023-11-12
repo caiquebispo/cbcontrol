@@ -26,7 +26,9 @@ class Create extends Component
     }
     public function create(): void
     {
-        $network = Network::create($this->validate());
+        $validated = $this->validate();
+        
+        $network = Network::create();
         StorageNetwork::dispatch($network);
         $this->reset();
         $this->emitTo(ListNetworks::class, 'network::index::created');
