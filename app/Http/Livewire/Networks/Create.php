@@ -17,7 +17,7 @@ class Create extends Component
 
     protected array $rules = [
 
-        'name' => 'unique:networks|required|min:4|max:150'
+        'name' => 'required|min:4|max:150|unique:networks'
     ];
 
     public function render(): View
@@ -26,9 +26,10 @@ class Create extends Component
     }
     public function create(): void
     {
-        $validated = $this->validate();
         
-        $network = Network::create();
+        $validated = $this->validate();
+
+        $network = Network::create($validated);
         StorageNetwork::dispatch($network);
         $this->reset();
         $this->emitTo(ListNetworks::class, 'network::index::created');

@@ -36,15 +36,23 @@ it('verificar se ao clicar no botão cadastra o modal está sendo exibido', func
         ->assertSee('Cadastrar Rede');
 
 });
-todo('verificar se no modal de criação tem o input de entrada');
 it('verificar se o nome da rede está preenchido', function(){
-
+    
     Livewire::actingAs($this->user)
     ->test(Create::class)
     ->set('name', '')
     ->call('create')
-    ->assertHasErrors('name');
-
+    ->assertHasErrors(['name' => 'required']);
+    
 });
+it('verificar se o nome da rede tem pelo menos 4 letras', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Create::class)
+    ->set('name', 'abc')
+    ->call('create')
+    ->assertHasErrors(['name' => 'min']);
+});
+todo('verificar se no modal de criação tem o input de entrada');
 todo('verificar se ouve o cadastro de uma nova rede');
 todo('verificar se  está listando as redes cadastrada');
