@@ -53,6 +53,14 @@ it('verificar se o nome da rede tem pelo menos 4 letras', function(){
     ->call('create')
     ->assertHasErrors(['name' => 'min']);
 });
+it('verificar se o nome da rede tem menos de 150 letras', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Create::class)
+    ->set('name', str_repeat('abc',150))
+    ->call('create')
+    ->assertHasErrors(['name' => 'max']);
+});
 todo('verificar se no modal de criação tem o input de entrada');
 todo('verificar se ouve o cadastro de uma nova rede');
 todo('verificar se  está listando as redes cadastrada');
