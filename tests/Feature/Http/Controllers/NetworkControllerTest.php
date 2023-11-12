@@ -28,7 +28,7 @@ it('verificar se existe o componente para criar uma nova rede está na tela', fu
     actingAs($this->user)
         ->get('/app/networks')
         ->assertOk()
-        ->assertSeeLivewire(ListNetworks::class);
+        ->assertSeeLivewire(Create::class);
 });
 it('verificar se ao clicar no botão cadastra o modal está sendo exibido', function(){
 
