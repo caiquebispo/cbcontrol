@@ -1,5 +1,5 @@
 <x-app-layout>
     <div class="py-24">
-        <livewire:networks.create />
+        <livewire:networks.list-networks />
     </div>
 </x-app-layout>

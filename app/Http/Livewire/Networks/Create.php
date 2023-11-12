@@ -32,7 +32,7 @@ class Create extends Component
         $network = Network::create($validated);
         StorageNetwork::dispatch($network);
         $this->reset();
-        $this->emit(ListNetworks::class, 'network::index::created');
+        $this->emitTo(ListNetworks::class, 'network::index::created');
         $this->notifications();
     }
     public function notifications(): void

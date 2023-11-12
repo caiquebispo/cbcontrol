@@ -6,7 +6,7 @@ use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
 
-use function Pest\Laravel\{get, actingAs, assertDatabaseHas};;
+use function Pest\Laravel\{get, actingAs, assertDatabaseHas, assertEquals};;
 beforeEach(function(){
     $this->user = User::factory()->createOne();
 });
@@ -28,7 +28,7 @@ it('verificar se existe o componente para criar uma nova rede está na tela', fu
     actingAs($this->user)
         ->get('/app/networks')
         ->assertOk()
-        ->assertSeeLivewire(Create::class);
+        ->assertSeeLivewire(ListNetworks::class);
 });
 it('verificar se ao clicar no botão cadastra o modal está sendo exibido', function(){
 
@@ -47,7 +47,7 @@ it('verificar se o nome da rede está preenchido', function(){
     ->assertHasErrors(['name' => 'required']);
     
 });
-it('verificar se o nome da rede tem pelo menos 4 letras', function(){
+it('verificar se o nome da rede tem pelomenos 4 letras', function(){
 
     Livewire::actingAs($this->user)
     ->test(Create::class)
@@ -74,17 +74,40 @@ it('verificar se o nome da rede é único', function(){
 it('verificar se cadastrou a rede com sucesso!', function(){
 
     $network = Network::factory()->createOne();
-    
+    $this->user->networks()->attach($network);
+
     Livewire::actingAs($this->user)
     ->test(Create::class)
     ->set('name', "'.$network->name.'")
     ->call('create')
     ->assertHasNoErrors('name')
-    ->assertEmitted(ListNetworks::class,'network::index::created');
+    ->assertEmittedTo(ListNetworks::class,'network::index::created');
     
     $this->assertDatabaseHas('networks',[
         'name' => $network->name
     ]);
 
 });
-todo('verificar se  está listando as redes cadastrada');
+
+it('verificar se está listando as redes cadastrada', function(){
+
+    $network = Network::factory()->createOne();
+    $this->user->networks()->attach($network);
+
+    Livewire::actingAs($this->user)
+    ->test(Create::class)
+    ->set('name', "'.$network->name.'")
+    ->call('create')
+    ->assertHasNoErrors('name')
+    ->assertEmittedTo(ListNetworks::class,'network::index::created');
+    
+    $this->assertDatabaseHas('networks',[
+        'name' => $network->name
+    ]);
+
+    Livewire::actingAs($this->user)
+    ->test(ListNetworks::class)
+    ->assertViewHas('networks')
+    ->assertSee($network->name);
+    
+});
