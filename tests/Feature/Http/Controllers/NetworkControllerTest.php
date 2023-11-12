@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Livewire\Networks\Create;
+use App\Http\Livewire\Networks\ListNetworks;
+use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
 
-use function Pest\Laravel\{get, actingAs};;
+use function Pest\Laravel\{get, actingAs, assertDatabaseHas};;
 beforeEach(function(){
     $this->user = User::factory()->createOne();
 });
@@ -69,6 +71,20 @@ it('verificar se o nome da rede é único', function(){
     ->call('create')
     ->assertHasNoErrors(['name' => 'unique']);
 });
-todo('verificar se no modal de criação tem o input de entrada');
-todo('verificar se ouve o cadastro de uma nova rede');
+it('verificar se cadastrou a rede com sucesso!', function(){
+
+    $network = Network::factory()->createOne();
+    
+    Livewire::actingAs($this->user)
+    ->test(Create::class)
+    ->set('name', "'.$network->name.'")
+    ->call('create')
+    ->assertHasNoErrors('name')
+    ->assertEmitted(ListNetworks::class,'network::index::created');
+    
+    $this->assertDatabaseHas('networks',[
+        'name' => $network->name
+    ]);
+
+});
 todo('verificar se  está listando as redes cadastrada');

@@ -21,7 +21,7 @@ class ListNetworks extends Component
 
     public function render(): View
     {
-        return view('livewire.networks.list-networks', ['networks' => $this->getNetworks()]);
+        return view('livewire.networks.list-networks', ['networks' => []]);
     }
     public function getNetworks(): object
     {
