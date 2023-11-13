@@ -128,4 +128,11 @@ it('verificar se o componente de visualizar rede está na tela', function(){
     ->assertOk()
     ->assertSeeLivewire(Show::class);
 });
+it('verificar se ao clicar no componente para visualizar a rede o modal modal de visualização está sendo exibido', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Show::class)
+    ->toggle('showModal')
+    ->assertSee('Visualizar Rede');
+});
 
