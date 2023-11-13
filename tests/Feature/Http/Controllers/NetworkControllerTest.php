@@ -111,5 +111,11 @@ it('verificar se o componente de edição  está na tela', function(){
     ->assertOk()
     ->assertSeeLivewire(Update::class);
 });
-todo('verificar se ao clicar no compoente para editar a rede o modal modal de edição está sendo exibido');
+it('verificar se ao clicar no compoente para editar a rede o modal modal de edição está sendo exibido', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+});
 todo('verificar se a rede foi editada com sucesso');
