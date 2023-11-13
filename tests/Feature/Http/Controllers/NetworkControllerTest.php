@@ -3,6 +3,7 @@
 use App\Http\Livewire\Networks\Create;
 use App\Http\Livewire\Networks\Delete;
 use App\Http\Livewire\Networks\ListNetworks;
+use App\Http\Livewire\Networks\Show;
 use App\Http\Livewire\Networks\Update;
 use App\Models\Network;
 use App\Models\User;
@@ -118,4 +119,13 @@ it('verificar se ao clicar no compoente para editar a rede o modal modal de ediÃ
     ->toggle('showModal')
     ->assertSee('Editar Rede');
 });
-todo('verificar se a rede foi editada com sucesso');
+it('verificar se o componente de visualizar rede estÃ¡ na tela', function(){
+
+    $this->user->networks()->attach($this->network);
+
+    actingAs($this->user)
+    ->get('/app/networks')
+    ->assertOk()
+    ->assertSeeLivewire(Show::class);
+});
+
