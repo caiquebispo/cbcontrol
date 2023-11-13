@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Network;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -22,7 +23,8 @@ class StorageNetwork
         public Network $network,
     )
     {
-        //
+       $user = User::find(1);
+       $user->networks()->attach($network);
     }
 
     /**

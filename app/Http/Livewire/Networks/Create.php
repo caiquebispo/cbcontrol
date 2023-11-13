@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Networks;
 
 use App\Events\StorageNetwork;
 use App\Models\Network;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Livewire\Component;
 use WireUi\Traits\Actions;
@@ -30,7 +32,7 @@ class Create extends Component
         $validated = $this->validate();
 
         $network = Network::create($validated);
-        StorageNetwork::dispatch($network);
+        StorageNetwork::dispatch($network);    
         $this->reset();
         $this->emitTo(ListNetworks::class, 'network::index::created');
         $this->notifications();

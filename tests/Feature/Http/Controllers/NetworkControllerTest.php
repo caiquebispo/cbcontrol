@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Livewire\Networks\Create;
+use App\Http\Livewire\Networks\Delete;
 use App\Http\Livewire\Networks\ListNetworks;
+use App\Http\Livewire\Networks\Update;
 use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
@@ -9,6 +11,7 @@ use Livewire\Livewire;
 use function Pest\Laravel\{get, actingAs, assertDatabaseHas, assertEquals};;
 beforeEach(function(){
     $this->user = User::factory()->createOne();
+    $this->network = Network::factory()->createOne();
 });
 
 it('verifica se somente usuário logado pode acessar a rota', function () {
@@ -73,41 +76,40 @@ it('verificar se o nome da rede é único', function(){
 });
 it('verificar se cadastrou a rede com sucesso!', function(){
 
-    $network = Network::factory()->createOne();
-    $this->user->networks()->attach($network);
+    
+    $this->user->networks()->attach($this->network);
 
     Livewire::actingAs($this->user)
     ->test(Create::class)
-    ->set('name', "'.$network->name.'")
+    ->set('name', '{$this->network->name}')
     ->call('create')
     ->assertHasNoErrors('name')
     ->assertEmittedTo(ListNetworks::class,'network::index::created');
     
     $this->assertDatabaseHas('networks',[
-        'name' => $network->name
+        'name' => $this->network->name
     ]);
 
 });
 
 it('verificar se está listando as redes cadastrada', function(){
 
-    $network = Network::factory()->createOne();
-    $this->user->networks()->attach($network);
-
-    Livewire::actingAs($this->user)
-    ->test(Create::class)
-    ->set('name', "'.$network->name.'")
-    ->call('create')
-    ->assertHasNoErrors('name')
-    ->assertEmittedTo(ListNetworks::class,'network::index::created');
-    
-    $this->assertDatabaseHas('networks',[
-        'name' => $network->name
-    ]);
+    $this->user->networks()->attach($this->network);
 
     Livewire::actingAs($this->user)
     ->test(ListNetworks::class)
     ->assertViewHas('networks')
-    ->assertSee($network->name);
+    ->assertSee($this->network->name);
     
 });
+it('verificar se o componente de edição  está na tela', function(){
+
+    $this->user->networks()->attach($this->network);
+
+    actingAs($this->user)
+    ->get('/app/networks')
+    ->assertOk()
+    ->assertSeeLivewire(Update::class);
+});
+todo('verificar se ao clicar no compoente para editar a rede o modal modal de edição está sendo exibido');
+todo('verificar se a rede foi editada com sucesso');
