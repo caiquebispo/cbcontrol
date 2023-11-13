@@ -2,6 +2,7 @@
     <x-button-update wire:click="$toggle('showModal', 'true')" />
     <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg">
         <x-slot:body>
+            <livewire:users.create />
             <!--  Accordion Empresas   -->
             <x-accordion title="Empresas">
                 <x-slot:body>

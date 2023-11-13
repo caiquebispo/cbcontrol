@@ -5,6 +5,7 @@ use App\Http\Livewire\Networks\Delete;
 use App\Http\Livewire\Networks\ListNetworks;
 use App\Http\Livewire\Networks\Show;
 use App\Http\Livewire\Networks\Update;
+use App\Http\Livewire\Users\Create as UsersCreate;
 use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
@@ -134,5 +135,15 @@ it('verificar se ao clicar no componente para visualizar a rede o modal modal de
     ->test(Show::class)
     ->toggle('showModal')
     ->assertSee('Visualizar Rede');
+});
+it('verificar se no modal de edição de rede tem o compente para cadastro de usuário', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::test(UsersCreate::class)
+    ->assertSee('Cadastrar');
 });
 
