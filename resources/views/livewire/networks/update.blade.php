@@ -1,8 +1,10 @@
 <div>
     <x-button-update wire:click="$toggle('showModal', 'true')" />
-    <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg">
+    <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg" >
         <x-slot:body>
-            <livewire:users.create />
+            <div class="flex justify-center">
+                <livewire:users.create  key="{{ now() }}" />
+            </div>
             <!--  Accordion Empresas   -->
             <x-accordion title="Empresas">
                 <x-slot:body>

@@ -146,4 +146,16 @@ it('verificar se no modal de edição de rede tem o compente para cadastro de us
     Livewire::test(UsersCreate::class)
     ->assertSee('Cadastrar');
 });
+it('verificar se ao clicar no componente para cadastra um novo usuário o modal de cadastro está sendo exibido', function(){
+
+    Livewire::actingAs($this->user)
+        ->test(Update::class)
+        ->toggle('showModal')
+        ->assertSee('Editar Rede');
+
+    Livewire::actingAs($this->user)
+        ->test(UsersCreate::class)
+        ->toggle('showModal')
+        ->assertSee('Cadastrar Usuário');
+});
 
