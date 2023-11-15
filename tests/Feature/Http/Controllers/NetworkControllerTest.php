@@ -158,4 +158,17 @@ it('verificar se ao clicar no componente para cadastra um novo usuário o modal 
         ->toggle('showModal')
         ->assertSee('Cadastrar Usuário');
 });
+it('validar se no cadastro de um usuarios está retornando erro caso as informações não sejam fornecida corretamente', function(){
 
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::actingAs($this->user)
+    ->test(UsersCreate::class)
+    ->call('create')
+    ->assertHasErrors()
+
+});
+todo('verificar se o cadastro do usuário foi relalizado com sucesso e se ele foi associado a rede correta');
