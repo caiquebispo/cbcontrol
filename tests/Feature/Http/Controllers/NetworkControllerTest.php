@@ -1,11 +1,8 @@
 <?php
 
-use App\Http\Livewire\Networks\Create;
-use App\Http\Livewire\Networks\Delete;
-use App\Http\Livewire\Networks\ListNetworks;
-use App\Http\Livewire\Networks\Show;
-use App\Http\Livewire\Networks\Update;
+use App\Http\Livewire\Networks\{Create,ListNetworks,Show, Update};
 use App\Http\Livewire\Users\Create as UsersCreate;
+use App\Http\Livewire\Users\UpdatePassword;
 use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
@@ -14,6 +11,7 @@ use function Pest\Laravel\{get, actingAs, assertDatabaseHas, assertEquals};;
 beforeEach(function(){
     $this->user = User::factory()->createOne();
     $this->network = Network::factory()->createOne();
+    
 });
 
 it('verifica se somente usuário logado pode acessar a rota', function () {
@@ -173,15 +171,13 @@ it('validar se no cadastro de um usuarios está retornando erro caso as informa�
 });
 it('verificar se o cadastro do usuário foi relalizado com sucesso e se ele foi associado a rede correta', function(){
 
-    $network = Network::factory()->createOne();
-
     Livewire::actingAs($this->user)
     ->test(Update::class)
     ->toggle('showModal')
     ->assertSee('Editar Rede');
 
     Livewire::actingAs($this->user)
-    ->test(UsersCreate::class, ['network' => $network])
+    ->test(UsersCreate::class, ['network' => $this->network])
     ->set('name', 'User Test')
     ->set('email', 'test@example.com')
     ->set('password', '12345678')

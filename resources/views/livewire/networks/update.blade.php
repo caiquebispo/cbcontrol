@@ -57,6 +57,11 @@
                                         <x-table.th>{{$user->email ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th>{{$user->company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th>{{$user->status }}</x-table.th>
+                                        <x-table.th class="flex  justify-evenly">
+                                            <livewire:users.update :user="$user" wire:key="{{now()}}" />
+                                            <livewire:users.update-password :user="$user" wire:key="{{now()}}" />
+                                            <livewire:users.delete :user="$user" wire:key="{{now()}}" />
+                                        </x-table.th>
                                     </x-table.tr>
                                 @endforeach
                             </x-table.tbody>
