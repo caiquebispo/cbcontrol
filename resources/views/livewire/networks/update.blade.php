@@ -3,7 +3,7 @@
     <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg" >
         <x-slot:body>
             <div class="flex justify-center">
-                <livewire:users.create  key="{{ now() }}" />
+                <livewire:users.create :network="$network" wire:key="{{ now() }}" />
             </div>
             <!--  Accordion Empresas   -->
             <x-accordion title="Empresas">

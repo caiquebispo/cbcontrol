@@ -168,7 +168,29 @@ it('validar se no cadastro de um usuarios está retornando erro caso as informa�
     Livewire::actingAs($this->user)
     ->test(UsersCreate::class)
     ->call('create')
-    ->assertHasErrors()
+    ->assertHasErrors();
 
 });
-todo('verificar se o cadastro do usuário foi relalizado com sucesso e se ele foi associado a rede correta');
+it('verificar se o cadastro do usuário foi relalizado com sucesso e se ele foi associado a rede correta', function(){
+
+    $network = Network::factory()->createOne();
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::actingAs($this->user)
+    ->test(UsersCreate::class, ['network' => $network])
+    ->set('name', 'User Test')
+    ->set('email', 'test@example.com')
+    ->set('password', '12345678')
+    ->set('password_confirm', '12345678')
+    ->call('create')
+    ->assertHasNoErrors();
+    
+    $this->assertDatabaseHas('users', [
+        'email' => "test@example.com",
+    ]);
+
+});

@@ -11,6 +11,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class StorageNetwork
 {
@@ -21,9 +22,11 @@ class StorageNetwork
      */
     public function __construct(
         public Network $network,
+        public $user_id = null
     )
     {
-       $user = User::find(1);
+       $id = $user_id ?: Auth::user()->id;
+       $user = User::find($id);
        $user->networks()->attach($network);
     }
 
