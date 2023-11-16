@@ -212,5 +212,16 @@ it('verificar se ao clicar no componente de cadasto de empresa o modal está sen
     ->toggle('showModal')
     ->assertSee('Cadastrar Empresa');
 });
-todo('verificar se todas as infromações necessarias para cadastrar uma empresa estão preenchidas');
+it('verificar se todas as infromações necessarias para cadastrar uma empresa estão preenchidas', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::test(CompaniesCreate::class)
+    ->toggle('showModal')
+    ->call('create')
+    ->assertHasErrors();
+});
 todo('verificar se o cadastro de uma nova empresa foi relaizado com sucesso e se a empresa foi associada corretamente a rede');
