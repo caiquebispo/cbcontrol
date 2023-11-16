@@ -25,9 +25,7 @@ class StorageNetwork
         public $user_id = null
     )
     {
-       $id = $user_id ?: Auth::user()->id;
-       $user = User::find($id);
-       $user->networks()->attach($network);
+       User::find($user_id ?: Auth::user()->id)->networks()->attach($network);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Companies\Create as CompaniesCreate;
 use App\Http\Livewire\Networks\{Create,ListNetworks,Show, Update};
 use App\Http\Livewire\Users\Create as UsersCreate;
 use App\Http\Livewire\Users\UpdatePassword;
@@ -190,3 +191,16 @@ it('verificar se o cadastro do usuário foi relalizado com sucesso e se ele foi 
     ]);
 
 });
+it('verificar se o componente de cadastro de empresa está na tela', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::test(CompaniesCreate::class)
+    ->assertSee('Cadastrar Empresa');
+});
+todo('veririficar se ao clicar no componente de cadasto de empresa o modal está sendo exibido');
+todo('verificar se todas as infromações necessarias para cadastrar uma empresa estão preenchidas');
+todo('verificar se o cadastro de uma nova empresa foi relaizado com sucesso e se a empresa foi associada corretamente a rede');

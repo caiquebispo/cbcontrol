@@ -4,6 +4,7 @@
         <x-slot:body>
             <div class="flex justify-center">
                 <livewire:users.create :network="$network" wire:key="{{ now() }}" />
+                <livewire:companies.create :network="$network" wire:key="{{ now() }}" />
             </div>
             <!--  Accordion Empresas   -->
             <x-accordion title="Empresas">
