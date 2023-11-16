@@ -13,7 +13,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Company extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
+    
     public function categories(): MorphMany
     {
         return $this->morphMany(Category::class, 'categories');

@@ -4,6 +4,7 @@ use App\Http\Livewire\Companies\Create as CompaniesCreate;
 use App\Http\Livewire\Networks\{Create,ListNetworks,Show, Update};
 use App\Http\Livewire\Users\Create as UsersCreate;
 use App\Http\Livewire\Users\UpdatePassword;
+use App\Models\Company;
 use App\Models\Network;
 use App\Models\User;
 use Livewire\Livewire;
@@ -224,4 +225,30 @@ it('verificar se todas as infromações necessarias para cadastrar uma empresa e
     ->call('create')
     ->assertHasErrors();
 });
-todo('verificar se o cadastro de uma nova empresa foi relaizado com sucesso e se a empresa foi associada corretamente a rede');
+it('verificar se o cadastro de uma nova empresa foi relaizado com sucesso e se a empresa foi associada corretamente a rede', function(){
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Rede');
+
+    Livewire::test(CompaniesCreate::class,['network' => $this->network])
+    ->toggle('showModal')
+    ->set('corporate_reason', 'Company Teste')
+    ->set('email', 'companyteste@teste.com')
+    ->set('state_registration', 'BA')
+    ->set('foundation_date', '2023-11-16')
+    ->set('phone', '48 93411-9802')
+    ->set('cnpj', '01.167.370/0111-01')
+    ->call('create')
+    ->assertHasNoErrors();
+
+    $this->assertDatabaseHas('companies', [
+        'corporate_reason' => "Company Teste",
+        'cnpj' => "01.167.370/0111-01",
+    ]);
+    $this->assertDatabaseHas('network_companies', [
+        'company_id' => 1,
+        'network_id' => $this->network->id,
+    ]);
+});
