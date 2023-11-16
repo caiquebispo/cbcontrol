@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Companies;
 
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 
