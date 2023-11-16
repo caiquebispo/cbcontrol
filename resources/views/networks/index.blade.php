@@ -3,5 +3,3 @@
         <livewire:networks.list-networks />
     </div>
 </x-app-layout>
-
-

@@ -1,5 +1,5 @@
 <div>
-    <x-button label="Cadastrar " primary md icon="plus-circle" wire:click="$toggle('showModal','true')"/>
+    <x-button label="Cadastrar" primary md icon="plus-circle" wire:click="$toggle('showModal','true')"/>
     <x-modal.main :title="'Cadastrar Rede'" :show="$showModal">
         <x-slot:body>
             <form wire:submit.prevent="create" class="my-2">

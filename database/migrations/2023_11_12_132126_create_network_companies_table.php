@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('network_users', function (Blueprint $table) {
+        Schema::create('network_companies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignId('network_id')->constrained('networks')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('network_users');
+        Schema::dropIfExists('network_companies');
     }
 };

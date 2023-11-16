@@ -1,7 +1,13 @@
 <div>
     <x-button-update wire:click="$toggle('showModal', 'true')" />
-    <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg">
+    <x-modal.main :title="'Editar Rede'" :show="$showModal" size="lg" >
         <x-slot:body>
+            <div class="flex justify-center">
+                <div class="mx-4">
+                <livewire:users.create :network="$network" wire:key="{{ now() }}" />
+                </div>
+                <livewire:companies.create :network="$network" wire:key="{{ now() }}" />
+            </div>
             <!--  Accordion Empresas   -->
             <x-accordion title="Empresas">
                 <x-slot:body>
@@ -21,6 +27,12 @@
                                         <x-table.th>{{$company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th class="text-center">{{count($company->users)}}</x-table.th>
                                         <x-table.th class="text-center">{{$company->status ? 'Ativa' : 'Desativada'}}</x-table.th>
+                                        <x-table.th class="text-center">ACTIONS</x-table.th>
+                                        <x-table.th class="flex  justify-evenly">
+                                            <livewire:companies.modal-update :company="$company" wire:key="{{now()}}"/>
+                                            <livewire:companies.delete :company="$company" wire:key="{{now()}}"/>
+                                        </x-table.th>
+
                                     </x-table.tr>
                                 @endforeach
                             </x-table.tbody>
@@ -54,6 +66,11 @@
                                         <x-table.th>{{$user->email ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th>{{$user->company->corporate_reason ?? 'NÃO DEFINIDO'}}</x-table.th>
                                         <x-table.th>{{$user->status }}</x-table.th>
+                                        <x-table.th class="flex  justify-evenly">
+                                            <livewire:users.update :user="$user" wire:key="{{now()}}" />
+                                            <livewire:users.update-password :user="$user" wire:key="{{now()}}" />
+                                            <livewire:users.delete :user="$user" wire:key="{{now()}}" />
+                                        </x-table.th>
                                     </x-table.tr>
                                 @endforeach
                             </x-table.tbody>

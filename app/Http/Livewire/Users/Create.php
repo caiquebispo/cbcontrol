@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire\Users;
 
+// use App\Models\User;
+
+use App\Events\StorageNetwork;
+use App\Models\Network;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +16,7 @@ use WireUi\Traits\Actions;
 class Create extends Component
 {
     use Actions;
-    public ?User $user;
+    public $network = null;
     public ?string $name = null;
     public ?string $number_phone = null;
     public ?string $email = null;
@@ -31,11 +35,7 @@ class Create extends Component
         'password_confirm' => 'required|min:8|max:16|same:password'
 
     ];
-
-    public function __construct()
-    {
-        $this->user = Auth::user();
-    }
+    
     public function render(): View
     {
         return view('livewire.users.create');
@@ -51,10 +51,16 @@ class Create extends Component
             'email' => $this->email,
             'birthday' => $this->birthday,
             'password' => $this->password,
-            'company_id' => $this->user->company_id,
+            'company_id' => Auth::user()->company_id,
         ];
 
-        $this->user->company->users()->create($data);
+        if(!$this->network){
+            Auth::user()->company->users()->create($data);
+        }else{
+            $user_id = User::create($data)->id;
+            StorageNetwork::dispatch($this->network, $user_id);
+        }
+
         $this->notifications();
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::created');
@@ -67,14 +73,18 @@ class Create extends Component
             'Parabéns!',
             'Usuário Cadastrado com sucesso!'
         );
-        foreach(Auth::user()->company->users as $user){
+        
+        if(Auth::user()->company === true){
 
-            $notification = new General(
-                'Cadastro de Usuário!',
-                'O usuário(a) '.Auth::user()->name.' cadastrou um usuário na empresa '.$this->user->company->corporate_reason,
-
-            );
-            $user->notify($notification);
+            foreach(Auth::user()->company->users as $user){
+    
+                $notification = new General(
+                    'Cadastro de Usuário!',
+                    'O usuário(a) '.Auth::user()->name.' cadastrou um usuário na empresa '.Auth::user()->company->corporate_reason,
+    
+                );
+                $user->notify($notification);
+            }
         }
     }
 }

@@ -2,4 +2,4 @@
 
 use App\Http\Controllers\NetworkController;
 
-Route::get('networks', [NetworkController::class, 'index']);
+Route::get('networks', [NetworkController::class, 'index'])->name('networks');
