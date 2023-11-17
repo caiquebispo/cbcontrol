@@ -2,7 +2,14 @@
 
 //Profiles Tests
 
-todo('verificar se existe a rota permissions');
+use function Pest\Laravel\{get,};
+
+it('verificar se existe a rota permissions', function(){
+
+    get('/app/permissions')
+    ->assertOk()
+    ->assertViewIs('permissions.index');
+});
 todo('verificar se somente usuários autenticado podem acessar essa rota');
 todo('verificar se usuários não autenticados estão sendo redirecionando para pagina de login');
 todo('verificar se na pagina tem o componente para criação de um perfil');
