@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Profiles\Update;
 use App\Http\Livewire\Profiles\Create;
 use App\Http\Livewire\Profiles\Delete;
 use App\Http\Livewire\Profiles\ListProfiles;
@@ -114,4 +115,18 @@ it('verificar se ao clicar no componente para deletar um perfil o perfil foi del
     ->assertDontSee($profile->name);
 
     $this->assertDatabaseCount('profiles', 0);
+});
+it('verficar se exite o componete para editar um perfil na tela', function(){
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', 'Perfil Base')
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(Update::class);
 });
