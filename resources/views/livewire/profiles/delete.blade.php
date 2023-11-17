@@ -1,3 +1,4 @@
 <div>
-    {{-- If your happiness depends on money, you will never be happy with yourself. --}}
+    <x-button-trash wire:click="$toggle('showModal', 'true')" />
+    <x-modal.delete :show="$showModal" typeModelDelete="o perfil" />
 </div>

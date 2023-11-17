@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Profiles\Create;
+use App\Http\Livewire\Profiles\Delete;
 use App\Http\Livewire\Profiles\ListProfiles;
 use App\Models\Profile;
 use App\Models\User;
@@ -72,6 +73,17 @@ it('verificar se foi realizado o cadastro de um perfil com sucesso e se o evento
         'id' => 1
     ]);
 });
+it('verficar se exite o componete para deletar um perfil na tela', function(){
 
-//Permission "Modules" Tests
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
 
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(Delete::class);
+});

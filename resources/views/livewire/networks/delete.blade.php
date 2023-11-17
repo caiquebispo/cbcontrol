@@ -1,3 +1,4 @@
 <div>
-    {{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
+    <x-button-trash wire:click="$toggle('showModal', 'true')" />
+    <x-modal.delete :show="$showModal" typeModelDelete="a rede" />
 </div>
