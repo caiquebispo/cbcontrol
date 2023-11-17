@@ -10,12 +10,6 @@ beforeEach(function(){
     $this->user = User::factory()->createOne();
 });
 
-it('verificar se existe a rota permissions', function(){
-
-    get('/app/permissions')
-    ->assertOk()
-    ->assertViewIs('permissions.index');
-});
 it('verificar se somente usuários autenticado podem acessar essa rota', function(){
 
     actingAs($this->user)
@@ -23,7 +17,12 @@ it('verificar se somente usuários autenticado podem acessar essa rota', functio
     ->assertOk()
     ->assertViewIs('permissions.index');
 });
-todo('verificar se usuários não autenticados estão sendo redirecionando para pagina de login');
+it('verificar se usuários não autenticados estão sendo redirecionando para pagina de login', function(){
+
+    get('/app/permissions')
+    ->assertFound()
+    ->assertRedirect('login');
+});
 todo('verificar se na pagina tem o componente para criação de um perfil');
 todo('verificar se ao clicar no componente o modal para cadastro de perfil está sendo exibido corretamente');
 todo('verificar se os dados estão devidamente preenchidos');
