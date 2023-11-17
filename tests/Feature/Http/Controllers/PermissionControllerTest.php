@@ -87,3 +87,18 @@ it('verficar se exite o componete para deletar um perfil na tela', function(){
     ->assertOk()
     ->assertSeeLivewire(Delete::class);
 });
+
+it('verificar se ao clicar no componente para deletar um perfil o modal de alerta está sendo exibido', function(){
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Delete::class)
+    ->toggle('showModal')
+    ->assertSee('Tem certeza de que deseja excluir');
+});
