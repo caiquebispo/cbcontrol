@@ -145,3 +145,19 @@ it('verificar se ao clicar no componente para editar o perfil o modal está send
     ->assertSee('Editar Perfil');
 
 });
+it('verificar se os dados estão devidamente preenchidos na edição do perfil', function(){
+     
+    $profile = Profile::factory()->createOne();
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::test(Update::class, ['profile' => $profile])
+    ->toggle('showModal')
+    ->call('update')
+    ->assertHasErrors();
+});

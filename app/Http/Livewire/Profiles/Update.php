@@ -15,7 +15,7 @@ class Update extends Component
     public function rules()
     {
         return [
-            'profile.name' =>  'required|string|min:4|max:256|unique:profiles,name,' . $this->profile->id,
+            'profile.name' =>  'required|string|min:4|max:256|unique:profiles,name,' . $this->profile->name,
         ];
     }
     
