@@ -161,3 +161,25 @@ it('verificar se os dados estão devidamente preenchidos na edição do perfil',
     ->call('update')
     ->assertHasErrors();
 });
+it('verificar se um perfil foi editado com sucesso!', function(){
+    
+    $profile = Profile::factory()->createOne();
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::test(Update::class, ['profile' => $profile])
+    ->toggle('showModal')
+    ->set('profile.name' , "Perfil Base 2")
+    ->call('update')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::updated');
+
+    $this->assertDatabaseHas('profiles', [
+        'name' => 'Perfil Base 2'
+    ]);
+});

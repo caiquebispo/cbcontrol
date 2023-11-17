@@ -23,6 +23,7 @@ class Update extends Component
     {
         $this->validate();
         $this->profile->save();
+        $this->emitTo(ListProfiles::class, 'profiles::index::updated');
         $this->notifications();
         
     }
