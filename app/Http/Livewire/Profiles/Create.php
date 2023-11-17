@@ -29,7 +29,7 @@ class Create extends Component
     {
         $this->notification()->success(
             'Parabéns!',
-            'Perfilç Cadastrado com sucesso!'
+            'Perfil Cadastrado com sucesso!'
         );
     }
     public function render(): View

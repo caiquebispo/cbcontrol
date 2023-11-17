@@ -102,3 +102,16 @@ it('verificar se ao clicar no componente para deletar um perfil o modal de alert
     ->toggle('showModal')
     ->assertSee('Tem certeza de que deseja excluir');
 });
+it('verificar se ao clicar no componente para deletar um perfil o perfil foi deletado com sucesso', function(){
+    
+    $profile = Profile::factory()->createOne();
+    
+    Livewire::actingAs($this->user)
+    ->test(Delete::class, ['profile' => $profile])
+    ->toggle('showModal')
+    ->call('delete')
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::deleted')
+    ->assertDontSee($profile->name);
+
+    $this->assertDatabaseCount('profiles', 0);
+});
