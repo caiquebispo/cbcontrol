@@ -32,7 +32,17 @@ it('verificar se na pagina tem o componente para criação de um perfil', functi
     ->assertSeeLivewire(ListProfiles::class)
     ->assertSeeLivewire(Create::class);
 });
-todo('verificar se ao clicar no componente o modal para cadastro de perfil está sendo exibido corretamente');
+it('verificar se ao clicar no componente o modal para cadastro de perfil está sendo exibido corretamente', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->assertSee('Cadastrar Perfil');
+
+});
 todo('verificar se os dados estão devidamente preenchidos');
 todo('verificar se foi realizado o cadastro de um perfil com sucesso e se o evento foi desparado corretamente');
 
