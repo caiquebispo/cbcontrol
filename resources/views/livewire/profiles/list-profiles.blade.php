@@ -12,9 +12,22 @@
                     <x-table.th>STATUS</x-table.th>
                     <x-table.th class="text-right">ACTIONS</x-table.th>
                 </x-table.thead>
-                <x-table.tbody></x-table.tbody>
+                <x-table.tbody>
+                    @foreach($profiles as $profile)
+                        <x-table.tr>
+                            <x-table.th>{{$profile->name ?? 'NÃO DEFINIDO'}}</x-table.th>
+                            <x-table.th>{{$profile->status ?? 'NÃO DEFINIDO'}}</x-table.th>
+                            <x-table.th class="flex  justify-end">
+                                <!-- livewire:profiles.show :profile="$profile" :wire:key="'network-show-'.$profile->id"/> -->
+                                <!-- <livewire:profiles.update :profile="$profile" :wire:key="'network-update-'.$profile->id"/> -->
+                            </x-table.th>
+                        </x-table.tr>
+                    @endforeach
+                </x-table.tbody>
             </x-table>
-            <div class="p-4"></div>
+            <div class="p-4">
+                {{ $profiles->links() }}
+            </div>
         </x-table.content-table>
     </div>
 </div>

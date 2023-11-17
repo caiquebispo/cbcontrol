@@ -2,6 +2,7 @@
 
 use App\Http\Livewire\Profiles\Create;
 use App\Http\Livewire\Profiles\ListProfiles;
+use App\Models\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -37,14 +38,40 @@ it('verificar se ao clicar no componente o modal para cadastro de perfil está s
     actingAs($this->user)
     ->get('/app/permissions')
     ->assertOk();
-    
+
     Livewire::test(Create::class)
     ->toggle('showModal')
     ->assertSee('Cadastrar Perfil');
 
 });
-todo('verificar se os dados estão devidamente preenchidos');
-todo('verificar se foi realizado o cadastro de um perfil com sucesso e se o evento foi desparado corretamente');
+it('verificar se os dados estão devidamente preenchidos', function(){
+    
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->call('create')
+    ->assertHasErrors();
+});
+it('verificar se foi realizado o cadastro de um perfil com sucesso e se o evento foi desparado corretamente', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    $this->assertDatabaseHas('profiles', [
+        'id' => 1
+    ]);
+});
 
 //Permission "Modules" Tests
 

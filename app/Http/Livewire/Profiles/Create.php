@@ -2,10 +2,14 @@
 
 namespace App\Http\Livewire\Profiles;
 
+use App\Models\Profile;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use WireUi\Traits\Actions;
 
 class Create extends Component
 {
+    use Actions;
     public ?bool $showModal = false;
     public ?string $name = null;
 
@@ -16,8 +20,19 @@ class Create extends Component
     public function create(): void
     {
         $validated = $this->validate();
+        Profile::create($validated);
+        $this->emitTo(ListProfiles::class, 'profiles::index::created');
+        $this->reset();
+        $this->notifications();
     }
-    public function render()
+    public function notifications(): void
+    {
+        $this->notification()->success(
+            'Parabéns!',
+            'Perfilç Cadastrado com sucesso!'
+        );
+    }
+    public function render(): View
     {
         return view('livewire.profiles.create');
     }
