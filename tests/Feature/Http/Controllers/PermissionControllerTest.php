@@ -130,3 +130,18 @@ it('verficar se exite o componete para editar um perfil na tela', function(){
     ->assertOk()
     ->assertSeeLivewire(Update::class);
 });
+it('verificar se ao clicar no componente para editar o perfil o modal está sendo exibido corretamente', function(){
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Perfil');
+
+});
