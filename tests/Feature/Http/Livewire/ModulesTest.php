@@ -3,6 +3,7 @@
 use App\Http\Livewire\Modules\Create;
 use App\Http\Livewire\Modules\ListModules;
 use App\Models\User;
+use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
@@ -38,7 +39,16 @@ it('verificar se o componente para criar uma nova permissão está na tela', fun
     ->assertOk()
     ->assertSeeLivewire(Create::class);
 });
-todo('verificar se ao clicar no componente para cirar uma novoa permissão o modal está sendo exibido corretamente');
+it('verificar se ao clicar no componente para cirar uma novoa permissão o modal está sendo exibido corretamente', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->assertSee('Cadastrar Módulo ou Permissão');
+});
 todo('verificar se os todos os dados fornecido pelo usuário estão correto e passando pelas validações');
 todo('verificar se a tabela já existe no banco e se está com todos os campos');
 todo('verificar se a permissão foi cadastrada com sucesso e o evento para recarregar a listagem foi disparado');
