@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Modules\Create;
 use App\Http\Livewire\Modules\ListModules;
 use App\Models\User;
 
@@ -30,7 +31,13 @@ it('verificar se o componente de listagem de modules/permissions está na tela',
     ->assertOk()
     ->assertSeeLivewire(ListModules::class);
 });
-todo('verificar se o componente para criar uma nova permissão está na tela');
+it('verificar se o componente para criar uma nova permissão está na tela', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(Create::class);
+});
 todo('verificar se ao clicar no componente para cirar uma novoa permissão o modal está sendo exibido corretamente');
 todo('verificar se os todos os dados fornecido pelo usuário estão correto e passando pelas validações');
 todo('verificar se a tabela já existe no banco e se está com todos os campos');
