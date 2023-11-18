@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Modules\ListModules;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -22,7 +23,13 @@ it('verificar se usuários não autenticados estão sendo redirecionados para pa
     ->assertFound()
     ->assertRedirect('login');
 });
-todo('verificar se o componente de listagem de modules/permissions está na tela');
+it('verificar se o componente de listagem de modules/permissions está na tela', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(ListModules::class);
+});
 todo('verificar se o componente para criar uma nova permissão está na tela');
 todo('verificar se ao clicar no componente para cirar uma novoa permissão o modal está sendo exibido corretamente');
 todo('verificar se os todos os dados fornecido pelo usuário estão correto e passando pelas validações');
