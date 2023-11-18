@@ -3,6 +3,7 @@
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
 
 beforeEach(function(){
 
@@ -15,7 +16,12 @@ it('verificar se somente usuários autendicado podem  acessar a rota', function(
     ->get('/app/permissions')
     ->assertViewIs('permissions.index');
 });
-todo('verificar se usuários não autenticados estão sendo redirecionados para pagina de login');
+it('verificar se usuários não autenticados estão sendo redirecionados para pagina de login', function(){
+
+    get('/app/permissions')
+    ->assertFound()
+    ->assertRedirect('login');
+});
 todo('verificar se o componente de listagem de modules/permissions está na tela');
 todo('verificar se o componente para criar uma nova permissão está na tela');
 todo('verificar se ao clicar no componente para cirar uma novoa permissão o modal está sendo exibido corretamente');
