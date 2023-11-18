@@ -1,7 +1,5 @@
 <x-app-layout>
     <div class="py-24">
-        <x-card title="RESUMO DE VENDAS">
-            <livewire:profiles.list-profiles />
-        </x-card>
+        <livewire:profiles.list-profiles />
     </div>
 </x-app-layout>
