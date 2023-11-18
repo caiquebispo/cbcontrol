@@ -2,12 +2,19 @@
 
 use App\Models\User;
 
+use function Pest\Laravel\actingAs;
+
 beforeEach(function(){
 
     $this->user = User::factory()->createOne();
 });
 
-todo('verificar se somente usuários autendicado podem  acessar a rota');
+it('verificar se somente usuários autendicado podem  acessar a rota', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertViewIs('permissions.index');
+});
 todo('verificar se usuários não autenticados estão sendo redirecionados para pagina de login');
 todo('verificar se o componente de listagem de modules/permissions está na tela');
 todo('verificar se o componente para criar uma nova permissão está na tela');
