@@ -49,8 +49,17 @@ it('verificar se ao clicar no componente para cirar uma novoa permissão o modal
     ->toggle('showModal')
     ->assertSee('Cadastrar Módulo ou Permissão');
 });
-todo('verificar se os todos os dados fornecido pelo usuário estão correto e passando pelas validações');
-todo('verificar se a tabela já existe no banco e se está com todos os campos');
+it('verificar se os todos os dados fornecido pelo usuário estão correto e passando pelas validações', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->call('create')
+    ->assertHasErrors();
+});
 todo('verificar se a permissão foi cadastrada com sucesso e o evento para recarregar a listagem foi disparado');
 todo('verificar se o componete para editar uma permisão está em tela');
 todo('verificar se ao clicar no componente para editar uma permissão o modal está  sendo exibido corretamente');
