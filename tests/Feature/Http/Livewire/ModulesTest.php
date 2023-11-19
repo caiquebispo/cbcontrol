@@ -189,5 +189,22 @@ it('verificar se o componente para deletar uma permissão está em tela', functi
     ->assertOk()
     ->assertSeeLivewire(Delete::class);
 });
-todo('verificar se ao clicar no componente para deletar uma permissão o modal de alerta está sendo exibido');
+it('verificar se ao clicar no componente para deletar uma permissão o modal de alerta está sendo exibido', function(){
+    
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Delete::class)
+    ->toggle('showModal')
+    ->assertSee('Tem certeza de que deseja excluir');
+});
 todo('verificar se a permissão foi deletada e o evento para recarregar a listagem foi disparado');

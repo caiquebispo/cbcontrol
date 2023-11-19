@@ -34,6 +34,7 @@ class Update extends Component
         $this->validate();
         $this->module->save();
         $this->emitTo(ListModules::class, 'module::index::updated');
+        $this->reset();
     }
     public function render(): View
     {
