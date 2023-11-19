@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Modules\Create;
+use App\Http\Livewire\Modules\Delete;
 use App\Http\Livewire\Modules\ListModules;
 use App\Http\Livewire\Modules\Update;
 use App\Models\Module;
@@ -142,7 +143,7 @@ it('verificar se todos os dados fornecido na edição estão sendo validados cor
 it('verificar se a permissão foi editada com sucesso e o evento para recarregar a listagem foi disparado', function(){
 
     $module = Module::factory()->createOne();
-    
+
     Livewire::test(Create::class)
     ->set('name', 'Categorias')
     ->set('label', 'categories')
@@ -171,6 +172,22 @@ it('verificar se a permissão foi editada com sucesso e o evento para recarregar
         'name' => "Categorias - EDITADO",
     ]);
 });
-todo('verificar se o componente para deletar uma permissão está em tela');
+it('verificar se o componente para deletar uma permissão está em tela', function(){
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(Delete::class);
+});
 todo('verificar se ao clicar no componente para deletar uma permissão o modal de alerta está sendo exibido');
 todo('verificar se a permissão foi deletada e o evento para recarregar a listagem foi disparado');
