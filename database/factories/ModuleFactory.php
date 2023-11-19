@@ -17,7 +17,12 @@ class ModuleFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => 'Categorias - EDITADO',
+            'label' => 'categories',
+            'url' => '/app/categories',
+            'menu_name' => 'Produtos',
+            'order_list' => 1,
+            'is_module' => 1,
         ];
     }
 }

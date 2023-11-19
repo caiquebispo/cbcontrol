@@ -139,7 +139,38 @@ it('verificar se todos os dados fornecido na edição estão sendo validados cor
     ->call('update')
     ->assertHasErrors();
 });
-todo('verificar se a permissão foi editada com sucesso e o evento para recarregar a listagem foi disparado');
+it('verificar se a permissão foi editada com sucesso e o evento para recarregar a listagem foi disparado', function(){
+
+    $module = Module::factory()->createOne();
+    
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::test(Update::class, ['module' => $module])
+    ->toggle('showModal')
+    ->set('module.name', 'Categorias - EDITADO')
+    ->set('module.label', 'categories')
+    ->set('module.url', '/app/categories')
+    ->set('module.menu_name', 'Produtos')
+    ->set('module.order_list', 1)
+    ->set('module.is_module', 1)
+    ->call('update')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class, 'module::index::updated');
+
+    $this->assertDatabaseHas('modules',[
+
+        'name' => "Categorias - EDITADO",
+    ]);
+});
 todo('verificar se o componente para deletar uma permissão está em tela');
 todo('verificar se ao clicar no componente para deletar uma permissão o modal de alerta está sendo exibido');
 todo('verificar se a permissão foi deletada e o evento para recarregar a listagem foi disparado');
