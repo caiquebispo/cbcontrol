@@ -207,4 +207,16 @@ it('verificar se ao clicar no componente para deletar uma permissão o modal de 
     ->toggle('showModal')
     ->assertSee('Tem certeza de que deseja excluir');
 });
-todo('verificar se a permissão foi deletada e o evento para recarregar a listagem foi disparado');
+it('verificar se a permissão foi deletada e o evento para recarregar a listagem foi disparado', function(){
+    
+    $module = Module::factory()->createOne();
+    
+    Livewire::actingAs($this->user)
+    ->test(Delete::class, ['module' => $module])
+    ->toggle('showModal')
+    ->call('delete')
+    ->assertEmittedTo(ListModules::class,'module::index::deleted')
+    ->assertDontSee($module->name);
+
+    $this->assertDatabaseCount('modules', 0);
+});
