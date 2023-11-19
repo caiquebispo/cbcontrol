@@ -102,7 +102,24 @@ it('verificar se o componente para editar uma permisão está em tela', function
     
 
 });
-todo('verificar se ao clicar no componente para editar uma permissão o modal está  sendo exibido corretamente');
+it('verificar se ao clicar no componente para editar uma permissão o modal está  sendo exibido corretamente', function(){
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Update::class)
+    ->toggle('showModal')
+    ->assertSee('Editar Módulo ou Permissão');
+});
 todo('verificar se todos os dados fornecido na edição estão sendo validados corretamente');
 todo('verificar se a permissão foi editada com sucesso e o evento para recarregar a listagem foi disparado');
 todo('verificar se o componente para deletar uma permissão está em tela');
