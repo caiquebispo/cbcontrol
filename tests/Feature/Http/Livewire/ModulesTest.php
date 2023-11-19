@@ -60,7 +60,27 @@ it('verificar se os todos os dados fornecido pelo usuário estão correto e pass
     ->call('create')
     ->assertHasErrors();
 });
-todo('verificar se a permissão foi cadastrada com sucesso e o evento para recarregar a listagem foi disparado');
+it('verificar se a permissão foi cadastrada com sucesso e o evento para recarregar a listagem foi disparado', function(){
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    $this->assertDatabaseHas('modules', [
+        'id' => 1
+    ]);
+});
 todo('verificar se o componete para editar uma permisão está em tela');
 todo('verificar se ao clicar no componente para editar uma permissão o modal está  sendo exibido corretamente');
 todo('verificar se todos os dados fornecido na edição estão sendo validados corretamente');
