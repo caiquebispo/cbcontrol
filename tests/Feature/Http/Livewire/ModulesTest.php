@@ -3,6 +3,7 @@
 use App\Http\Livewire\Modules\Create;
 use App\Http\Livewire\Modules\ListModules;
 use App\Http\Livewire\Modules\Update;
+use App\Models\Module;
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -120,7 +121,24 @@ it('verificar se ao clicar no componente para editar uma permissão o modal est�
     ->toggle('showModal')
     ->assertSee('Editar Módulo ou Permissão');
 });
-todo('verificar se todos os dados fornecido na edição estão sendo validados corretamente');
+it('verificar se todos os dados fornecido na edição estão sendo validados corretamente', function(){
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::test(Update::class)
+    ->toggle('showModal')
+    ->call('update')
+    ->assertHasErrors();
+});
 todo('verificar se a permissão foi editada com sucesso e o evento para recarregar a listagem foi disparado');
 todo('verificar se o componente para deletar uma permissão está em tela');
 todo('verificar se ao clicar no componente para deletar uma permissão o modal de alerta está sendo exibido');
