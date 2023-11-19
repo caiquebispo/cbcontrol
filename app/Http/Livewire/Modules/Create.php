@@ -32,6 +32,7 @@ class Create extends Component
         $validated = $this->validate();
         Module::create($validated);
         $this->emitTo(ListModules::class, 'module::index::created');
+        $this->reset();
     }
     public function render(): View
     {

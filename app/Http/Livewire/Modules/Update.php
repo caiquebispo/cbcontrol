@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Update extends Component
 {
-    public object $module;
+    public $module;
     public ?bool $showModal = false;
     public ?string $name = null;
     public ?string $label = null;

@@ -6,18 +6,19 @@
                 @csrf
                 <div class="grid md:grid-cols-2 md:gap-6 my-3">
                     <div>
-                        <x-input label="Nome" placeholder="Nome" type="text" wire:model.defer="module.name" />
+                        <x-input label="Menu Name" placeholder="Menu Name" type="text" wire:model.defer="module.menu_name" />
                     </div>
                     <div>
-                        <x-input label="Label" placeholder="Label" type="text" wire:model.defer="module.label" />
+                        <x-input label="Nome" placeholder="Nome" type="text" wire:model.defer="module.name" />
                     </div>
+                    
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6 my-3">
                     <div>
                         <x-input label="URL" placeholder="URL" type="text" wire:model.defer="module.url" />
                     </div>
                     <div>
-                        <x-input label="Menu Name" placeholder="Menu Name" type="text" wire:model.defer="module.menu_name" />
+                        <x-input label="Label" placeholder="Label" type="text" wire:model.defer="module.label" />
                     </div>
                 </div>
                 <div class="grid md:grid-cols-3 md:gap-6 my-3">
@@ -29,7 +30,7 @@
                     </div>
                     <x-native-select
                         label="È um módulo?"
-                        placeholder="Status"
+                        placeholder="È um módulo?"
                         :options="[
                             ['is_module' => 'Sim',  'value' => 1],
                             ['is_module' => 'Não', 'value' => 0],
