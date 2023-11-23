@@ -18,8 +18,9 @@ class ListModules extends Component
     ];
     public function getModules(): object
     {
+        
         return Module::when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
-            ->orderBy($this->setSortField('name'), $this->sortDirection)
+            ->orderBy($this->setSortField('menu_name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }
     public function render(): View

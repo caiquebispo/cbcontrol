@@ -8,7 +8,7 @@
             </x-table.actions>
             <x-table>
                 <x-table.thead>
-                    <x-table.th>MENU</x-table.th>
+                    <x-table.th wire:click.prevent="sortBy('menu_name')" :sortable="true" :direction="$sortDirection">MENU</x-table.th>
                     <x-table.th>MODULO/PERMISSÃO</x-table.th>
                     <x-table.th>LABEL</x-table.th>
                     <x-table.th>É UM MÓDULO?</x-table.th>
@@ -29,6 +29,7 @@
                             <x-table.th>{{$module->order_listi ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex  justify-end">
                                 <livewire:modules.update :module="$module" wire:key="{{now()}}"/>
+                                <livewire:modules.profiles :module="$module" wire:key="{{now()}}"/>
                                 <livewire:modules.delete :module="$module" wire:key="{{now()}}"/>
                             </x-table.th>
                         </x-table.tr>
