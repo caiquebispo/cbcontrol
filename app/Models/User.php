@@ -58,6 +58,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'id', 'company_id');
     }
+    public function profiles(): BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'profile_users');
+    }
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_users');

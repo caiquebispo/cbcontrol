@@ -24,7 +24,10 @@ class Toggle extends Component
     }
     public function hasRelationship(): bool
     {
-        return $this->module->profiles->contains($this->profile);
+        if($this->module){
+            return $this->module->profiles->contains($this->profile);
+        }
+        return false;
     }
     public function render(): View
     {

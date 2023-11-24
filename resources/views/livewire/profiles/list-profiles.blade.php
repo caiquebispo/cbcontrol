@@ -19,6 +19,7 @@
                             <x-table.th>{{$profile->status ?? 'NÃO DEFINIDO'}}</x-table.th>
                             <x-table.th class="flex  justify-end">
                                 <livewire:profiles.update :profile="$profile" wire:key="{{now()}}"/>
+                                <livewire:profiles.users  :profile="$profile" wire:key="{{now()}}"/>
                                 <livewire:profiles.delete :profile="$profile" wire:key="{{now()}}"/>
                             </x-table.th>
                         </x-table.tr>
