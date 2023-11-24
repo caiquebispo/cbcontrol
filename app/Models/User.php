@@ -74,4 +74,15 @@ class User extends Authenticatable
     {
        return $this->belongsToMany(Group::class, 'group_users');
     }
-}
+    public function hasPermission($permission): bool
+    {
+        return $this->doesThisUserHaveThisProfile($permission->profiles);
+    }
+    public function doesThisUserHaveThisProfile($profiles): bool
+    {
+        if(is_array($profiles) || is_object($profiles)){
+            return !!$profiles->intersect($this->profiles)->count();
+        }
+        return $this->profiles->contains('name', $profiles->name);
+    }
+}   
