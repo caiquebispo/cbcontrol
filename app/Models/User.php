@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Laravel\Sanctum\HasApiTokens;
 use MBarlow\Megaphone\HasMegaphone;
 
@@ -85,4 +86,27 @@ class User extends Authenticatable
         }
         return $this->profiles->contains('name', $profiles->name);
     }
+    public function getMenu()
+    {
+       $menu = [];
+
+       foreach($this->profiles as $profile){
+
+            foreach($profile->permissions as $permission){
+
+                if($permission->is_module){
+
+                    $index_menu = array_search($permission->menu_name, array_column($menu, 'menu'));
+
+                    if($index_menu === false){
+                        array_push($menu,['menu' => $permission->menu_name, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
+                    }else{
+                        array_push($menu[$index_menu]['sub_menu'], Arr::only($permission->toArray(), ['name', 'url']));
+                    }
+                }
+            }
+       }
+       return $menu;
+    }
 }   
+
