@@ -99,13 +99,14 @@ class User extends Authenticatable
                     $index_menu = array_search($permission->menu_name, array_column($menu, 'menu'));
 
                     if($index_menu === false){
-                        array_push($menu,['menu' => $permission->menu_name, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
+                        array_push($menu,['menu' => $permission->menu_name, 'order_list' => $permission->order_list, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
                     }else{
                         array_push($menu[$index_menu]['sub_menu'], Arr::only($permission->toArray(), ['name', 'url']));
                     }
                 }
             }
        }
+       usort($menu, fn($a, $b) => $a['order_list'] <=> $b['order_list']);
        return $menu;
     }
 }   

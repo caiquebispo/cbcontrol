@@ -53,12 +53,12 @@
              @endcan
             @foreach(auth()->user()->getMenu() as $key_menu => $menu)
              <li x-data="{ open: false }">
+                
                 <button type="button"
-                     
                     x-on:click="open = ! open"
                     class="flex items-center w-full p-2 text-gray-500 text-sm transition duration-75 rounded-lg group hover:bg-gray-950 hover:text-gray-200 dark:text-white dark:hover:bg-gray-700"
                     aria-controls="dropdown-{{$key_menu}}" data-collapse-toggle="dropdown-{{$key_menu}}">
-                
+
                     <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item>{{$menu['menu']}}</span>
                       <template x-if="open">
                          <x-bi-chevron-up />
