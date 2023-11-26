@@ -28,8 +28,15 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        if(isset(auth()->user()->getMenu()[0]['sub_menu'][0]['url'])){
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->intended(auth()->user()->getMenu()[0]['sub_menu'][0]['url']);
+        }
+        
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Laravel\Sanctum\HasApiTokens;
 use MBarlow\Megaphone\HasMegaphone;
 
@@ -58,6 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'id', 'company_id');
     }
+    public function profiles(): BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'profile_users');
+    }
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_users');
@@ -70,4 +75,39 @@ class User extends Authenticatable
     {
        return $this->belongsToMany(Group::class, 'group_users');
     }
-}
+    public function hasPermission($permission): bool
+    {
+        return $this->doesThisUserHaveThisProfile($permission->profiles);
+    }
+    public function doesThisUserHaveThisProfile($profiles): bool
+    {
+        if(is_array($profiles) || is_object($profiles)){
+            return !!$profiles->intersect($this->profiles)->count();
+        }
+        return $this->profiles->contains('name', $profiles->name);
+    }
+    public function getMenu()
+    {
+       $menu = [];
+
+       foreach($this->profiles as $profile){
+
+            foreach($profile->permissions as $permission){
+
+                if($permission->is_module){
+
+                    $index_menu = array_search($permission->menu_name, array_column($menu, 'menu'));
+
+                    if($index_menu === false){
+                        array_push($menu,['menu' => $permission->menu_name, 'order_list' => $permission->order_list, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
+                    }else{
+                        array_push($menu[$index_menu]['sub_menu'], Arr::only($permission->toArray(), ['name', 'url']));
+                    }
+                }
+            }
+       }
+       usort($menu, fn($a, $b) => $a['order_list'] <=> $b['order_list']);
+       return $menu;
+    }
+}   
+

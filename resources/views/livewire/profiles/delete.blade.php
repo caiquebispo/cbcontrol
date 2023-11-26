@@ -1,4 +1,4 @@
 <div>
     <x-button-trash wire:click="$toggle('showModal', 'true')" />
-    <x-modal.delete :show="$showModal" typeModelDelete="a rede" />
+    <x-modal.delete :show="$showModal" typeModelDelete="o perfil" />
 </div>
