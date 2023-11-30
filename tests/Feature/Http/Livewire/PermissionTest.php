@@ -4,6 +4,7 @@ use App\Http\Livewire\Profiles\Update;
 use App\Http\Livewire\Profiles\Create;
 use App\Http\Livewire\Profiles\Delete;
 use App\Http\Livewire\Profiles\ListProfiles;
+use App\Http\Livewire\Profiles\Users;
 use App\Models\Profile;
 use App\Models\User;
 use Livewire\Livewire;
@@ -182,4 +183,22 @@ it('verificar se um perfil foi editado com sucesso!', function(){
     $this->assertDatabaseHas('profiles', [
         'name' => 'Perfil Base 2'
     ]);
+});
+it('verificar se o componente para associar um perfil a uma usuário o componente está em tela', function(){
+    
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk()
+    ->assertSeeLivewire(Users::class);
 });
