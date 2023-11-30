@@ -23,7 +23,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        return;
         $permissions = Module::with('profiles')->get();
 
         if(sizeof($permissions) > 0){
