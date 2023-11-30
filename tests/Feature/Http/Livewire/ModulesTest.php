@@ -4,6 +4,7 @@ use App\Http\Livewire\Modules\Create;
 use App\Http\Livewire\Modules\Delete;
 use App\Http\Livewire\Modules\ListModules;
 use App\Http\Livewire\Modules\Profiles;
+use App\Http\Livewire\Modules\Toggle;
 use App\Http\Livewire\Modules\Update;
 use App\Models\Module;
 use App\Models\Profile;
@@ -260,4 +261,32 @@ it('verificar se ao clicar no componente associar uma permissão a uma perfil o 
     ->test(Profiles::class , ['profile' => $profile, 'module' => $module])
     ->toggle('showModal')
     ->assertSee('Adicionar permissão');
+});
+it('verificar se ao clicar no componente toggle uma permissão foi associada ao perfil e se o evento foi desparado', function(){
+    
+    $profile = Profile::factory()->createOne();
+    $module = Module::factory()->createOne();
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Toggle::class , ['profile' => $profile, 'module' => $module])
+    ->call('attach')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(Profiles::class, 'profile::index::attach');
+
+    $this->assertDatabaseHas('module_profiles',[
+
+        'module_id' => $module->id,
+        'profile_id' => $profile->id,
+    ]);
 });
