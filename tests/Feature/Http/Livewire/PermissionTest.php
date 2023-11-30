@@ -202,3 +202,22 @@ it('verificar se o componente para associar um perfil a uma usuário o component
     ->assertOk()
     ->assertSeeLivewire(Users::class);
 });
+it('verificar se o componente para associar um perfil a uma usuário o modal está sendo exibido corretamente', function(){
+    
+    $profile = Profile::factory()->createOne();
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::test(Users::class, ['profile' => $profile, 'user' => $this->user])
+    ->toggle('showModal')
+    ->assertSee('Adicionar perfil');
+});
