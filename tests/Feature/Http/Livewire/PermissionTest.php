@@ -4,6 +4,7 @@ use App\Http\Livewire\Profiles\Update;
 use App\Http\Livewire\Profiles\Create;
 use App\Http\Livewire\Profiles\Delete;
 use App\Http\Livewire\Profiles\ListProfiles;
+use App\Http\Livewire\Profiles\Toggle;
 use App\Http\Livewire\Profiles\Users;
 use App\Models\Profile;
 use App\Models\User;
@@ -220,4 +221,29 @@ it('verificar se o componente para associar um perfil a uma usuário o modal est
     Livewire::test(Users::class, ['profile' => $profile, 'user' => $this->user])
     ->toggle('showModal')
     ->assertSee('Adicionar perfil');
+});
+it('verificar se ao clicar no componente toggle o prfil está sendo associado ao usuário corretamente', function(){
+    
+    $profile = Profile::factory()->createOne();
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::test(Toggle::class, ['profile' => $profile, 'user' => $this->user])
+    ->call('attach')
+    ->assertEmittedTo(Users::class, 'users::index::attach');
+
+    $this->assertDatabaseHas('profile_users',[
+    
+        'user_id' => $this->user->id,
+        'profile_id' => $profile->id,
+    ]);
 });
