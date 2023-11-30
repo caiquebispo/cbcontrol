@@ -6,6 +6,7 @@ use App\Http\Livewire\Modules\ListModules;
 use App\Http\Livewire\Modules\Profiles;
 use App\Http\Livewire\Modules\Update;
 use App\Models\Module;
+use App\Models\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -238,4 +239,25 @@ it('verificar se o componente para associar um perfil a uma permissão está em 
     ->get('/app/permissions')
     ->assertOk()
     ->assertSeeLivewire(Profiles::class);
+});
+it('verificar se ao clicar no componente associar uma permissão a uma perfil o modal de alerta está sendo exibido', function(){
+    
+    $profile = Profile::factory()->createOne();
+    $module = Module::factory()->createOne();
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Profiles::class , ['profile' => $profile, 'module' => $module])
+    ->toggle('showModal')
+    ->assertSee('Adicionar permissão');
 });
