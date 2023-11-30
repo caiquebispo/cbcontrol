@@ -4,9 +4,7 @@
             <x-table.actions  :showButtonExport="false">
                 
                 <x-slot name="buttonCreate">
-                    @can('create-permission')
-                        <livewire:profiles.create />
-                    @endcan
+                    <livewire:profiles.create />
                 </x-slot>
             </x-table.actions>
             <x-table>
