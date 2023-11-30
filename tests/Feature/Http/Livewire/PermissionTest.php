@@ -247,3 +247,24 @@ it('verificar se ao clicar no componente toggle o prfil está sendo associado ao
         'profile_id' => $profile->id,
     ]);
 });
+it('verificar se ao clicar no componente toggle o perfil está sendo removido do usuário corretamente', function(){
+    
+    $profile = Profile::factory()->createOne();
+
+    actingAs($this->user)
+    ->get('/app/permissions')
+    ->assertOk();
+    
+    Livewire::test(Create::class)
+    ->toggle('showModal')
+    ->set('name', "Perfil Base")
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListProfiles::class,'profiles::index::created');
+
+    Livewire::test(Toggle::class, ['profile' => $profile, 'user' => $this->user])
+    ->call('detach')
+    ->assertEmittedTo(Users::class, 'users::index::detach');
+
+    $this->assertDatabaseCount('profile_users',0);
+});
