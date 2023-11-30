@@ -290,3 +290,27 @@ it('verificar se ao clicar no componente toggle uma permissão foi associada ao 
         'profile_id' => $profile->id,
     ]);
 });
+it('verificar se ao clicar no componente toggle uma permissão foi removida do perfil e se o evento foi desparado', function(){
+    
+    $profile = Profile::factory()->createOne();
+    $module = Module::factory()->createOne();
+
+    Livewire::test(Create::class)
+    ->set('name', 'Categorias')
+    ->set('label', 'categories')
+    ->set('url', '/app/categories')
+    ->set('menu_name', 'Produtos')
+    ->set('order_list', 1)
+    ->set('is_module', 1)
+    ->call('create')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(ListModules::class,'module::index::created');
+
+    Livewire::actingAs($this->user)
+    ->test(Toggle::class , ['profile' => $profile, 'module' => $module])
+    ->call('detach')
+    ->assertHasNoErrors()
+    ->assertEmittedTo(Profiles::class, 'profile::index::detach');
+
+    $this->assertDatabaseCount('module_profiles', 0);
+});
