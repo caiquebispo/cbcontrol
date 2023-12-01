@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AuthenticatedUser;
 use App\Events\StorageNetwork;
 use App\Listeners\AttchAdminUserInNetwork;
+use App\Listeners\SaveLogUserAuthenticated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         StorageNetwork::class =>[
             AttchAdminUserInNetwork::class
-        ]
+        ],
+        AuthenticatedUser::class => [
+            SaveLogUserAuthenticated::class
+        ],
     ];
 
     /**

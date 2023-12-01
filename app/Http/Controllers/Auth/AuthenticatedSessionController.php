@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\AuthenticatedUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,10 +28,11 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
+        
         if(isset(auth()->user()->getMenu()[0]['sub_menu'][0]['url'])){
-
+            
+            AuthenticatedUser::dispatch(Auth::user());
             return redirect()->intended(auth()->user()->getMenu()[0]['sub_menu'][0]['url']);
         }
         
