@@ -75,6 +75,10 @@ class User extends Authenticatable
     {
        return $this->belongsToMany(Group::class, 'group_users');
     }
+    public function log():  BelongsToMany
+    {
+        return $this->belongsToMany(UserLoginHistory::class, 'user_login_histories');
+    }
     public function hasPermission($permission): bool
     {
         return $this->doesThisUserHaveThisProfile($permission->profiles);
