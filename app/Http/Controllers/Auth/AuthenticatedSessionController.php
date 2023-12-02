@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Stevebauman\Location\Facades\Location;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,9 +31,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         
+        AuthenticatedUser::dispatch(Auth::user(), Location::get('168.196.215.201'));
         if(isset(auth()->user()->getMenu()[0]['sub_menu'][0]['url'])){
             
-            AuthenticatedUser::dispatch(Auth::user());
             return redirect()->intended(auth()->user()->getMenu()[0]['sub_menu'][0]['url']);
         }
         
