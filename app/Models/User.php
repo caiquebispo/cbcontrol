@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -74,6 +75,10 @@ class User extends Authenticatable
     public function groups(): BelongsToMany
     {
        return $this->belongsToMany(Group::class, 'group_users');
+    }
+    public function history_log(): HasMany
+    {
+        return $this->hasMany(UserLoginHistory::class);
     }
     public function hasPermission($permission): bool
     {
