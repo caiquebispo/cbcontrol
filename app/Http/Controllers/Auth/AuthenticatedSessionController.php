@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Events\AuthenticatedUser;
+use App\Events\UnaAuthenticated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
@@ -31,15 +32,19 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         
-        AuthenticatedUser::dispatch(Auth::user(), Location::get('168.196.215.201'));
+        AuthenticatedUser::dispatch(Auth::user(), Location::get($request->ip()));
+
         if(isset(auth()->user()->getMenu()[0]['sub_menu'][0]['url'])){
             
             return redirect()->intended(auth()->user()->getMenu()[0]['sub_menu'][0]['url']);
         }
         
         Auth::guard('web')->logout();
+
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 
@@ -48,6 +53,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        
+        UnaAuthenticated::dispatch(Auth::user(), Location::get($request->ip()));
+        
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

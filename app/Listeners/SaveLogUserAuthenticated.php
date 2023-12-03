@@ -22,15 +22,15 @@ class SaveLogUserAuthenticated
     public function handle(AuthenticatedUser $event): void
     {
         
-        
         $event->user->history_log()
         ->insert(
             [
                 'user_id' => $event->user->id,
                 'day' => (new DateTime())->format('Y-m-d'),  
                 'login' => (new DateTime())->format('Y-m-d H:i:s'),
-                'location' => json_encode(Arr::except($event->location->toArray(), ['driver']), true)
+                'location' => json_encode($event->location != false ? Arr::except($event->location->toArray(), ['driver']): [], true)
             ]
         );
     }
+    
 }
