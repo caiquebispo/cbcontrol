@@ -15,6 +15,6 @@ class UserLoginHistory extends Model
 
     public function history_navigation(): HasMany
     {
-        return $this->hasMany(UserNavigationHistory::class);
+        return $this->hasMany(UserNavigationHistory::class, 'user_login_history_id');
     }
 }
