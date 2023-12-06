@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -74,7 +76,7 @@ class User extends Authenticatable
     }
     public function groups(): BelongsToMany
     {
-       return $this->belongsToMany(Group::class, 'group_users');
+        return $this->belongsToMany(Group::class, 'group_users');
     }
     public function history_log(): HasMany
     {
@@ -86,33 +88,46 @@ class User extends Authenticatable
     }
     public function doesThisUserHaveThisProfile($profiles): bool
     {
-        if(is_array($profiles) || is_object($profiles)){
+        if (is_array($profiles) || is_object($profiles)) {
             return !!$profiles->intersect($this->profiles)->count();
         }
         return $this->profiles->contains('name', $profiles->name);
     }
-    public function getMenu()
+    public function getMenu(): array
     {
-       $menu = [];
+        $menu = [];
 
-       foreach($this->profiles as $profile){
+        foreach ($this->profiles as $profile) {
 
-            foreach($profile->permissions as $permission){
+            foreach ($profile->permissions as $permission) {
 
-                if($permission->is_module){
+                if ($permission->is_module) {
 
                     $index_menu = array_search($permission->menu_name, array_column($menu, 'menu'));
 
-                    if($index_menu === false){
-                        array_push($menu,['menu' => $permission->menu_name, 'order_list' => $permission->order_list, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
-                    }else{
+                    if ($index_menu === false) {
+                        array_push($menu, ['menu' => $permission->menu_name, 'order_list' => $permission->order_list, 'icon' => $permission->icon_class, 'sub_menu' => [Arr::only($permission->toArray(), ['name', 'url'])]]);
+                    } else {
                         array_push($menu[$index_menu]['sub_menu'], Arr::only($permission->toArray(), ['name', 'url']));
                     }
                 }
             }
-       }
-       usort($menu, fn($a, $b) => $a['order_list'] <=> $b['order_list']);
-       return $menu;
+        }
+        usort($menu, fn ($a, $b) => $a['order_list'] <=> $b['order_list']);
+        return $menu;
     }
-}   
+    public function history_navigation($path = null): void
+    {
+        $getLastAccess = $this->history_log()
+            ->where('day', (new DateTime())->format('Y-m-d'))
+            ->orderBy('login', 'desc')
+            ->first();
 
+        $getLastAccess->history_navigation()
+            ->insert([
+                'user_login_history_id' => $getLastAccess->id,
+                'date' => new DateTime(),
+                'functionality' => $path
+            ]);
+    }
+}
