@@ -26,7 +26,7 @@ class SystemUsability{
     }
     public function getDataGraphs(): array
     {
-        $payload = $this->getLogs();
+        $payload = $this->getLogs(false);
         return $this->dataGraphs($payload);
     }
     private function dataTable($payload): array
@@ -55,12 +55,14 @@ class SystemUsability{
             if(count($pay->history_navigation) > 0){
     
                 foreach($pay->history_navigation as $navigation){
-                    
-                    $index_navigation = array_search($navigation->module->name, array_column($graph_navigation, 'name'));
-                    if($index_navigation !== false){
-                        $graph_navigation[$index_navigation]['total']++;
-                    }else{
-                        array_push($graph_navigation, ['name'=>$navigation->module->name, 'total' => 1]);
+                    if(isset($navigation->module->name)){
+
+                        $index_navigation = array_search($navigation->module->name, array_column($graph_navigation, 'name'));
+                        if($index_navigation !== false){
+                            $graph_navigation[$index_navigation]['total']++;
+                        }else{
+                            array_push($graph_navigation, ['name'=>$navigation->module->name, 'total' => 1]);
+                        }
                     }
                 }
             }
@@ -91,12 +93,19 @@ class SystemUsability{
             'graph_location_state' => $graph_location_state,
         ];
     }
-    private function getLogs(): object
+    private function getLogs($is_grouped = true): object
     {
+        if($is_grouped){
+
+            return UserLoginHistory::with('history_navigation.module', 'users')
+            ->whereBetween('day', [$this->start->format('Y-m-d'),$this->end->format('Y-m-d')])
+            ->orderBy('login', 'DESC')
+            ->get()
+            ->unique('user_id');
+        }
         return UserLoginHistory::with('history_navigation.module', 'users')
-        ->whereBetween('day', [$this->start->format('Y-m-d'),$this->end->format('Y-m-d')])
-        ->orderBy('login', 'DESC')
-        ->get()
-        ->unique('user_id');
+            ->whereBetween('day', [$this->start->format('Y-m-d'),$this->end->format('Y-m-d')])
+            ->orderBy('login', 'DESC')
+            ->get();
     }
 }
