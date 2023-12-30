@@ -35,7 +35,7 @@
         </div>
 
         <div class="mb-5">
-            <x-button type="submit" class="w-full cursor-pointer rounded-lg border border-blue-600 bg-blue-600 p-4  py-4 font-medium tex-lg text-white hove:bg-blue-600">Logar</x-button>
+            <x-button type="submit" class="w-full cursor-pointer rounded-lg border border-blue-600 bg-blue-600 p-4  py-4 font-medium tex-lg text-white hover:bg-blue-600">Logar</x-button>
         </div>
 
     </form>
