@@ -11,20 +11,24 @@ class Client extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+
+    protected $casts = [
+        'birthday' => 'date',
+        'password' => 'hashed',
+    ];
 
     public function groups(): BelongsToMany
     {
-       return $this->belongsToMany(Group::class, 'group_clients');
+        return $this->belongsToMany(Group::class, 'group_clients');
     }
     public function image(): MorphMany
     {
-        
+
         return $this->morphMany(Image::class, 'images');
     }
     public function address(): MorphMany
     {
-        
+
         return $this->morphMany(Address::class, 'address');
     }
     public function companies(): BelongsToMany

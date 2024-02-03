@@ -17,10 +17,18 @@ class Order extends Model
     }
     public  function user(): HasOne
     {
-        return $this->hasOne(User::class, 'id','user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+    public  function client(): HasOne
+    {
+        return $this->hasOne(Client::class, 'id', 'client_id');
+    }
+    public  function who_received(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'who_received_id');
     }
     public  function reason(): HasOne
     {
-        return $this->hasOne('reason', 'id','reason_id');
+        return $this->hasOne('reason', 'id', 'reason_id');
     }
 }

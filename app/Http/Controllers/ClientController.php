@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use DateTime;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class ClientController extends Controller
     {
         return view('clients');
     }
-    public static function exportPDF(){
+    public static function exportPDF()
+    {
 
-        $clients  = Auth::user()->company->clients()->orderBy('clients.full_name','asc')->get();
+        $clients  = Auth::user()->company->clients()->orderBy('clients.full_name', 'asc')->get();
         $pdf = PDF::loadView('clients.export.list_clients', compact('clients'));
         $fileName = 'Listagem de cliente ' . (new Datetime('now'))->format('d-m-Y H_i_s') . '.pdf';
         $pdf->save(storage_path('/app/pdf/' . $fileName));

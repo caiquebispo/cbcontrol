@@ -5,6 +5,7 @@ namespace App\Class\Store\Checkout;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\User;
+use DateTime;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -16,40 +17,62 @@ class ProcessingCheckout
     public function __construct(
         protected ?object $company = null,
         protected ?object $user = null,
+        protected ?object $client = null,
         protected ?object $address = null,
         protected ?string $paymentMethod = null,
         protected ?string $delivery_method = null,
         protected ?bool $hasExchange = null,
         protected ?float $amount = null,
-    ){}
+        protected ?string $origin = 'PDV'
+    ) {
+    }
     public  function  processing(): void
     {
-        $address_id = ($this->address instanceof Collection)? $this->address->get('id') : $this->address->id;
-        $this->storeOrder($this->company->id, $this->user->id,$address_id,$this->paymentMethod, $this->delivery_method,$this->hasExchange, $this->amount);
+        $client_id = is_object($this->client) ? $this->client->id : 0;
+        $user_id = is_object($this->user) ? $this->user->id : 0;
+        $address_id = ($this->address instanceof Collection) ? $this->address->get('id') : $this->address->id;
+
+        $this->storeOrder($this->company->id, $user_id, $client_id, $address_id, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $this->amount, $this->origin);
     }
-    private function  storeOrder($company_id,$user_id,$address_id,$paymentMethod, $delivery_method,$hasExchange, $amount): void{
+    private function  storeOrder($company_id, $user_id,  $client_id = null, $address_id, $paymentMethod, $delivery_method, $hasExchange, $amount, $origin): void
+    {
 
         $order = Order::create([
             'user_id'               => $user_id,
+            'client_id'             => $client_id,
             'company_id'            => $company_id,
             'address_id'            => $address_id,
             'day'                   => (new \DateTime('now'))->format('Y-m-d'),
+            'duet_day'              => $paymentMethod === 'in_count' ? (new DateTime('now'))->modify('+1 month')->format('Y-m-d') : (new \DateTime('now'))->format('Y-m-d'),
             'total_amount'          => \Cart::subtotal(),
             'payment_method'        => $paymentMethod,
+            'payment_status'        => $this->setStatusSales($paymentMethod),
             'delivery_method'       => $delivery_method,
             'hasExchange'           => $hasExchange ?? 0,
             'amount'                => $amount ?: 0.00,
             'quantityItem'          => sizeof(\Cart::content()),
-            'status_order'          => 'new',
+            'status_order'          => $origin == 'PDV' ? 'confirmed' : 'new',
+            'origin'                => $origin,
+            'received_day'          => $this->setStatusSales($paymentMethod) != 'pending' ? (new DateTime('now'))->format('Y-m-d') : null,
+            'who_received_id'       => ($this->setStatusSales($paymentMethod) != 'pending' && $origin  == 'PDV') ? $user_id : null,
         ]);
 
         $this->mountedStructureOrderProducts($order->id, \Cart::content());
-
     }
-    private  function  mountedStructureOrderProducts($order_id, $orderProducts): void{
+    private function setStatusSales($state)
+    {
+        return match ($state) {
+            'in_count' =>  'pending',
+            'credit_card' =>  'confirmed',
+            'cash' =>   'confirmed',
+            'pix_or_transfer_bank' =>  'confirmed',
+        };
+    }
+    private  function  mountedStructureOrderProducts($order_id, $orderProducts): void
+    {
 
         $order_products = [];
-        foreach($orderProducts as $key => $item){
+        foreach ($orderProducts as $key => $item) {
             $order_products[] = [
                 'order_id' => $order_id,
                 'product_id' => $item->id,
@@ -66,12 +89,17 @@ class ProcessingCheckout
     }
     public function notifications(): void
     {
-        foreach($this->company->users as $user){
+        $message = '';
+        if (is_object($this->user)) {
+            $message = 'O vendedor(a) ' . $this->user->name . ', realizou uma nova venda para o cliente _client_name_';
+        } else {
+            $message = 'Parabéns! Você tem uma nova venda do cliente _client_name_';
+        }
+        foreach ($this->company->users as $user) {
 
             $notification = new \MBarlow\Megaphone\Types\General(
-                'Parabéns Você VENDEUUUU!',
-                'O usuário(a) '.$this->user->name.' realizou uma compra nova, corre e já corefere.',
-
+                $this->origin != 'PDV' ? 'Parabéns Você VENDEUUUU!' : '',
+                str_replace('_client_name_', $this->client->full_name, $message)
             );
             $user->notify($notification);
         }

@@ -23,14 +23,14 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
+
         $permissions = Module::with('profiles')->get();
 
-        if(sizeof($permissions) > 0){
-            foreach($permissions as $permission){
-                
-               Gate::define($permission->label, function(User $user) use ($permission){
-                    
+        if (sizeof($permissions) > 0) {
+            foreach ($permissions as $permission) {
+
+                Gate::define($permission->label, function (User $user) use ($permission) {
+
                     return  $user->hasPermission($permission);
                 });
             }

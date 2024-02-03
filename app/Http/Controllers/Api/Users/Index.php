@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Index extends Controller
 {
-   
+
     public function getCompanies(User $user, Request $request): Collection
     {
         return Company::query()
