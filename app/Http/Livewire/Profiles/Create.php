@@ -10,11 +10,13 @@ use WireUi\Traits\Actions;
 class Create extends Component
 {
     use Actions;
+
     public ?bool $showModal = false;
+
     public ?string $name = null;
 
     protected array $rules = [
-        'name' => ['required', 'unique:profiles', 'min:4', 'max:256']
+        'name' => ['required', 'unique:profiles', 'min:4', 'max:256'],
     ];
 
     public function create(): void
@@ -25,6 +27,7 @@ class Create extends Component
         $this->reset();
         $this->notifications();
     }
+
     public function notifications(): void
     {
         $this->notification()->success(
@@ -32,6 +35,7 @@ class Create extends Component
             'Perfil Cadastrado com sucesso!'
         );
     }
+
     public function render(): View
     {
         return view('livewire.profiles.create');

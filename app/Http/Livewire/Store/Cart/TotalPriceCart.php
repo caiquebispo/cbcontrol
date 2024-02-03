@@ -12,6 +12,7 @@ class TotalPriceCart extends Component
         'cartItem::index::removeItemCart' => '$refresh',
         'cartItem::index::cleanCart' => '$refresh',
     ];
+
     public function render()
     {
         return view('livewire.store.cart.total-price-cart');

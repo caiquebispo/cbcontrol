@@ -10,8 +10,11 @@ use WireUi\Traits\Actions;
 class Product extends Component
 {
     use Actions;
+
     public ?object $product;
+
     public ModelsProduct $productCart;
+
     public ?string $observation = null;
 
     public function addToCart(ModelsProduct $product, $quantity = 1): void
@@ -23,14 +26,15 @@ class Product extends Component
             'price' => $product->price,
             'qty' => $quantity,
             'options' => [
-                'path_img' =>  $product->image->first()?->path ?? null,
-                'description' =>  $product->description ?? null,
-                'observation' =>  $this->observation ?? null,
-            ]
+                'path_img' => $product->image->first()?->path ?? null,
+                'description' => $product->description ?? null,
+                'observation' => $this->observation ?? null,
+            ],
         ])->associate('App\Models\Product');
         $this->notifications();
         $this->emit('cartItem::index::addToCart');
     }
+
     public function notifications(): void
     {
         $this->notification()->success(
@@ -38,6 +42,7 @@ class Product extends Component
             $description = 'Produto addicionado ao carrinho'
         );
     }
+
     public function render(): View
     {
         return view('livewire.box-front.product');

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('price');
             $table->integer('quantity');
             $table->string('observation')->nullable();
-            $table->timestamps();;
+            $table->timestamps();
         });
     }
 

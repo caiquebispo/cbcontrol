@@ -8,16 +8,14 @@ use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class Index extends Controller
 {
-
     public function getCompanies(User $user, Request $request): Collection
     {
         return Company::query()
             ->whereIn('id', array_column($user->companies->toArray(), 'id'))
-            ->select('id', 'corporate_reason',)
+            ->select('id', 'corporate_reason')
             ->orderBy('corporate_reason')
             ->when(
                 $request->search,

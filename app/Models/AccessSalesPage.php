@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AccessSalesPage extends Model
 {
     use HasFactory;
-    protected  $guarded = [];
+
+    protected $guarded = [];
 }

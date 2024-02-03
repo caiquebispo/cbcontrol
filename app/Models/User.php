@@ -18,7 +18,7 @@ use MBarlow\Megaphone\HasMegaphone;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasMegaphone;
+    use HasApiTokens, HasFactory, HasMegaphone, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -53,46 +53,57 @@ class User extends Authenticatable
 
         return $this->morphMany(Image::class, 'images');
     }
+
     public function address(): MorphMany
     {
 
         return $this->morphMany(Address::class, 'address');
     }
+
     public function company(): HasOne
     {
         return $this->hasOne(Company::class, 'id', 'company_id');
     }
+
     public function profiles(): BelongsToMany
     {
         return $this->belongsToMany(Profile::class, 'profile_users');
     }
+
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_users');
     }
+
     public function networks(): BelongsToMany
     {
         return $this->belongsToMany(Network::class, 'network_users');
     }
+
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_users');
     }
+
     public function history_log(): HasMany
     {
         return $this->hasMany(UserLoginHistory::class);
     }
+
     public function hasPermission($permission): bool
     {
         return $this->doesThisUserHaveThisProfile($permission->profiles);
     }
+
     public function doesThisUserHaveThisProfile($profiles): bool
     {
         if (is_array($profiles) || is_object($profiles)) {
-            return !!$profiles->intersect($this->profiles)->count();
+            return (bool) $profiles->intersect($this->profiles)->count();
         }
+
         return $this->profiles->contains('name', $profiles->name);
     }
+
     public function getMenu(): array
     {
         $menu = [];
@@ -114,8 +125,10 @@ class User extends Authenticatable
             }
         }
         usort($menu, fn ($a, $b) => $a['order_list'] <=> $b['order_list']);
+
         return $menu;
     }
+
     public function history_navigation($path = null): void
     {
         $getLastAccess = $this->history_log()
@@ -127,7 +140,7 @@ class User extends Authenticatable
             ->insert([
                 'user_login_history_id' => $getLastAccess->id,
                 'date' => new DateTime(),
-                'functionality' => $path
+                'functionality' => $path,
             ]);
     }
 }

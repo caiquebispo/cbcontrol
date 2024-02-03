@@ -4,11 +4,8 @@ namespace App\Events;
 
 use App\Models\Network;
 use App\Models\User;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +20,8 @@ class StorageNetwork
     public function __construct(
         public Network $network,
         public $user_id = null
-    )
-    {
-       User::find($user_id ?: Auth::user()->id)->networks()->attach($network);
+    ) {
+        User::find($user_id ?: Auth::user()->id)->networks()->attach($network);
     }
 
     /**

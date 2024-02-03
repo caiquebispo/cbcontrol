@@ -8,9 +8,12 @@ use Livewire\Component;
 class Show extends Component
 {
     public object $client;
-    public function mount(Client $client){
+
+    public function mount(Client $client)
+    {
         $this->client = $client;
     }
+
     public function render()
     {
         return view('livewire.utils.address.show');

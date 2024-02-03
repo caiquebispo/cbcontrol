@@ -10,14 +10,20 @@ use WireUi\Traits\Actions;
 
 class Settings extends Component
 {
-
     use Actions;
+
     public ?SettingCompany $settings;
+
     public ?string $slung = null;
+
     public ?string $primary_color = null;
+
     public ?string $second_color = null;
+
     public ?bool $is_opened = null;
+
     public ?bool $has_delivery = null;
+
     public ?float $delivery_price = null;
 
     public function rules(): array
@@ -32,15 +38,18 @@ class Settings extends Component
             'settings.delivery_price' => 'nullable',
         ];
     }
+
     public function mount(): void
     {
         $this->settings = Auth::user()->company->settings;
     }
-    public function render():View
+
+    public function render(): View
     {
         return view('livewire.settings-company.settings');
     }
-    public function update():void
+
+    public function update(): void
     {
         $this->validate();
         $this->settings->save();
@@ -50,9 +59,10 @@ class Settings extends Component
         );
 
     }
+
     public function toCleanPaletteColors(): void
     {
-        $this->settings->update(['primary_color' => '','second_color' => '','font_color' => '']);
+        $this->settings->update(['primary_color' => '', 'second_color' => '', 'font_color' => '']);
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Aterações realizadas com sucesso!'

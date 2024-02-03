@@ -12,15 +12,18 @@ use WireUi\Traits\Actions;
 class UpdateOrInsertPhoto extends Component
 {
     use Actions;
+
     public ?object $product;
+
     public ?bool $showModal = false;
+
     use WithFileUploads;
 
-    public  $photos = [];
+    public $photos = [];
 
     protected array $rules = [
 
-        'photos.*' => 'required|image|max:1024'
+        'photos.*' => 'required|image|max:1024',
     ];
 
     public function render(): View
@@ -34,22 +37,23 @@ class UpdateOrInsertPhoto extends Component
 
         foreach ($this->photos as $img) {
 
-            $filename = str_replace(" ", "", date('YmdHi').$img->getClientOriginalName());
+            $filename = str_replace(' ', '', date('YmdHi').$img->getClientOriginalName());
             $imagePath = $img->storeAs('public/images/product', $filename);
             $this->product->image()->create(['images_id' => $this->product->id, 'path' => $imagePath]);
         }
 
         $this->emitTo(ListPhotos::class, 'products::index::created');
-        $this->notifications(sizeof($this->photos));
+        $this->notifications(count($this->photos));
     }
-    public function notifications($totalImages):void
+
+    public function notifications($totalImages): void
     {
 
         $this->notification()->success(
             'Parabéns!',
             'Imagem adicionada com sucesso!'
         );
-        foreach(Auth::user()->company->users as $user){
+        foreach (Auth::user()->company->users as $user) {
 
             $notification = new General(
                 'Atualização de Produto!',

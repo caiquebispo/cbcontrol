@@ -13,5 +13,4 @@ class SlideShowModalProduct extends Component
     {
         return view('livewire.store.products.slide-show-modal-product');
     }
-    
 }

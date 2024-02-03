@@ -5,8 +5,11 @@ namespace App\Traits\Table;
 trait SettingTable
 {
     public ?string $search = '';
+
     public ?int $qtyItemsForPage = 10;
+
     public ?string $sortField;
+
     public ?string $sortDirection = 'asc';
 
     public function sortBy($field): void
@@ -17,9 +20,9 @@ trait SettingTable
             : 'asc';
         $this->sortField = $field;
     }
-    public  function setSortField($name = null)
+
+    public function setSortField($name = null)
     {
         return $this->sortField = $name ?? 'full_name';
     }
-
 }

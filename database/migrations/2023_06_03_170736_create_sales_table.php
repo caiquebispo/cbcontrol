@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->unsigned()
-            ->references('id')->on('companies')
-            ->nullable();
+                ->references('id')->on('companies')
+                ->nullable();
             $table->integer('user_id')->unsigned()
-            ->references('id')->on('users')
-            ->nullable();
+                ->references('id')->on('users')
+                ->nullable();
             $table->integer('client_id')->unsigned()
-            ->references('id')->on('users')
-            ->nullable();
+                ->references('id')->on('users')
+                ->nullable();
             $table->integer('product_id')->unsigned()
-            ->references('id')->on('products')
-            ->nullable();
+                ->references('id')->on('products')
+                ->nullable();
             $table->float('price_sales');
             $table->integer('delivery_method');
             $table->integer('type_sales');

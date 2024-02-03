@@ -12,8 +12,8 @@ use Livewire\WithPagination;
 
 class ListClient extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
     public User $user;
 
@@ -23,6 +23,7 @@ class ListClient extends Component
         'client::index::deleted' => '$refresh',
         'client:index::increase-or-decrease' => '$refresh',
     ];
+
     public function mount(): void
     {
         $this->user = Auth::user();
@@ -32,14 +33,17 @@ class ListClient extends Component
     {
         return view('livewire.clients.list-client', ['clients' => $this->getClients()]);
     }
-    protected function getClients(){
+
+    protected function getClients()
+    {
 
         return $this->user->company->clients()
-            ->when($this->search != "", fn($query) => $query->where('full_name', 'like', '%'.$this->search."%"))
+            ->when($this->search != '', fn ($query) => $query->where('full_name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField(), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }
-    public function  exportPDF($model): \Symfony\Component\HttpFoundation\BinaryFileResponse
+
+    public function exportPDF($model): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return ClientController::exportPDF();
     }

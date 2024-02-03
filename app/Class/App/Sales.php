@@ -3,25 +3,27 @@
 namespace App\Class\App;
 
 use App\Models\User;
-use DateTime;
 use DateInterval;
 use DatePeriod;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 
 class Sales
 {
     private ?User $user;
+
     private ?object $start;
+
     private ?object $end;
+
     private ?object $interval;
+
     private ?object $dateRange;
 
     /**
-     * @param $start
-     * @param $end
      * @throws \Exception
      */
-    public  function __construct($start = null, $end = null)
+    public function __construct($start = null, $end = null)
     {
 
         $this->start = is_object($start) ? $start : new DateTime($start);
@@ -30,9 +32,10 @@ class Sales
         $this->dateRange = new DatePeriod($this->start, $this->interval, $this->end->modify('+1 day'));
         $this->user = Auth::user();
     }
+
     public function getDataTableSales(): array|object
     {
-        $sales  = [];
+        $sales = [];
         $payload = $this->getSalesBasedOnPeriods();
         foreach ($payload as $key_sale => $sale) {
 
@@ -44,7 +47,7 @@ class Sales
                 'type_payment_sale' => $this->getTypePayment($sale->payment_method),
                 'segment' => $sale->origin === 'SITE' ? 'VENDA ONLINE' : 'VENDA BALCAO',
                 'delivery_method' => $this->getTypeDelivery($sale->delivery_method),
-                'value' => 'R$ ' . number_format($sale->total_amount, 2, ',', '.'),
+                'value' => 'R$ '.number_format($sale->total_amount, 2, ',', '.'),
                 'total_items' => $sale->quantityItem,
                 'status' => $this->getTypeStatus($sale->status_order),
                 'payment_status' => $sale->payment_status == 'pending' ? 'PENDENTE' : 'PAGO',
@@ -52,20 +55,22 @@ class Sales
                 'date' => (new DateTime($sale->day))->format('d/m/Y'),
                 'duet_day' => $sale->duet_day != null ? (new DateTime($sale->duet_day))->format('d/m/Y') : (new DateTime($sale->day))->format('d/m/Y'),
                 'received_day' => $sale->received_day != null ? (new DateTime($sale->received_day))->format('d/m/Y') : 'AGUARDANDO...',
-                'qty_items' => sizeof($sale->order_product),
-                'products_sale' => []
+                'qty_items' => count($sale->order_product),
+                'products_sale' => [],
             ];
             foreach ($sale->order_product as $key_sale_product => $sale_product) {
                 $sales[$key_sale]['products_sale'][$key_sale_product] = [
                     'name' => $sale_product->product->first()->name,
                     'category' => $sale_product->product->first()->categories->name,
                     'qty_product' => $sale_product->quantity,
-                    'price' => 'R$ ' . number_format($sale_product->price, 2, ',', '.')
+                    'price' => 'R$ '.number_format($sale_product->price, 2, ',', '.'),
                 ];
             }
         }
+
         return $sales;
     }
+
     public function getSummarySales()
     {
         $data = $this->getDataTableSales();
@@ -77,6 +82,7 @@ class Sales
 
         return $summary;
     }
+
     private function summarySellers($data)
     {
 
@@ -84,7 +90,7 @@ class Sales
 
         foreach ($data as $key_d => $d) {
 
-            foreach ($d['products_sale']  as $key_p => $product) {
+            foreach ($d['products_sale'] as $key_p => $product) {
 
                 $index = -1;
                 foreach ($arr as $key_a => $a) {
@@ -96,8 +102,8 @@ class Sales
 
                 if ($index > -1) {
 
-                    $arr[$index]['quantity'] +=  $product['qty_product'];
-                    $arr[$index]['price'] +=  (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                    $arr[$index]['quantity'] += $product['qty_product'];
+                    $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
                 } else {
 
                     array_push(
@@ -106,14 +112,16 @@ class Sales
                             'name' => $d['seller_name'],
                             'product' => $product['name'],
                             'quantity' => $product['qty_product'],
-                            'price' => (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])))
+                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
                         ]
                     );
                 }
             }
         }
+
         return $arr;
     }
+
     private function summaryClients($data)
     {
 
@@ -121,7 +129,7 @@ class Sales
 
         foreach ($data as $key_d => $d) {
 
-            foreach ($d['products_sale']  as $key_p => $product) {
+            foreach ($d['products_sale'] as $key_p => $product) {
 
                 $index = -1;
                 foreach ($arr as $key_a => $a) {
@@ -133,8 +141,8 @@ class Sales
 
                 if ($index > -1) {
 
-                    $arr[$index]['quantity'] +=  $product['qty_product'];
-                    $arr[$index]['price'] +=  (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                    $arr[$index]['quantity'] += $product['qty_product'];
+                    $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
                 } else {
 
                     array_push(
@@ -143,27 +151,29 @@ class Sales
                             'name' => $d['client_name'],
                             'product' => $product['name'],
                             'quantity' => $product['qty_product'],
-                            'price' => (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])))
+                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
                         ]
                     );
                 }
             }
         }
+
         return $arr;
     }
+
     private function summaryProduct($data): array
     {
 
         $arr = [];
         foreach ($data as $key_d => $d) {
 
-            foreach ($d['products_sale']  as $key_p => $product) {
+            foreach ($d['products_sale'] as $key_p => $product) {
 
                 $index_product = array_search($product['name'], array_column($arr, 'name'));
 
                 if ($index_product !== false) {
 
-                    $arr[$index_product]['price'] += (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                    $arr[$index_product]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
                     $arr[$index_product]['quantity'] += $product['qty_product'];
                 } else {
                     array_push(
@@ -171,30 +181,24 @@ class Sales
                         [
                             'name' => $product['name'],
                             'quantity' => $product['qty_product'],
-                            'price' => (float)str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])))
+                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
                         ]
                     );
                 }
             }
         }
+
         return $arr;
     }
-    /**
-     * @param $type_graph
-     * @param $field
-     * @return array|null
-     */
-    public function getDataGraph($type_graph = null, $field = null): array|null
+
+    public function getDataGraph($type_graph = null, $field = null): ?array
     {
-        return  match ($type_graph) {
+        return match ($type_graph) {
             'pizza' => $this->getDataGraphPizza($field),
             default => $this->getDataGraphComparisonLineOrBar()
         };
     }
 
-    /**
-     * @return array
-     */
     private function getDataGraphComparisonLineOrBar(): array
     {
         $data = $this->mountedArrayPeriods(['sale_actual' => 0, 'canceled_actual' => 0, 'sale_last' => 0, 'canceled_last' => 0]);
@@ -228,164 +232,140 @@ class Sales
         return $data;
     }
 
-    /**
-     * @param $field
-     * @return array
-     */
     private function getDataGraphPizza($field): array
     {
         return match ($field) {
-            'status'     => $this->getDataGraphForStatus(),
-            'delivery'   => $this->getDataGraphForDeliveryMethod(),
-            'payment'    => $this->getDataGraphForPaymentMethod(),
-            'segment'    => $this->getDataGraphForSegment(),
+            'status' => $this->getDataGraphForStatus(),
+            'delivery' => $this->getDataGraphForDeliveryMethod(),
+            'payment' => $this->getDataGraphForPaymentMethod(),
+            'segment' => $this->getDataGraphForSegment(),
             'categories' => $this->getDataGraphForCategories(),
             'products' => $this->getDataGraphForProducts(),
             default => 'Error! Graph Type not mapping'
         };
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForStatus(): array
+    private function getDataGraphForStatus(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
             $index = $item['status_order'];
 
-            if (!isset($accumulator[$index])) {
+            if (! isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypeStatus($item['status_order']),
                     'total' => 0,
                 ];
             }
             $accumulator[$index]['total']++;
+
             return $accumulator;
         }, []));
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForDeliveryMethod(): array
+    private function getDataGraphForDeliveryMethod(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
 
             $index = $item['delivery_method'];
 
-            if (!isset($accumulator[$index])) {
+            if (! isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypeDelivery($item['delivery_method']),
                     'total' => 0,
                 ];
             }
             $accumulator[$index]['total']++;
+
             return $accumulator;
         }, []));
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForPaymentMethod(): array
+    private function getDataGraphForPaymentMethod(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
 
             $index = $item['payment_method'];
 
-            if (!isset($accumulator[$index])) {
+            if (! isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypePayment($item['payment_method']),
                     'total' => 0,
                 ];
             }
             $accumulator[$index]['total']++;
+
             return $accumulator;
         }, []));
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForSegment(): array
+    private function getDataGraphForSegment(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
 
             $index = $item['origin'];
 
-            if (!isset($accumulator[$index])) {
+            if (! isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $item['origin'],
                     'total' => 0,
                 ];
             }
             $accumulator[$index]['total']++;
+
             return $accumulator;
         }, []));
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForCategories(): array
+    private function getDataGraphForCategories(): array
     {
         $data = [];
         foreach ($this->getSalesBasedOnPeriods() as $sale) {
-            foreach ($sale->order_product as  $sale_product) {
+            foreach ($sale->order_product as $sale_product) {
 
                 $index = array_search($sale_product->product()->first()->categories->name, array_column($data, 'name'));
 
                 if ($index !== false) {
                     $data[$index]['total']++;
                 } else {
-                    $data[]  = ['name' => $sale_product->product()->first()->categories->name, 'total' => 1];
+                    $data[] = ['name' => $sale_product->product()->first()->categories->name, 'total' => 1];
                 }
             }
         }
-        return  $data;
+
+        return $data;
     }
 
-    /**
-     * @return array
-     */
-    private  function getDataGraphForProducts(): array
+    private function getDataGraphForProducts(): array
     {
 
         $data = [];
         foreach ($this->getSalesBasedOnPeriods() as $sale) {
-            foreach ($sale->order_product as  $sale_product) {
+            foreach ($sale->order_product as $sale_product) {
 
                 $index = array_search($sale_product->product()->first()->name, array_column($data, 'name'));
 
                 if ($index !== false) {
                     $data[$index]['total']++;
                 } else {
-                    $data[]  = ['name' => $sale_product->product()->first()->name, 'total' => 1];
+                    $data[] = ['name' => $sale_product->product()->first()->name, 'total' => 1];
                 }
             }
         }
-        return  $data;
+
+        return $data;
     }
 
-    /**
-     * @param $method
-     * @return string
-     */
     private function getTypeDelivery($method): string
     {
-        return  match ($method) {
+        return match ($method) {
             'delivery' => 'DELIVERY',
             default => 'RETIRAR NO LOCAL'
         };
     }
 
-    /**
-     * @param $method
-     * @return string
-     */
     private function getTypeStatus($method): string
     {
-        return  match ($method) {
+        return match ($method) {
             'new' => 'NOVA',
             'canceled' => 'CANCELADA',
             'confirmed' => 'CONFIRMADA',
@@ -393,23 +373,15 @@ class Sales
         };
     }
 
-    /**
-     * @param $method
-     * @return string
-     */
     private function getTypePayment($method): string
     {
-        return  match ($method) {
+        return match ($method) {
             'credit_card' => 'CARTAO CREDITO/ E OU DEBITO',
             'in_count' => 'NA NOTA',
             default => 'A VISTA'
         };
     }
 
-    /**
-     * @param $array_combine
-     * @return array
-     */
     private function mountedArrayPeriods($array_combine = null): array
     {
         $periods = [];
@@ -420,16 +392,10 @@ class Sales
                 $periods[$key_d] = ['day' => $d->format('Y-m-d'), 'day_last' => $d->modify('-1 months')->format('Y-m-d'), 'day_format' => $d->format('d/m')];
             }
         }
+
         return $periods;
     }
 
-    /**
-     * @param $is_comparasion
-     * @param $operator
-     * @param $quantity
-     * @param $type
-     * @return object
-     */
     public function getSalesBasedOnPeriods($is_comparasion = false, $operator = '-', $quantity = 1, $type = 'months'): object
     {
         if ($is_comparasion) {
@@ -437,8 +403,8 @@ class Sales
                 ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
                     'day',
                     [
-                        $this->start->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d'),
-                        $this->end->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d')
+                        $this->start->modify($operator.' '.$quantity.' '.$type)->format('Y-m-d'),
+                        $this->end->modify($operator.' '.$quantity.' '.$type)->format('Y-m-d'),
                     ]
                 )
                 ->get();

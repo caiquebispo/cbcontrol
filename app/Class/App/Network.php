@@ -8,7 +8,8 @@ class Network
 {
     public function __construct(
         private ?object $user,
-    ){}
+    ) {
+    }
 
     public function getAll()
     {

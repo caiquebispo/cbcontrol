@@ -14,10 +14,12 @@ class AllProducts extends Component
         'products::index::deleted' => '$refresh',
         'products::index::updated' => '$refresh',
     ];
+
     protected function getAll()
     {
         return Auth::user()->company->products;
     }
+
     public function render(): View
     {
         return view('livewire.box-front.all-products', ['products' => $this->getAll()]);
