@@ -16,7 +16,11 @@ class ClientController extends Controller
 
     public function index(): View
     {
-        return view('clients');
+        return view('clients.index');
+    }
+    public function ultragaz(): View
+    {
+        return view('clients.ultragaz');
     }
 
     public static function exportPDF()
@@ -24,9 +28,9 @@ class ClientController extends Controller
 
         $clients = Auth::user()->company->clients()->orderBy('clients.full_name', 'asc')->get();
         $pdf = PDF::loadView('clients.export.list_clients', compact('clients'));
-        $fileName = 'Listagem de cliente '.(new Datetime('now'))->format('d-m-Y H_i_s').'.pdf';
-        $pdf->save(storage_path('/app/pdf/'.$fileName));
+        $fileName = 'Listagem de cliente ' . (new Datetime('now'))->format('d-m-Y H_i_s') . '.pdf';
+        $pdf->save(storage_path('/app/pdf/' . $fileName));
 
-        return response()->download(storage_path('/app/pdf/'.$fileName));
+        return response()->download(storage_path('/app/pdf/' . $fileName));
     }
 }

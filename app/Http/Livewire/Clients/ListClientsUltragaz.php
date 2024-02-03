@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ListClient extends Component
+class ListClientsUltragaz extends Component
 {
     use SettingTable;
     use WithPagination;
@@ -21,19 +21,17 @@ class ListClient extends Component
         'client::index::created' => '$refresh',
         'client::index::updated' => '$refresh',
         'client::index::deleted' => '$refresh',
+        'client:index::increase-or-decrease' => '$refresh',
     ];
 
     public function mount(): void
     {
         $this->user = Auth::user();
     }
-
-
     protected function getClients()
     {
 
         return $this->user->company->clients()
-            ->with('address')
             ->when($this->search != '', fn ($query) => $query->where('full_name', 'like', '%' . $this->search . '%'))
             ->orderBy($this->setSortField(), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
@@ -45,6 +43,6 @@ class ListClient extends Component
     }
     public function render(): View
     {
-        return view('livewire.clients.list-client', ['clients' => $this->getClients()]);
+        return view('livewire.clients.list-clients-ultragaz', ['clients' => $this->getClients()]);
     }
 }
