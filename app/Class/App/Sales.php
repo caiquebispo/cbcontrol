@@ -33,21 +33,22 @@ class Sales
         $this->user = Auth::user();
     }
 
-    public function getDataTableSales(): array|object
+    public function getDataTableSales($orders = null): array|object
     {
         $sales = [];
-        $payload = $this->getSalesBasedOnPeriods();
+        $payload = $orders ?? $this->getSalesBasedOnPeriods();
         foreach ($payload as $key_sale => $sale) {
 
             $sales[$key_sale] = [
-                'seller_name' => $sale->user?->name ?: 'NÃO INFORMADO',
-                'client_name' => $sale->client?->full_name ?: 'NÃO INFORMADO',
-                'received_name' => $sale->who_received?->name ?: 'NÃO INFORMADO',
-                'phone_contact' => $sale->client?->number_phone ?: 'NÃO INFORMADO',
+                'id' => $sale->id,
+                'seller_name' => $sale->user?->name ?: 'SITE',
+                'client_name' => $sale->client?->full_name ?: 'N/D',
+                'received_name' => $sale->who_received?->name ?? 'N/D',
+                'phone_contact' => $sale->client?->number_phone ?: 'N/D',
                 'type_payment_sale' => $this->getTypePayment($sale->payment_method),
                 'segment' => $sale->origin === 'SITE' ? 'VENDA ONLINE' : 'VENDA BALCAO',
                 'delivery_method' => $this->getTypeDelivery($sale->delivery_method),
-                'value' => 'R$ '.number_format($sale->total_amount, 2, ',', '.'),
+                'value' => 'R$ ' . number_format($sale->total_amount, 2, ',', '.'),
                 'total_items' => $sale->quantityItem,
                 'status' => $this->getTypeStatus($sale->status_order),
                 'payment_status' => $sale->payment_status == 'pending' ? 'PENDENTE' : 'PAGO',
@@ -63,7 +64,7 @@ class Sales
                     'name' => $sale_product->product->first()->name,
                     'category' => $sale_product->product->first()->categories->name,
                     'qty_product' => $sale_product->quantity,
-                    'price' => 'R$ '.number_format($sale_product->price, 2, ',', '.'),
+                    'price' => 'R$ ' . number_format($sale_product->price, 2, ',', '.'),
                 ];
             }
         }
@@ -78,6 +79,7 @@ class Sales
         $summary['summary_products'] = $this->summaryProduct($data);
         $summary['summary_sellers'] = $this->summarySellers($data);
         $summary['summary_clients'] = $this->summaryClients($data);
+        $summary['summary_received'] = $this->summaryReceived();
         $summary['general'] = $data;
 
         return $summary;
@@ -122,6 +124,35 @@ class Sales
         return $arr;
     }
 
+    private function summaryReceived()
+    {
+        $payload =  $this->user->company->orders()
+            ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
+                'received_day',
+                [
+                    now()->format('Y-m-d'),
+                    now()->format('Y-m-d'),
+                ]
+            )
+            ->get();
+        $data = $this->getDataTableSales($payload);
+        $arr = [];
+
+        foreach ($data as $key_d => $d) {
+            array_push(
+                $arr,
+                [
+                    'name' => $d['client_name'],
+                    'seller' => $d['seller_name'],
+                    'date' => $d['date'],
+                    'duet_day' => $d['duet_day'],
+                    'received_name' => $d['received_name'],
+                    'value' => $d['value'],
+                ]
+            );
+        }
+        return $arr;
+    }
     private function summaryClients($data)
     {
 
@@ -250,7 +281,7 @@ class Sales
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
             $index = $item['status_order'];
 
-            if (! isset($accumulator[$index])) {
+            if (!isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypeStatus($item['status_order']),
                     'total' => 0,
@@ -268,7 +299,7 @@ class Sales
 
             $index = $item['delivery_method'];
 
-            if (! isset($accumulator[$index])) {
+            if (!isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypeDelivery($item['delivery_method']),
                     'total' => 0,
@@ -286,7 +317,7 @@ class Sales
 
             $index = $item['payment_method'];
 
-            if (! isset($accumulator[$index])) {
+            if (!isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $this->getTypePayment($item['payment_method']),
                     'total' => 0,
@@ -304,7 +335,7 @@ class Sales
 
             $index = $item['origin'];
 
-            if (! isset($accumulator[$index])) {
+            if (!isset($accumulator[$index])) {
                 $accumulator[$index] = [
                     'name' => $item['origin'],
                     'total' => 0,
@@ -398,13 +429,14 @@ class Sales
 
     public function getSalesBasedOnPeriods($is_comparasion = false, $operator = '-', $quantity = 1, $type = 'months'): object
     {
+
         if ($is_comparasion) {
             return $this->user->company->orders()
                 ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
                     'day',
                     [
-                        $this->start->modify($operator.' '.$quantity.' '.$type)->format('Y-m-d'),
-                        $this->end->modify($operator.' '.$quantity.' '.$type)->format('Y-m-d'),
+                        $this->start->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d'),
+                        $this->end->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d'),
                     ]
                 )
                 ->get();

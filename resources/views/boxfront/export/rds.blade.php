@@ -160,6 +160,50 @@
         </table>
     </div>
     <div>
+        <p style="text-align:center; font-size: 1.1rem; font-weight: bold;">Relação de Recebidos</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Clientes</th>
+                    <th>Vendedor</th>
+                    <th>D/COMPRA</th>
+                    <th>D/PAGAMENTO</th>
+                    <th>QUEM RECEBEU</th>
+                    <th>VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($summary['summary_received'] as $product)
+                <tr>
+                    <td>{{ $product['name'] }}</td>
+                    <td>{{ $product['seller'] }}</td>
+                    <td>{{ $product['date'] }}</td>
+                    <td>{{ $product['duet_day'] }}</td>
+                    <td>{{ $product['received_name'] }}</td>
+                    <td>{{ $product['value'] }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    @php
+                    $total = 0;
+                    foreach($summary['summary_received'] as $product){
+
+                    $total += str_replace(',','.',str_replace('.','',str_replace('R$ ', '',$product['value'])));
+                    }
+                    @endphp
+                    <td>TOTAL</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
         <p style="text-align:center; font-size: 1.1rem; font-weight: bold;">Resumo Geral</p>
         <table>
             <thead>

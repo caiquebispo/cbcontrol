@@ -3,7 +3,7 @@
         <x-table.content-table>
             <x-table.actions :modelExport="'clients'" :showButtonExport="false">
                 <x-slot name="buttonCreate">
-                    <livewire:clients.create />
+                    <livewire:box-front.register-client />
                 </x-slot>
             </x-table.actions>
             <x-table>
@@ -26,7 +26,10 @@
                         <x-table.th class="text-center">{{$client->address()->first()->neighborhood ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->address()->first()->number ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="flex  justify-end">
-                            <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id" />
+                            <livewire:clients.shopping-list :client="$client" :wire:key="'client-shopping-'.$client->id" />
+                            <div class="mx-3">
+                                <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id" />
+                            </div>
                             <livewire:clients.delete :client="$client" :wire:key="'client-delete-'.$client->id" />
                         </x-table.th>
                     </x-table.tr>

@@ -18,7 +18,7 @@ class ListClient extends Component
     public User $user;
 
     protected $listeners = [
-        'client::index::created' => '$refresh',
+        'client::index::registered' => '$refresh',
         'client::index::updated' => '$refresh',
         'client::index::deleted' => '$refresh',
     ];
