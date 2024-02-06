@@ -4,7 +4,7 @@
         <x-slot:body>
             <div>
                 @if ($step === 1)
-                <x-store.checkout.form-create-acount />
+                <x-store.checkout.form-create-acount :groups="$groups" />
                 @elseif ($step === 2)
                 <x-store.checkout.register-address />
                 @endif
@@ -12,7 +12,7 @@
                 <x-store.checkout.thaks-for-buy-with-we />
                 @endif
             </div>
-            <x-store.checkout.next-steps-buttons :step="$step" />
+            <x-store.checkout.next-steps-buttons :step=" $step" />
 
         </x-slot:body>
     </x-modal.main>

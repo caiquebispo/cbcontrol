@@ -43,6 +43,7 @@ class UpdateUltragaz extends Component
             'client.full_name' => 'required|min:4|max:150',
             'client.number_phone' => 'nullable|string|min:4|unique:clients,number_phone,' . $this->client->id,
             'client.value' => 'required',
+            'client.group_id' => 'nullable',
             'client.payment_method' => 'required|min:4|max:16',
             'client.delivery' => 'required|min:4|max:16',
             'client.local' => 'string',
@@ -61,8 +62,6 @@ class UpdateUltragaz extends Component
 
         $this->validate();
         $this->client->save();
-        $this->client->groups()->detach();
-        $this->client->groups()->attach($this->group_id);
 
         $this->notifications();
         $this->reset();

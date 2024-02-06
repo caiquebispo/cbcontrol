@@ -4,7 +4,7 @@
         <x-slot:body>
             <div>
                 @if ($step === 1)
-                <x-clients.form-create-acount />
+                <x-clients.form-create-acount :groups="$groups" />
                 @elseif ($step === 2)
                 <x-store.checkout.register-address />
                 @endif

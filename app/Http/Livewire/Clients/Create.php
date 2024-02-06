@@ -37,6 +37,7 @@ class Create extends Component
         'full_name' => 'required|min:4|max:150',
         'number_phone' => 'nullable|max:16',
         'value' => 'required',
+        'group_id' => 'nullable',
         'payment_method' => 'required|min:4|max:16',
         'delivery' => 'required|min:4|max:16',
         'local' => 'string',
@@ -51,7 +52,6 @@ class Create extends Component
     public function render(): View
     {
         $groups = $this->user->company->groups;
-
         return view('livewire.clients.create', compact('groups'));
     }
 
@@ -59,7 +59,7 @@ class Create extends Component
     {
 
         $validated = $this->validate();
-        $this->user->company->clients()->create($validated)->groups()->attach($this->group_id);
+        $this->user->company->clients()->create($validated);
         $this->notifications();
         $this->reset();
         $this->emitTo(ListClient::class, 'client::index::created');
@@ -76,7 +76,7 @@ class Create extends Component
 
             $notification = new \MBarlow\Megaphone\Types\General(
                 'Cadastro de cliente!',
-                'O usuário(a) '.$this->user->name.' cadastrou um novo cliente na empresa '.$this->user->company->corporate_reason, // Notification Body
+                'O usuário(a) ' . $this->user->name . ' cadastrou um novo cliente na empresa ' . $this->user->company->corporate_reason, // Notification Body
 
             );
             $user->notify($notification);

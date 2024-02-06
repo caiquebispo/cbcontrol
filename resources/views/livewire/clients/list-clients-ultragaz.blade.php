@@ -22,7 +22,7 @@
                     @foreach($clients as $client)
                     <x-table.tr>
                         <x-table.th>{{$client->full_name ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->groups->value('name') ?? 'NÃO DEFINIDO'}}</x-table.th>
+                        <x-table.th class="text-center">{{$client->group->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->number_phone ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">R$ {{ number_format($client->value, 2, ',','.')}}</x-table.th>
                         <x-table.th class="text-center">{{$client->local ?? 'NÃO DEFINIDO'}}</x-table.th>

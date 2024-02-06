@@ -9,6 +9,7 @@
             <x-table>
                 <x-table.thead>
                     <x-table.th wire:click.prevent="sortBy('full_name')" :sortable="true" :direction="$sortDirection">NOME</x-table.th>
+                    <x-table.th class="text-center">GRUPO</x-table.th>
                     <x-table.th class="text-center">TELEFONE</x-table.th>
                     <x-table.th class="text-center">ANIVERARIO</x-table.th>
                     <x-table.th class="text-center">ESTADO</x-table.th>
@@ -24,6 +25,7 @@
                     @foreach($clients as $client)
                     <x-table.tr>
                         <x-table.th>{{$client->full_name ?? 'NÃO DEFINIDO'}}</x-table.th>
+                        <x-table.th class="text-center">{{$client->group->name ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->number_phone ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->birthday != null ? (new Datetime($client->birthday))->format('d/m/Y') : 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->address()->first()->states ?? 'NÃO DEFINIDO'}}</x-table.th>

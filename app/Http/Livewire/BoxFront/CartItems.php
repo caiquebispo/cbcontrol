@@ -8,6 +8,7 @@ use App\Models\Client;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Whoops\Run;
 use WireUi\Traits\Actions;
 
 class CartItems extends Component
@@ -35,14 +36,23 @@ class CartItems extends Component
         if (count(\Cart::content()) > 0) {
 
             $client = Client::find($this->client_id);
-            $address = $client->address()->first();
-            (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, \Cart::subtotal()))->processing();
-            $this->emit('cartItem::index::finishSale');
-            // $this->reset();
-            $this->notification()->success(
-                'Parabéns!',
-                'Venda realizada com sucesso!'
-            );
+
+            if (!$this->canBuy($client->group->name) && $this->paymentMethod == "in_count") {
+                $this->notification()->error(
+                    'Erro!',
+                    'Esse cliente está impossibilitado de realizar compras a prazo no momento'
+                );
+            } else {
+
+                $address = $client->address()->first();
+                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, \Cart::subtotal()))->processing();
+                $this->emit('cartItem::index::finishSale');
+                // $this->reset();
+                $this->notification()->success(
+                    'Parabéns!',
+                    'Venda realizada com sucesso!'
+                );
+            }
         } else {
             $this->notification()->error(
                 'Ops!',
@@ -50,7 +60,16 @@ class CartItems extends Component
             );
         }
     }
-
+    private function canBuy($group)
+    {
+        return match (strtoupper($group)) {
+            'NEGATIVADO' => false,
+            'NEGATIVADOS' => false,
+            'DUVIDOSO' => false,
+            'DUVIDOSOS' => false,
+            default => true,
+        };
+    }
     public function exportSummarySales()
     {
         return SalesController::export();

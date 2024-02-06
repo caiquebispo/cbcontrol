@@ -49,6 +49,8 @@
                     <span class="flex-1 ml-3 whitespace-nowrap text-green-500 rounded-lg dark:text-white">Ver loja online</span>
                 </a>
             </li>
+            @endcan
+            @can('can-box-front')
             <li>
                 <a href="{{route('boxfront')}}" target="_blank" class="flex items-center p-2 text-green-900 rounded-lg dark:text-white group">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="animate-bounce flex-shrink-0 w-5 h-5 text-green-500 transition duration-75 dark:text-blue-400 group-hover:text-blue-900 dark:group-hover:text-white" viewBox="0 0 16 16">

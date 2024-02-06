@@ -12,7 +12,6 @@ class RegisterClient extends Component
 {
     use Actions;
 
-    public $client;
     public ?bool $showModal = false;
 
     public ?int $step = 1;
@@ -34,8 +33,10 @@ class RegisterClient extends Component
         } else {
 
             $full_name = ['full_name' => Arr::only($this->user['user'], ['name'])['name']];
+
             $data = array_merge($full_name, Arr::except($this->user['user'], ['password_confirm', 'name']));
             $user = Auth::user()->company->clients()->create($data);
+
             $address = is_string($this->address) ? collect(json_decode($this->address, true)) : $user->address()->create($this->address['address']);
 
             $this->resetCheckoutField();
@@ -66,6 +67,7 @@ class RegisterClient extends Component
         $this->user = $this->validate([
             'user.name' => 'required|min:3',
             'user.email' => 'nullable|email',
+            'user.group_id' => 'nullable',
             'user.number_phone' => 'required',
             'user.password' => 'required|min:8|max:16',
             'user.password_confirm' => 'required|min:8|max:16|same:user.password',
@@ -88,6 +90,7 @@ class RegisterClient extends Component
 
     public function render(): View
     {
-        return view('livewire.box-front.register-client');
+        $groups = Auth::user()->company->groups;
+        return view('livewire.box-front.register-client', ['groups' => $groups]);
     }
 }

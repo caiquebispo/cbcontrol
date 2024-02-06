@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Clients;
 
 use App\Models\Client;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 
@@ -32,6 +34,7 @@ class Update extends Component
             'client.email' => 'nullable|email',
             'client.number_phone' => 'nullable|string|min:4|unique:clients,number_phone,' . $this->client->id,
             'client.birthday' => 'nullable|date',
+            'client.group_id' => 'nullable',
             'address.states' => 'required|max:150',
             'address.zipe_code' => 'required',
             'address.city' => 'required',
@@ -84,6 +87,7 @@ class Update extends Component
         $this->user = $this->validate([
             'client.full_name' => 'required|min:3',
             'client.email' => 'nullable|email',
+            'client.group_id' => 'nullable',
             'client.number_phone' => 'required',
             'client.birthday' => 'nullable|date',
         ]);
@@ -105,6 +109,7 @@ class Update extends Component
 
     public function render(): View
     {
-        return view('livewire.clients.update');
+        $groups = Auth::user()->company->groups;
+        return view('livewire.clients.update', compact('groups'));
     }
 }
