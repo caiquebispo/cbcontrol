@@ -1,6 +1,6 @@
 <div>
     <x-button label="Cadastrar Cliente" primary md icon="plus-circle" wire:click="$toggle('showModal', 'true')" />
-    <x-modal.main :title="'Cadastrar Cliente'" :show="$showModal">
+    <x-modal.main :title="'Cadastrar Cliente'" :show="$showModal" size="lg">
         <x-slot:body>
             <div>
                 @if ($step === 1)

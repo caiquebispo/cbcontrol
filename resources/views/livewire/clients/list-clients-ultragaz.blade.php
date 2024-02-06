@@ -29,7 +29,7 @@
                         <x-table.th class="text-center">{{$client->payment_method ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="text-center">{{$client->delivery ?? 'NÃO DEFINIDO'}}</x-table.th>
                         <x-table.th class="flex  justify-end">
-                            <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id" />
+                            <livewire:clients.update-ultragaz :client="$client" :wire:key="'client-update-'.$client->id" />
                             <livewire:clients.delete :client="$client" :wire:key="'client-delete-'.$client->id" />
                         </x-table.th>
                     </x-table.tr>

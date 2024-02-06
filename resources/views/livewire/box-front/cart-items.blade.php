@@ -5,7 +5,7 @@
     <div class="my-6">
         <div class="grid grid-cols-3 gap-4 items-center">
             <div class="col-span-2 ">
-                <x-native-select placeholder="Selecione um cliente" :options="$clients" option-label="full_name" option-value="id" wire:model="client_id" />
+                <x-native-select placeholder="Selecione um cliente" :options="$clients" option-label="full_name" option-value="id" wire:model.defer="client_id" />
             </div>
             <div>
                 <livewire:box-front.register-client />
@@ -17,14 +17,21 @@
                     ['paymentMethod' => 'Pix/ Tranferência',  'value' => 'pix_or_transfer_bank'],
                     ['paymentMethod' => 'À vista', 'value' => 'cash'],
                     ['paymentMethod' => 'Na nota', 'value' => 'in_count'],
-                ]" option-label="paymentMethod" option-value="value" wire:model="paymentMethod" />
+                ]" option-label="paymentMethod" option-value="value" wire:model.defer="paymentMethod" />
             <x-native-select label="Forma de Retirada" placeholder="Forma de Retirada" :options="[
                         ['delivery_method' => 'Entregar',  'value' => 'delivery'],
                         ['delivery_method' => 'Retirar no Local', 'value' => 'local_pickup'],
-                ]" option-label="delivery_method" option-value="value" wire:model="delivery_method" />
+                ]" option-label="delivery_method" option-value="value" wire:model.defer="delivery_method" />
         </div>
     </div>
     <livewire:box-front.total-cart-items-price />
+    <section class="footer bg-slate-150 mt-6 border border-gray-300 p-2 rounded-lg">
+        <div class="grid md:grid-cols-3 md:gap-6 my-3">
+            <button type="button" class="bg-green-300 text-green-600 text-lg p-2 rounded-md" wire:click="finish">Finalizar</button>
+            <button type="button" class="bg-red-300 text-red-600 text-lg p-2 rounded-md" wire:click="clearCart">Cancelar</button>
+            <button type="button" class="bg-blue-300 text-blue-600 text-lg p-2 rounded-md" wire:click="exportSummarySales">Baixar Relatório</button>
+        </div>
+    </section>
     <table class="my-6 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -55,11 +62,5 @@
             @endforeach
         </tbody>
     </table>
-    <section class="footer bg-slate-150 mt-6 border border-gray-300 p-2 rounded-lg">
-        <div class="grid md:grid-cols-3 md:gap-6 my-3">
-            <button type="button" class="bg-green-300 text-green-600 text-lg p-2 rounded-md" wire:click="finish">Finalizar</button>
-            <button type="button" class="bg-red-300 text-red-600 text-lg p-2 rounded-md" wire:click="clearCart">Cancelar</button>
-            <button type="button" class="bg-blue-300 text-blue-600 text-lg p-2 rounded-md" wire:click="exportSummarySales">Baixar Relatório</button>
-        </div>
-    </section>
+
 </div>

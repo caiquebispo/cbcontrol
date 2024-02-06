@@ -19,6 +19,7 @@ class ListClient extends Component
 
     protected $listeners = [
         'client::index::registered' => '$refresh',
+        'client::index::updatedaux' => '$refresh',
         'client::index::updated' => '$refresh',
         'client::index::deleted' => '$refresh',
     ];

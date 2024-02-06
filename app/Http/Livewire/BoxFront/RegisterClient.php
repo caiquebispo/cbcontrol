@@ -12,6 +12,7 @@ class RegisterClient extends Component
 {
     use Actions;
 
+    public $client;
     public ?bool $showModal = false;
 
     public ?int $step = 1;
