@@ -27,6 +27,10 @@ class Order extends Model
     {
         return $this->hasOne(Client::class, 'id', 'client_id');
     }
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class, 'id', 'company_id');
+    }
 
     public function who_received(): HasOne
     {
