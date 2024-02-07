@@ -1,7 +1,9 @@
+@props(['groups' => null]);
 <x-card title="Informações pessoal">
     <x-errors />
     <form wire:submit.prevent="create" class="my-2">
         @csrf
+        <x-native-select class="my-2" label="Selecione um grupo para ao cliente" placeholder="Selecionar grupo" :options="$groups" option-label="name" option-value="id" wire:model.defer="user.group_id" />
         <div class="grid md:grid-cols-2 md:gap-6 my-3">
             <div>
                 <x-input label="Nome" placeholder="Nome" wire:model.defer="user.name" />
@@ -27,4 +29,3 @@
     </form>
 
 </x-card>
-

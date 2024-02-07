@@ -18,6 +18,7 @@ let Sales = {
 
             start = moment(start).format('YYYY-MM-DD')
             end = moment(end).format('YYYY-MM-DD')
+
             Sales.get_data_graphs_pizzas(start, end);
             Sales.get_data_resume_table_sales(start, end);
 
@@ -70,6 +71,9 @@ let Sales = {
 
         let table =  $('#table-resume-sales').DataTable({
             data: data,
+            responsive: true,
+            scrollX: 300,
+            "destroy": true,
             columns:[
                 {
                     className: 'dt-control',
@@ -77,15 +81,20 @@ let Sales = {
                     data: null,
                     defaultContent: ''
                 },
+                {data: 'date', title: 'DATA/VENDA'},
                 {data: 'client_name', title: 'CLIENTE'},
                 {data: 'phone_contact', title: 'CONTATO'},
-                {data: 'qty_items', title: 'QT/Items'},
+                {data: 'seller_name', title: 'VENDEDOR'},
                 {data: 'segment', title: 'SEGMENTO'},
+                {data: 'qty_items', title: 'QT/Items'},
                 {data: 'type_payment_sale', title: 'F/PAGAMENTO'},
-                {data: 'value', title: 'VALOR'},
                 {data: 'delivery_method', title: 'F/ENTREGA'},
-                {data: 'status', title: 'STATUS'},
-                {data: 'date', title: 'DATA'},
+                {data: 'status', title: 'STATUS/VENDA'},
+                {data: 'payment_status', title: 'STATUS/PAG'},
+                {data: 'value', title: 'VALOR'},
+                {data: 'duet_day', title: 'DT/VENCIMENTO'},
+                {data: 'received_day', title: 'DT/RECEBIMENTO'},
+                {data: 'received_name', title: 'QUEM RECEBEU'},
             ]
         });
 

@@ -2,4 +2,4 @@
 
 use App\Http\Controllers\CategoryController;
 
-Route::get('catgories', [CategoryController::class, 'index'])->name('categories.list');
+Route::get('categories', [CategoryController::class, 'index'])->name('categories.list');

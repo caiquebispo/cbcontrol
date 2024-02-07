@@ -24,8 +24,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        StorageNetwork::class =>[
-            AttchAdminUserInNetwork::class
+        StorageNetwork::class => [
+            AttchAdminUserInNetwork::class,
         ],
         AuthenticatedUser::class => [
             SaveLogUserAuthenticated::class,

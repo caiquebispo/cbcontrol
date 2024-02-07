@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -15,5 +16,14 @@ class GroupController extends Controller
     public function index(): View
     {
         return view('groups');
+    }
+    public function updateGroupsClients()
+    {
+        $related = DB::table('group_clients')->get();
+
+        foreach ($related as $rl) {
+
+            Client::find($rl->client_id)->update(['group_id' => $rl->group_id]);
+        }
     }
 }

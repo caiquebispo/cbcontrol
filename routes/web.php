@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,11 +29,9 @@ Route::prefix('app')->group(base_path('routes/web/app/sales.php'));
 Route::prefix('app')->group(base_path('routes/web/app/networks.php'));
 Route::prefix('app')->group(base_path('routes/web/app/permissions.php'));
 Route::prefix('app')->group(base_path('routes/web/app/systemUsability.php'));
+Route::prefix('app')->group(base_path('routes/web/app/boxfront.php'));
 
 //STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
-
-
-
 
 require __DIR__.'/auth.php';

@@ -2,14 +2,11 @@
 
 namespace App\Http\Livewire\Store\Cart;
 
-use Gloudemans\Shoppingcart\Cart;
 use Illuminate\Contracts\View\View;
 use LivewireUI\Modal\ModalComponent;
-use Livewire\Component;
 
 class ModalCartItens extends ModalComponent
 {
-
     public function render(): View
     {
         return view('livewire.store.cart.modal-cart-itens', ['items' => \Cart::content()]);
@@ -43,5 +40,4 @@ class ModalCartItens extends ModalComponent
         \Cart::destroy();
         $this->emit('cartItem::index::cleanCart');
     }
-
 }

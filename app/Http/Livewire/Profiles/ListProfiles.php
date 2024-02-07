@@ -10,7 +10,8 @@ use Livewire\Component;
 class ListProfiles extends Component
 {
     use SettingTable;
-    protected  $listeners = [
+
+    protected $listeners = [
         'profiles::index::created' => '$refresh',
         'profiles::index::deleted' => '$refresh',
         'profiles::index::updated' => '$refresh',
@@ -20,9 +21,10 @@ class ListProfiles extends Component
     {
         return view('livewire.profiles.list-profiles', ['profiles' => $this->getProfiles()]);
     }
+
     public function getProfiles(): object
     {
-        return Profile::when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
+        return Profile::when($this->search != '', fn ($query) => $query->where('name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }

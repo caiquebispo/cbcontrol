@@ -1,46 +1,20 @@
 <div>
     <x-button-update wire:click="$toggle('showModal', 'true')" />
-    <x-modal.main :title="'Editar Cliente'" :show="$showModal">
+    <x-modal.main title="Editar dados do cliente {{$client->full_name}}" :show="$showModal" size="lg">
         <x-slot:body>
-            <form wire:submit.prevent="update" class="my-2">
-                @csrf
-                <x-native-select class="my-2"
-                                 label="Selecione um grupo para ao cliente"
-                                 placeholder="Selecionar grupo"
-                                 :options="$groups"
-                                 option-label="name"
-                                 option-value="id"
-                                 wire:model="client.group_id"
-                />
-                <div class="grid md:grid-cols-3 md:gap-6 my-3">
-                    <div>
-                        <x-input label="Nome Completo" placeholder="Nome Completo" wire:model.defer="client.full_name"/>
-                    </div>
-                    <div>
-                        <x-input label="Nª Telefone" placeholder="Nª Telefone" wire:model.defer="client.number_phone"/>
-                    </div>
-                    <div>
-                        <x-input label="Data de Aniversário" type="date" placeholder="Data de Aniversário" wire:model.defer="client.birthday" />
-                    </div>
-                </div>
-                <div class="grid md:grid-cols-2 md:gap-6 my-3">
-                    <div>
-                        <x-input label="Valor" placeholder="Valor" wire:model.defer="client.value"/>
-                    </div>
-                    <div>
-                        <x-input label="Forma de Pagamento" placeholder="Forma de Pagamento" wire:model.defer="client.payment_method"/>
-                    </div>
-                </div>
-                <div class="grid md:grid-cols-2 md:gap-6 my-3">
-                    <div>
-                        <x-input label="Local" placeholder="Local" wire:model.defer="client.local" class="my-2"/>
-                    </div>
-                    <div>
-                        <x-input label="Entrega" placeholder="Entrega" wire:model.defer="client.delivery" class="my-2"/>
-                    </div>
-                </div>
-                <x-button type="submit" icon="pencil" primary label="ATUALIZAR" class="my-2"/>
-            </form>
+            <div>
+                @if ($step === 1)
+                <x-clients.form-create-acount :groups="$groups" />
+                @elseif ($step === 2)
+                <x-store.checkout.register-address />
+                @endif
+                @if ($step === 5)
+                <x-store.checkout.thaks-for-buy-with-we />
+                @endif
+            </div>
+            <x-store.checkout.next-steps-buttons :step="$step" />
+
         </x-slot:body>
     </x-modal.main>
+
 </div>

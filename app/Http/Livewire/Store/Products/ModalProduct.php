@@ -3,57 +3,62 @@
 namespace App\Http\Livewire\Store\Products;
 
 use App\Models\Product;
-use Gloudemans\Shoppingcart\Cart;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
 use LivewireUI\Modal\ModalComponent;
 use WireUi\Traits\Actions;
 
 class ModalProduct extends ModalComponent
 {
     use Actions;
+
     public Product $product;
+
     public ?int $quantity = 1;
+
     public ?string $observation = null;
 
-    protected $listeners = ['incrementQuantity' => 'increment','decrementQuantity' => 'decrement'];
-    protected array $rules  = ['observation' => 'nullable|min:10|max:150'];
+    protected $listeners = ['incrementQuantity' => 'increment', 'decrementQuantity' => 'decrement'];
+
+    protected array $rules = ['observation' => 'nullable|min:10|max:150'];
 
     public function mount(Product $product, int $quantity = 1): void
     {
         $this->product = $product;
         $this->quantity = $quantity;
     }
-    public function render():View
+
+    public function render(): View
     {
         return view('livewire.store.products.modal-product');
     }
+
     public function increment(): int
     {
         return $this->quantity++;
     }
+
     public function decrement(): int
     {
-        if($this->quantity > 1){
+        if ($this->quantity > 1) {
             return $this->quantity--;
-        }else{
+        } else {
             return $this->quantity;
         }
     }
+
     public function addToCart(Product $product, $quantity): void
     {
 
         \Cart::add([
             'id' => $product->id,
-            'name'=> $product->name,
+            'name' => $product->name,
             'price' => $product->price,
             'qty' => $quantity,
-            'options' =>[
-                'path_img' =>  $product->image->first()?->path ?? null,
-                'description' =>  $product->description ?? null,
-                'observation' =>  $this->observation ?? null,
-            ]
+            'options' => [
+                'path_img' => $product->image->first()?->path ?? null,
+                'description' => $product->description ?? null,
+                'observation' => $this->observation ?? null,
+            ],
         ])->associate('App\Models\Product');
 
         $this->notifications();
@@ -61,6 +66,7 @@ class ModalProduct extends ModalComponent
         $this->emit('cartItem::index::addToCart');
 
     }
+
     public function notifications(): void
     {
         $this->notification()->success(

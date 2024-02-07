@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Address extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
+
     public function address(): MorphTo
     {
-        
+
         return $this->morphTo();
     }
 }

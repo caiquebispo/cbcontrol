@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('setting_companies', function (Blueprint $table) {
-            
+
             $table->id();
             $table->foreignId('company_id')->constrained('companies');
             $table->string('slung');

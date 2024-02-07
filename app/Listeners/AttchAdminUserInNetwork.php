@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\StorageNetwork;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class AttchAdminUserInNetwork
 {
@@ -21,6 +19,6 @@ class AttchAdminUserInNetwork
      */
     public function handle(StorageNetwork $event): void
     {
-//        dd($event);
+        //        dd($event);
     }
 }

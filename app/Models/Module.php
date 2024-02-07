@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Module extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
+    protected $guarded = [];
 
     public function profiles(): BelongsToMany
     {

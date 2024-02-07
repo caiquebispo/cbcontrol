@@ -13,24 +13,31 @@ use WireUi\Traits\Actions;
 class Update extends Component
 {
     use Actions;
+
     public ?Category $category;
+
     public ?User $user;
+
     public ?string $name = null;
+
     public ?bool $showModal = false;
 
     protected array $rules = [
 
-        'category.name' => 'required|min:4|max:150'
+        'category.name' => 'required|min:4|max:150',
     ];
+
     public function __construct()
     {
         $this->category = new Category;
         $this->user = Auth::user();
     }
+
     public function render(): View
     {
         return view('livewire.categories.update');
     }
+
     public function update(): void
     {
         $this->validate();
@@ -39,6 +46,7 @@ class Update extends Component
         $this->reset();
         $this->emitTo(ListCategories::class, 'categories::index::updated');
     }
+
     public function notifications(): void
     {
 
@@ -46,7 +54,7 @@ class Update extends Component
             'Parabéns!',
             'Categoria Editado com sucesso!'
         );
-        foreach($this->user->company->users as $user){
+        foreach ($this->user->company->users as $user) {
 
             $notification = new General(
                 'Atualização de Categoria!',

@@ -10,8 +10,8 @@ use Livewire\WithPagination;
 
 class ListUsers extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
     protected $listeners = [
         'users::index::created' => '$refresh',
@@ -24,10 +24,11 @@ class ListUsers extends Component
     {
         return view('livewire.users.list-users', ['users' => $this->getUsers()]);
     }
+
     public function getUsers(): object
     {
         return Auth::user()->company->users()
-            ->when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
+            ->when($this->search != '', fn ($query) => $query->where('name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }

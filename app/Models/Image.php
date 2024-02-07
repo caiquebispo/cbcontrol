@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Image extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
-    public function images():MorphTo
+    public function images(): MorphTo
     {
-        
+
         return $this->morphTo();
     }
 }

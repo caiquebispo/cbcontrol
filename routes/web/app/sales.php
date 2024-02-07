@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\SalesController;
 
 Route::get('sales', [SalesController::class, 'index'])->name('sales.list');
