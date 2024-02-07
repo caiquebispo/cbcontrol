@@ -10,13 +10,14 @@ use Livewire\WithPagination;
 
 class Update extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
     public ?bool $showModal = false;
+
     public ?Network $network;
 
-    public  function mount( Network $network): void
+    public function mount(Network $network): void
     {
         $this->network = $network;
     }
@@ -26,21 +27,23 @@ class Update extends Component
         return view('livewire.networks.update',
             [
                 'companies' => $this->getCompanies(),
-                'users' => $this->getUsers()
+                'users' => $this->getUsers(),
             ]
         );
     }
+
     protected function getCompanies(): object
     {
 
-        return $this->network->companies()->when($this->search != "", fn($query) => $query->where('corporate_reason', 'like', '%'.$this->search."%"))
+        return $this->network->companies()->when($this->search != '', fn ($query) => $query->where('corporate_reason', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('corporate_reason'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }
+
     protected function getUsers(): object
     {
 
-        return $this->network->users()->when($this->search != "", fn($query) => $query->where('corporate_reason', 'like', '%'.$this->search."%"))
+        return $this->network->users()->when($this->search != '', fn ($query) => $query->where('corporate_reason', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }

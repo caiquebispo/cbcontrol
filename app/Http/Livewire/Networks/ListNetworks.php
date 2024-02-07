@@ -10,10 +10,10 @@ use Livewire\WithPagination;
 
 class ListNetworks extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
-    protected  $listeners = [
+    protected $listeners = [
         'network::index::created' => '$refresh',
         'network::index::deleted' => '$refresh',
         'network::index::updated' => '$refresh',
@@ -23,10 +23,11 @@ class ListNetworks extends Component
     {
         return view('livewire.networks.list-networks', ['networks' => $this->getNetworks()]);
     }
+
     public function getNetworks(): object
     {
         return Auth::user()->networks()
-            ->when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
+            ->when($this->search != '', fn ($query) => $query->where('name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }

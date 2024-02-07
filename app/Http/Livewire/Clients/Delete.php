@@ -11,19 +11,25 @@ use WireUi\Traits\Actions;
 class Delete extends Component
 {
     use Actions;
+
     public Client $client;
+
     public User $user;
+
     public ?bool $showModal = false;
+
     public function __construct()
     {
         $this->client = new Client;
         $this->user = Auth::user();
     }
+
     public function render()
     {
         return view('livewire.clients.delete');
     }
-    public function delete():void
+
+    public function delete(): void
     {
 
         $this->client->delete();
@@ -31,13 +37,15 @@ class Delete extends Component
         $this->reset();
         $this->emitTo(ListClient::class, 'client::index::deleted');
     }
-    public function notifications(){
+
+    public function notifications()
+    {
 
         $this->notification()->success(
             $title = 'Parabéns!',
             $description = 'Cliente Deletado com sucesso!'
         );
-        foreach($this->user->company->users as $user){
+        foreach ($this->user->company->users as $user) {
 
             $notification = new \MBarlow\Megaphone\Types\Important(
                 'Remoção de cliente!',

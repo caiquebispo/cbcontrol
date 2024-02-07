@@ -12,13 +12,14 @@ class ListPhotos extends Component
 
     protected $listeners = [
         'products::index::deleted' => '$refresh',
-        'products::index::created' => '$refresh'
+        'products::index::created' => '$refresh',
     ];
 
     public function render(): View
     {
-        return view('livewire.products.list-photos',['images' => $this->getPhotos()]);
+        return view('livewire.products.list-photos', ['images' => $this->getPhotos()]);
     }
+
     public function getPhotos(): Collection|array
     {
         return $this->product->image ?: [];

@@ -10,10 +10,10 @@ use Livewire\WithPagination;
 
 class ListProducts extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
-    protected  $listeners = [
+    protected $listeners = [
         'products::index::created' => '$refresh',
         'products::index::deleted' => '$refresh',
         'products::index::updated' => '$refresh',
@@ -23,10 +23,11 @@ class ListProducts extends Component
     {
         return view('livewire.products.list-products', ['products' => $this->getProducts()]);
     }
+
     public function getProducts(): object
     {
         return Auth::user()->company->products()
-            ->when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
+            ->when($this->search != '', fn ($query) => $query->where('name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }

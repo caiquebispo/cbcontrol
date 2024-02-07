@@ -10,10 +10,10 @@ use Livewire\WithPagination;
 
 class ListCategories extends Component
 {
-    use WithPagination;
     use SettingTable;
+    use WithPagination;
 
-    protected  $listeners = [
+    protected $listeners = [
         'categories::index::created' => '$refresh',
         'categories::index::deleted' => '$refresh',
         'categories::index::updated' => '$refresh',
@@ -21,14 +21,14 @@ class ListCategories extends Component
 
     public function render(): View
     {
-    return view('livewire.categories.list-categories', ['categories' => $this->getCategories()]);
+        return view('livewire.categories.list-categories', ['categories' => $this->getCategories()]);
     }
+
     public function getCategories(): object
     {
         return Auth::user()->company->categories()
-            ->when($this->search != "", fn($query) => $query->where('name', 'like', '%'.$this->search."%"))
+            ->when($this->search != '', fn ($query) => $query->where('name', 'like', '%'.$this->search.'%'))
             ->orderBy($this->setSortField('name'), $this->sortDirection)
             ->paginate($this->qtyItemsForPage);
     }
-
 }

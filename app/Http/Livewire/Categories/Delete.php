@@ -13,8 +13,11 @@ use WireUi\Traits\Actions;
 class Delete extends Component
 {
     use Actions;
+
     public ?Category $category;
+
     public ?User $user;
+
     public ?bool $showModal = false;
 
     public function __construct()
@@ -22,11 +25,13 @@ class Delete extends Component
         $this->category = new Category;
         $this->user = Auth::user();
     }
+
     public function render(): View
     {
         return view('livewire.categories.delete');
     }
-    public function delete():void
+
+    public function delete(): void
     {
 
         $this->category->delete();
@@ -35,14 +40,15 @@ class Delete extends Component
         $this->emitTo(ListCategories::class, 'categories::index::deleted');
 
     }
-    public function notifications() :void
+
+    public function notifications(): void
     {
 
         $this->notification()->success(
-        'Parabéns!',
-        'Categoria Deletado com sucesso!'
+            'Parabéns!',
+            'Categoria Deletado com sucesso!'
         );
-        foreach($this->user->company->users as $user){
+        foreach ($this->user->company->users as $user) {
 
             $notification = new Important(
                 'Remoção de Categoria!',

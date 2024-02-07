@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class OrderProduct extends Model
 {
     use HasFactory;
-    protected  $guarded = [];
+
+    protected $guarded = [];
 
     public function product(): HasMany
     {

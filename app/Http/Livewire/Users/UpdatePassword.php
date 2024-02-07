@@ -12,15 +12,19 @@ use WireUi\Traits\Actions;
 class UpdatePassword extends Component
 {
     use Actions;
+
     public ?User $user;
+
     public ?string $password = null;
+
     public ?string $password_confirm = null;
+
     public ?bool $showModal = false;
 
     protected array $rules = [
 
         'password' => 'required|min:8|max:16',
-        'password_confirm' => 'required|min:8|max:16|same:password'
+        'password_confirm' => 'required|min:8|max:16|same:password',
 
     ];
 
@@ -28,6 +32,7 @@ class UpdatePassword extends Component
     {
         $this->user = Auth::user();
     }
+
     public function render(): View
     {
         return view('livewire.users.update-password');
@@ -41,6 +46,7 @@ class UpdatePassword extends Component
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::updated-password');
     }
+
     public function notifications(): void
     {
 
@@ -48,7 +54,7 @@ class UpdatePassword extends Component
             $title = 'Parabéns!',
             $description = 'Senha Alterada com sucesso!'
         );
-        foreach(Auth::user()->company->users as $user){
+        foreach (Auth::user()->company->users as $user) {
 
             $notification = new General(
                 'Atualização de Senha!',

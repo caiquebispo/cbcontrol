@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('birthday:run')->daily();
+        $schedule->command('app:verify-duet-day')->dailyAt('5:00');
         $schedule->command('megaphone:clear-announcements')->daily();
     }
 
@@ -21,7 +22,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

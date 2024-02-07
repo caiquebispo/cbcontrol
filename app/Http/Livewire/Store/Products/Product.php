@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Store\Products;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class Product extends Component
@@ -15,20 +14,18 @@ class Product extends Component
         'products::index::deleted' => '$refresh',
         'products::index::updated' => '$refresh',
     ];
-    
+
     public function mount($product)
     {
         $this->product = $product;
     }
 
-
-    
-    
     public function render(): View
     {
-        return view('livewire.store.products.product',['product' => $this->getProduct()]);
+        return view('livewire.store.products.product', ['product' => $this->getProduct()]);
     }
-    public function getProduct(): Object
+
+    public function getProduct(): object
     {
         return $this->product;
     }

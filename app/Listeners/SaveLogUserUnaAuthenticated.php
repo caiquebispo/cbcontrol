@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\UnaAuthenticated;
 use DateTime;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
 
 class SaveLogUserUnaAuthenticated
@@ -32,7 +30,7 @@ class SaveLogUserUnaAuthenticated
 
             $las_access_day->update([
                 'logout' => (new DateTime('now'))->format('Y-m-d H:i:s'),
-                'location' => json_encode($event->location != false ? Arr::except($event->location->toArray(), ['driver']) : [], true)
+                'location' => json_encode($event->location != false ? Arr::except($event->location->toArray(), ['driver']) : [], true),
             ]);
 
             $las_access_day->save();

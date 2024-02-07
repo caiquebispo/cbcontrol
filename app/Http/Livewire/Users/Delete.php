@@ -11,7 +11,9 @@ use WireUi\Traits\Actions;
 class Delete extends Component
 {
     use Actions;
+
     public ?User $user;
+
     public ?bool $showModal = false;
 
     public function __construct()
@@ -19,17 +21,20 @@ class Delete extends Component
 
         $this->user = new User;
     }
+
     public function render()
     {
         return view('livewire.users.delete');
     }
-    public function delete():void
+
+    public function delete(): void
     {
         $this->user->delete();
         $this->notifications();
         $this->reset();
         $this->emitTo(ListUsers::class, 'users::index::deleted');
     }
+
     public function notifications(): void
     {
 
@@ -37,7 +42,7 @@ class Delete extends Component
             'Parabéns!',
             'Usuário Deletado com sucesso!'
         );
-        foreach(Auth::user()->company->users as $user){
+        foreach (Auth::user()->company->users as $user) {
 
             $notification = new Important(
                 'Remoção de Usuário!',

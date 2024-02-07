@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class UserNavigationHistory extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function module(): HasOne

@@ -12,39 +12,45 @@ use WireUi\Traits\Actions;
 class Create extends Component
 {
     use Actions;
+
     public ?User $user;
+
     public ?string $name = null;
+
     public ?bool $showModal = false;
 
     protected array $rules = [
 
-        'name' => 'required|min:4|max:150'
+        'name' => 'required|min:4|max:150',
     ];
 
     public function __construct()
     {
         $this->user = Auth::user();
     }
+
     public function render(): View
     {
         return view('livewire.groups.create');
     }
+
     public function create(): void
     {
         $validated = $this->validate();
         $this->notifications();
-        $this->user->company->groups()->updateOrCreate($validated,$validated);
+        $this->user->company->groups()->updateOrCreate($validated, $validated);
         $this->reset();
         $this->emitTo(ListGroup::class, 'group::index::created');
     }
+
     public function notifications(): void
     {
 
         $this->notification()->success(
-           'Parabéns!',
+            'Parabéns!',
             'Grupo Criado com sucesso!'
         );
-        foreach($this->user->company->users as $user){
+        foreach ($this->user->company->users as $user) {
 
             $notification = new General(
                 'Cadastro de Grupo!',
@@ -54,5 +60,4 @@ class Create extends Component
             $user->notify($notification);
         }
     }
-
 }

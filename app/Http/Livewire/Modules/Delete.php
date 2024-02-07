@@ -8,6 +8,7 @@ use Livewire\Component;
 class Delete extends Component
 {
     public ?bool $showModal = false;
+
     public $module;
 
     public function delete(): void
@@ -16,6 +17,7 @@ class Delete extends Component
         $this->emitTo(ListModules::class, 'module::index::deleted');
         $this->reset();
     }
+
     public function render(): View
     {
         return view('livewire.modules.delete');
