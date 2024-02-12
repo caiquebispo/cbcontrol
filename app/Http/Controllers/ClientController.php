@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
@@ -22,7 +25,23 @@ class ClientController extends Controller
     {
         return view('clients.ultragaz');
     }
-
+    public function getAll(Request $request): Collection
+    {
+        return Auth()->user()->company->clients()
+            ->select('clients.id', 'clients.full_name')
+            ->orderBy('full_name')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('clients.full_name', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(10)
+            )
+            ->get();
+    }
     public static function exportPDF()
     {
 

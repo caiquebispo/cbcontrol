@@ -5,7 +5,7 @@
     <div class="my-6">
         <div class="grid grid-cols-3 gap-4 items-center">
             <div class="col-span-2 ">
-                <x-native-select placeholder="Selecione um cliente" :options="$clients" option-label="full_name" option-value="id" wire:model.defer="client_id" />
+                <x-select wire:model.defer="client_id" placeholder="Selecione um cliente" :async-data="route('client.getAll')" option-label="full_name" option-value="id" />
             </div>
             <div>
                 <livewire:box-front.register-client />
