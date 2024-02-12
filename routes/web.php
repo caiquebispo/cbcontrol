@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SubscribeController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/login');
+Route::redirect('/', '/login')->name('home');
 
 //PANEL ROUTE LINKS
 Route::prefix('app')->group(base_path('routes/web/app/dashboard.php'));
@@ -35,7 +37,8 @@ Route::prefix('app')->group(base_path('routes/web/app/report.php'));
 //STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
-Route::get('webhook', function () {
-    return 'Hello';
-});
+Route::get('subscribe', SubscribeController::class)
+    ->name('subscribe')
+    ->middleware(Authenticate::class);
+
 require __DIR__ . '/auth.php';
