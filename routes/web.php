@@ -30,8 +30,9 @@ Route::prefix('app')->group(base_path('routes/web/app/networks.php'));
 Route::prefix('app')->group(base_path('routes/web/app/permissions.php'));
 Route::prefix('app')->group(base_path('routes/web/app/systemUsability.php'));
 Route::prefix('app')->group(base_path('routes/web/app/boxfront.php'));
+Route::prefix('app')->group(base_path('routes/web/app/report.php'));
 
 //STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
