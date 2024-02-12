@@ -35,4 +35,7 @@ Route::prefix('app')->group(base_path('routes/web/app/report.php'));
 //STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
+Route::get('webhook', function () {
+    return 'Hello';
+});
 require __DIR__ . '/auth.php';

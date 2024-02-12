@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Laravel\Cashier\Billable;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory, Billable;
 
     protected $guarded = [];
 
