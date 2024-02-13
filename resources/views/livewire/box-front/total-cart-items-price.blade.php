@@ -1,5 +1,5 @@
 <div>
-    <div class="bg-slate-50 p-4 rounded-lg flex flex-col items-start">
+    <div class="bg-slate-50 p-4 dark:bg-gray-800 dark:text-gray-900 rounded-lg flex flex-col items-start">
         <div class="mb-3">
             <p class="text-lg">Preço Total: <span class="text-xl font-semibold">R$
                     {{number_format($total,2,',','.')}}</span></p>

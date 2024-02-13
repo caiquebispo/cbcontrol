@@ -25,6 +25,7 @@ class Settings extends Component
     public ?bool $has_delivery = null;
 
     public ?float $delivery_price = null;
+    public ?float $is_test_mode = 1;
 
     public function rules(): array
     {
@@ -36,6 +37,7 @@ class Settings extends Component
             'settings.is_opened' => 'required',
             'settings.has_delivery' => 'required',
             'settings.delivery_price' => 'nullable',
+            'settings.is_test_mode' => 'nullable',
         ];
     }
 
@@ -57,7 +59,6 @@ class Settings extends Component
             $title = 'Parabéns!',
             $description = 'Aterações realizadas com sucesso!'
         );
-
     }
 
     public function toCleanPaletteColors(): void
