@@ -18,25 +18,28 @@ class CanAccessRoute
     public function handle(Request $request, Closure $next): Response
     {
 
-        $permissions = Module::where('is_module', true)->get()->toArray();
+        $permissions = Module::get()->toArray();
         $has_permission = false;
         $user = Auth::user();
 
-        if (array_search('/'.$request->route()->uri(), array_column($permissions, 'url')) !== false) {
+        if (array_search('/' . $request->route()->uri(), array_column($permissions, 'url')) !== false) {
 
             foreach ($user->profiles as $profile) {
 
-                $has_permission = $profile->permissions->contains('url', '/'.$request->route()->uri());
+                $has_permission = $profile->permissions->contains('url', '/' . $request->route()->uri());
             }
 
             if ($has_permission) {
 
-                $user->history_navigation('/'.$request->route()->uri());
+                $user->history_navigation('/' . $request->route()->uri());
 
                 return $next($request);
             }
+            if (!empty($user->getMenu())) {
+                return redirect($user->getMenu()[0]['sub_menu'][0]['url']);
+            }
 
-            return redirect($user->getMenu()[0]['sub_menu'][0]['url']);
+            return redirect($user->profiles[0]->permissions()->value('url'));
         } else {
 
             return $next($request);
