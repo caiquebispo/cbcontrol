@@ -16,19 +16,22 @@ class Subscribe
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $company = Auth::user()->company;
+        if (Auth::check()) {
 
-        if (!$company?->subscribed()) {
-            // Redirect user to billing page and ask them to subscribe...
+            $company = Auth::user()->company;
 
-            $company->createOrGetStripeCustomer();
+            if (!$company->settings->is_test_mode && !$company?->subscribed()) {
+                // Redirect user to billing page and ask them to subscribe...
 
-            return $company->newSubscription(
-                'default',
-                'price_1Oj7HhCWYJrbHOpT0lgwjrOI'
-            )
-                ->checkout()
-                ->redirect();
+                $company->createOrGetStripeCustomer();
+
+                return $company->newSubscription(
+                    'default',
+                    'price_1OjIz4CWYJrbHOpTpHPRgi7w'
+                )
+                    ->checkout()
+                    ->redirect();
+            }
         }
 
         return $next($request);
