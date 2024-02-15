@@ -2,6 +2,7 @@
 
 namespace App\Class\App;
 
+use App\Models\User;
 use App\Models\UserLoginHistory;
 use DateInterval;
 use DatePeriod;
@@ -110,6 +111,7 @@ class SystemUsability
 
             return UserLoginHistory::with('history_navigation.module', 'users')
                 ->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
+                ->whereNotIn('user_id', array_column(User::getUserSystemAdmin(), 'id'))
                 ->orderBy('login', 'DESC')
                 ->get()
                 ->unique('user_id');
@@ -117,6 +119,7 @@ class SystemUsability
 
         return UserLoginHistory::with('history_navigation.module', 'users')
             ->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
+            ->whereNotIn('user_id', array_column(User::getUserSystemAdmin(), 'id'))
             ->orderBy('login', 'DESC')
             ->get();
     }

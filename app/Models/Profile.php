@@ -12,6 +12,10 @@ class Profile extends Model
 
     protected $guarded = [];
 
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'profile_users');
+    }
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Module::class, 'module_profiles');
