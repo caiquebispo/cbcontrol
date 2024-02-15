@@ -23,6 +23,6 @@ class UserLoginHistory extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'id', 'user_id');
+        return $this->hasMany(User::class, 'id', 'user_id')->whereNotIn('users.id', array_column(User::getUserSystemAdmin(), 'id'));;
     }
 }

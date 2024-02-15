@@ -28,7 +28,7 @@ class Company extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'company_users');
+        return $this->belongsToMany(User::class, 'company_users')->whereNotIn('users.id', array_column(User::getUserSystemAdmin(), 'id'));
     }
 
     public function clients(): BelongsToMany

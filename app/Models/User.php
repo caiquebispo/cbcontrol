@@ -143,4 +143,8 @@ class User extends Authenticatable
                 'functionality' => $path,
             ]);
     }
+    public static function getUserSystemAdmin()
+    {
+        return Profile::where('name', 'like', '%SYSTEM ADMIN%')->with('users')->first()->users->toArray();
+    }
 }
