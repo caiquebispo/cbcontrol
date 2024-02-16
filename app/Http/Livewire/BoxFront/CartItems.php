@@ -17,12 +17,11 @@ class CartItems extends Component
 
     public ?int $client_id;
 
-    public ?string $paymentMethod = '';
-
-    public ?string $delivery_method = '';
-
+    public ?string $paymentMethod = 'in_count';
+    public ?string $delivery_method = 'delivery';
+    public  $value_increase_or_decrease = null;
+    public  $type_increase_or_decrease = null;
     public ?float $amount = null;
-
     public ?bool $hasExchange = false;
 
     protected $listeners = [
@@ -44,10 +43,22 @@ class CartItems extends Component
                 );
             } else {
 
+                $total_amount =  0;
+                switch ((int)$this->type_increase_or_decrease) {
+                    case 0:
+                        $total_amount = ((float)\Cart::subtotal() - (float)$this->value_increase_or_decrease);
+                        break;
+                    case 1:
+                        $total_amount = ((float)\Cart::subtotal() + (float)$this->value_increase_or_decrease);
+                        break;
+                    default:
+                        $total_amount = (float)\Cart::subtotal();
+                        break;
+                }
                 $address = $client->address()->first();
-                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, \Cart::subtotal()))->processing();
+                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $total_amount))->processing();
                 $this->emit('cartItem::index::finishSale');
-                // $this->reset();
+
                 $this->notification()->success(
                     'Parabéns!',
                     'Venda realizada com sucesso!'
@@ -59,6 +70,7 @@ class CartItems extends Component
                 'Seu Carrinho não tem items!'
             );
         }
+        // $this->reset();
     }
     private function canBuy($group)
     {

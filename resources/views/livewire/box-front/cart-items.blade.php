@@ -24,6 +24,13 @@
                 ]" option-label="delivery_method" option-value="value" wire:model.defer="delivery_method" />
         </div>
     </div>
+    <div class="grid md:grid-cols-2 md:gap-2 my-3">
+        <x-native-select label="Acréscimo / Decréscimo" placeholder="Adicionar acréscimo / decréscimo" :options="[
+                            ['name' => 'Acréscimo',  'value' => 1],
+                            ['name' => 'Decréscimo', 'value' => 0],
+                        ]" option-label="name" option-value="value" wire:model.defer="type_increase_or_decrease" />
+        <x-input label="Valor" placeholder="Valor" class="my-2" wire:model.defer="value_increase_or_decrease" />
+    </div>
     <livewire:box-front.total-cart-items-price />
     <section class="footer bg-slate-150 mt-6 border border-gray-300 p-2 rounded-lg">
         <div class="grid md:grid-cols-3 md:gap-6 my-3">
