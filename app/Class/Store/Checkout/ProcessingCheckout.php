@@ -44,7 +44,7 @@ class ProcessingCheckout
             'address_id' => $address_id,
             'day' => (new \DateTime('now'))->format('Y-m-d'),
             'duet_day' => $paymentMethod === 'in_count' ? (new DateTime('now'))->modify('+1 month')->format('Y-m-d') : (new \DateTime('now'))->format('Y-m-d'),
-            'total_amount' => \Cart::subtotal(),
+            'total_amount' => $amount,
             'payment_method' => $paymentMethod,
             'payment_status' => $this->setStatusSales($paymentMethod),
             'delivery_method' => $delivery_method,
@@ -94,7 +94,7 @@ class ProcessingCheckout
     {
         $message = '';
         if (is_object($this->user)) {
-            $message = 'O vendedor(a) '.$this->user->name.', realizou uma nova venda para o cliente _client_name_';
+            $message = 'O vendedor(a) ' . $this->user->name . ', realizou uma nova venda para o cliente _client_name_';
         } else {
             $message = 'Parabéns! Você tem uma nova venda do cliente _client_name_';
         }
