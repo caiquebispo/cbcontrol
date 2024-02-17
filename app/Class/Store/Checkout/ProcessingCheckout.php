@@ -22,8 +22,8 @@ class ProcessingCheckout
         protected ?bool $hasExchange = null,
         protected ?float $amount = null,
         protected ?float $total_amount = null,
-        protected ?int $type_increase_or_decrease = 0,
-        protected ?int $value_increase_or_decrease = 0,
+        protected ?int $type_increase_or_decrease = null,
+        protected ?int $value_increase_or_decrease = null,
         protected ?float $delivery_man_id = null,
         protected ?string $origin = 'PDV',
     ) {
@@ -60,8 +60,8 @@ class ProcessingCheckout
             'received_day' => $this->setStatusSales($this->paymentMethod) != 'pending' ? (new DateTime('now'))->format('Y-m-d') : null,
             'who_received_id' => ($this->setStatusSales($this->paymentMethod) != 'pending' && $this->origin == 'PDV') ? $user_id : null,
             'delivery_man_id' => $this->delivery_man_id,
-            'is_discount' => $this->type_increase_or_decrease,
-            'value_discount' => $this->value_increase_or_decrease,
+            'is_discount' => $this->type_increase_or_decrease !== null ? $this->type_increase_or_decrease : false,
+            'value_discount' => $this->value_increase_or_decrease  !== null ? $this->value_increase_or_decrease : 0,
         ]);
 
         $this->mountedStructureOrderProducts($order->id, \Cart::content());
