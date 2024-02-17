@@ -8,13 +8,10 @@
             </x-table.actions>
             <x-table>
                 <x-table.thead>
-                    <x-table.th wire:click.prevent="sortBy('full_name')" :sortable="true" :direction="$sortDirection">NOME</x-table.th>
+                    <x-table.th wire:click.prevent="sortBy('full_name')" :sortable="true"
+                        :direction="$sortDirection">NOME</x-table.th>
                     <x-table.th class="text-center">GRUPO</x-table.th>
                     <x-table.th class="text-center">TELEFONE</x-table.th>
-                    <x-table.th class="text-center">ANIVERARIO</x-table.th>
-                    <x-table.th class="text-center">ESTADO</x-table.th>
-                    <x-table.th class="text-center">CEP</x-table.th>
-                    <x-table.th class="text-center">CIDADE</x-table.th>
                     <x-table.th class="text-center">RUA</x-table.th>
                     <x-table.th class="text-center">BAIRRO</x-table.th>
                     <x-table.th class="text-center">Nª</x-table.th>
@@ -22,27 +19,29 @@
                     <x-table.th class="text-right">ACTIONS</x-table.th>
                 </x-table.thead>
                 <x-table.tbody>
-                    @foreach($clients as $client)
-                    <x-table.tr>
-                        <x-table.th>{{$client->full_name ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->group->name ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->number_phone ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->birthday != null ? (new Datetime($client->birthday))->format('d/m/Y') : 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->states ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->zipe_code ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->city ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->road ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->neighborhood ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->number ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="text-center">{{$client->address()->first()->complement ?? 'NÃO DEFINIDO'}}</x-table.th>
-                        <x-table.th class="flex  justify-end">
-                            <livewire:clients.shopping-list :client="$client" :wire:key="'client-shopping-'.$client->id" />
-                            <div class="mx-3">
-                                <livewire:clients.update :client="$client" :wire:key="'client-update-'.$client->id" />
-                            </div>
-                            <livewire:clients.delete :client="$client" :wire:key="'client-delete-'.$client->id" />
-                        </x-table.th>
-                    </x-table.tr>
+                    @foreach ($clients as $client)
+                        <x-table.tr>
+                            <x-table.th>{{ $client->full_name ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th class="text-center">{{ $client->group->name ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th class="text-center">{{ $client->number_phone ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th
+                                class="text-center">{{ $client->address()->first()->road ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th
+                                class="text-center">{{ $client->address()->first()->neighborhood ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th
+                                class="text-center">{{ $client->address()->first()->number ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th
+                                class="text-center">{{ $client->address()->first()->complement ?? 'NÃO DEFINIDO' }}</x-table.th>
+                            <x-table.th class="flex  justify-end">
+                                <livewire:clients.shopping-list :client="$client"
+                                    :wire:key="'client-shopping-'.$client->id" />
+                                <div class="mx-3">
+                                    <livewire:clients.update :client="$client"
+                                        :wire:key="'client-update-'.$client->id" />
+                                </div>
+                                <livewire:clients.delete :client="$client" :wire:key="'client-delete-'.$client->id" />
+                            </x-table.th>
+                        </x-table.tr>
                     @endforeach
                 </x-table.tbody>
             </x-table>

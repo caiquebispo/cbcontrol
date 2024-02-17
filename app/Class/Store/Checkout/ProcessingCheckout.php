@@ -21,20 +21,20 @@ class ProcessingCheckout
         protected ?string $delivery_method = null,
         protected ?bool $hasExchange = null,
         protected ?float $amount = null,
-        protected ?string $origin = 'PDV'
+        protected ?string $origin = 'PDV',
     ) {
     }
 
-    public function processing(): void
+    public function processing($delivery_man_id = null): void
     {
         $client_id = is_object($this->client) ? $this->client->id : 0;
         $user_id = is_object($this->user) ? $this->user->id : 0;
         $address_id = ($this->address instanceof Collection) ? $this->address->get('id') : $this->address->id;
 
-        $this->storeOrder($this->company->id, $user_id, $client_id, $address_id, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $this->amount, $this->origin);
+        $this->storeOrder($this->company->id, $user_id, $client_id, $address_id, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $this->amount, $this->origin, $delivery_man_id);
     }
 
-    private function storeOrder($company_id, $user_id, $client_id, $address_id, $paymentMethod, $delivery_method, $hasExchange, $amount, $origin): void
+    private function storeOrder($company_id, $user_id, $client_id, $address_id, $paymentMethod, $delivery_method, $hasExchange, $amount, $origin, $delivery_man_id): void
     {
 
         $order = Order::create([
@@ -55,6 +55,7 @@ class ProcessingCheckout
             'origin' => $origin,
             'received_day' => $this->setStatusSales($paymentMethod) != 'pending' ? (new DateTime('now'))->format('Y-m-d') : null,
             'who_received_id' => ($this->setStatusSales($paymentMethod) != 'pending' && $origin == 'PDV') ? $user_id : null,
+            'delivery_man_id' => $delivery_man_id,
         ]);
 
         $this->mountedStructureOrderProducts($order->id, \Cart::content());
