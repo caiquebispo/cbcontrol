@@ -1,0 +1,1 @@
+<x-select wire:model.defer="delivery_man_id" placeholder="Selecione um entregador" :async-data="route('users.getAll')" option-label="name" option-value="id" />
