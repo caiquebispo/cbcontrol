@@ -15,8 +15,8 @@ class CartItems extends Component
 {
     use Actions;
 
-    public ?int $client_id;
-    public ?int $delivery_man_id;
+    public ?int $client_id = null;
+    public ?int $delivery_man_id = null;
 
     public ?string $paymentMethod = 'in_count';
     public ?string $delivery_method = 'delivery';
@@ -38,7 +38,7 @@ class CartItems extends Component
 
             $client = Client::find($this->client_id);
 
-            if (!$this->canBuy($client->group->name) && $this->paymentMethod == "in_count") {
+            if ((isset($client->group->name) && !$this->canBuy($client->group->name)) && $this->paymentMethod == "in_count") {
                 $this->notification()->error(
                     'Erro!',
                     'Esse cliente está impossibilitado de realizar compras a prazo no momento'
@@ -73,7 +73,7 @@ class CartItems extends Component
                 'Seu Carrinho não tem items!'
             );
         }
-        // $this->reset();
+        $this->reset();
     }
     private function canBuy($group)
     {
