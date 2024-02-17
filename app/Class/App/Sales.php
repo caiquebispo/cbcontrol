@@ -44,6 +44,7 @@ class Sales
                 'seller_name' => $sale->user?->name ?: 'SITE',
                 'client_name' => $sale->client?->full_name ?: 'N/D',
                 'received_name' => $sale->who_received?->name ?? 'N/D',
+                'delivery_man' => $sale->delivery_man?->name ?? 'N/D',
                 'phone_contact' => $sale->client?->number_phone ?: 'N/D',
                 'type_payment_sale' => $this->getTypePayment($sale->payment_method),
                 'segment' => $sale->origin === 'SITE' ? 'VENDA ONLINE' : 'VENDA BALCAO',
@@ -432,7 +433,7 @@ class Sales
 
         if ($is_comparasion) {
             return $this->user->company->orders()
-                ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
+                ->with('user', 'client', 'who_received', 'delivery_man', 'order_product.product')->whereBetween(
                     'day',
                     [
                         $this->start->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d'),
@@ -442,7 +443,7 @@ class Sales
                 ->get();
         } else {
             return $this->user->company->orders()
-                ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
+                ->with('user', 'client', 'who_received', 'delivery_man', 'order_product.product')->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
                 ->get();
         }
     }

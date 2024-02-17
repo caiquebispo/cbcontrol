@@ -16,6 +16,7 @@ class CartItems extends Component
     use Actions;
 
     public ?int $client_id;
+    public ?int $delivery_man_id;
 
     public ?string $paymentMethod = 'in_count';
     public ?string $delivery_method = 'delivery';
@@ -32,6 +33,7 @@ class CartItems extends Component
 
     public function finish()
     {
+
         if (count(\Cart::content()) > 0) {
 
             $client = Client::find($this->client_id);
@@ -56,7 +58,8 @@ class CartItems extends Component
                         break;
                 }
                 $address = $client->address()->first();
-                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $total_amount))->processing();
+                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $total_amount))->processing($this->delivery_man_id);
+
                 $this->emit('cartItem::index::finishSale');
 
                 $this->notification()->success(

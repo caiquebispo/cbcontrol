@@ -63,7 +63,7 @@ class Checkout extends ModalComponent
             $user = $this->product->company->clients()->create($data);
             $address = is_string($this->address) ? collect(json_decode($this->address, true)) : $user->address()->create($this->address['address']);
 
-            (new ProcessingCheckout($this->product->company, null, $user, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $this->amount, 'SITE'))->processing();
+            (new ProcessingCheckout($this->product->company, null, $user, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, \Cart::subtotal(), 'SITE'))->processing();
             $this->forceClose()->closeModal();
             $this->emit('cartItem::index::cleanCart');
             $this->emitTo(TotalItensCart::class, 'cartItem::index::addToCart');
@@ -84,7 +84,7 @@ class Checkout extends ModalComponent
 
     public function validateDataUser(): void
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             $this->user = $this->validate([
                 'user.name' => 'required|min:3',
                 'user.email' => 'required|email',
@@ -110,7 +110,7 @@ class Checkout extends ModalComponent
 
     public function validateAddressUser(): void
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             $this->address = $this->validate([
                 'address.states' => 'required|max:150',
                 'address.zipe_code' => 'required',

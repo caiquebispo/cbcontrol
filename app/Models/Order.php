@@ -36,6 +36,10 @@ class Order extends Model
     {
         return $this->hasOne(User::class, 'id', 'who_received_id');
     }
+    public function delivery_man(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'delivery_man_id');
+    }
 
     public function reason(): HasOne
     {
