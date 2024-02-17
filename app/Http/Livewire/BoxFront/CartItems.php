@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\BoxFront;
 
+use App\Class\App\BoxFront\ProcessingCartItemsCheckout;
 use App\Class\Store\Checkout\ProcessingCheckout;
 use App\Http\Controllers\SalesController;
 use App\Models\Client;
@@ -33,58 +34,58 @@ class CartItems extends Component
 
     public function finish()
     {
+        $client = Client::find($this->client_id);
+        $user = Auth::user();
 
-        if (count(\Cart::content()) > 0) {
+        $processing = new ProcessingCartItemsCheckout(
+            $this->client_id,
+            $this->paymentMethod,
+            $this->type_increase_or_decrease,
+            $this->value_increase_or_decrease
+        );
 
-            $client = Client::find($this->client_id);
-
-            if ((isset($client->group->name) && !$this->canBuy($client->group->name)) && $this->paymentMethod == "in_count") {
-                $this->notification()->error(
-                    'Erro!',
-                    'Esse cliente está impossibilitado de realizar compras a prazo no momento'
-                );
-            } else {
-
-                $total_amount =  0;
-                switch ((int)$this->type_increase_or_decrease) {
-                    case 0:
-                        $total_amount = ((float)\Cart::subtotal() - (float)$this->value_increase_or_decrease);
-                        break;
-                    case 1:
-                        $total_amount = ((float)\Cart::subtotal() + (float)$this->value_increase_or_decrease);
-                        break;
-                    default:
-                        $total_amount = (float)\Cart::subtotal();
-                        break;
-                }
-                $address = $client->address()->first();
-                (new ProcessingCheckout(Auth::user()->company, Auth::user(), $client, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $total_amount))->processing($this->delivery_man_id);
-
-                $this->emit('cartItem::index::finishSale');
-
-                $this->notification()->success(
-                    'Parabéns!',
-                    'Venda realizada com sucesso!'
-                );
-            }
-        } else {
-            $this->notification()->error(
+        if (!$processing->verifyHasItemsCart()) {
+            return $this->notification()->warning(
                 'Ops!',
                 'Seu Carrinho não tem items!'
             );
         }
+        if (!$processing->verifyClientCanBuy()) {
+            return $this->notification()->warning(
+                'Erro!',
+                'Esse cliente está impossibilitado de realizar compras a prazo no momento'
+            );
+        }
+
+        $total_amount =  $processing->makeCalcIcreaseOrDecrease();
+        $this->amount = (float)\Cart::subtotal();
+
+        $address = $client->address()->first();
+
+        (new ProcessingCheckout(
+            $user->company,
+            $user,
+            $client,
+            $address,
+            $this->paymentMethod,
+            $this->delivery_method,
+            $this->hasExchange,
+            $this->amount,
+            $total_amount,
+            $this->type_increase_or_decrease,
+            $this->value_increase_or_decrease,
+            $this->delivery_man_id
+        ))->processing();
+
+        $this->emit('cartItem::index::finishSale');
+        $this->notification()->success(
+            'Parabéns!',
+            'Venda realizada com sucesso!'
+        );
+
         $this->reset();
     }
-    private function canBuy($group)
-    {
-        return match (strtoupper($group)) {
-            'NEGATIVADO' => false,
-            'NEGATIVADOS' => false,
-            'DUVIDOSO' => false,
-            'DUVIDOSOS' => false,
-            default => true,
-        };
-    }
+
     public function exportSummarySales()
     {
         return SalesController::export();
