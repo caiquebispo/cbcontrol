@@ -63,7 +63,21 @@ class Checkout extends ModalComponent
             $user = $this->product->company->clients()->create($data);
             $address = is_string($this->address) ? collect(json_decode($this->address, true)) : $user->address()->create($this->address['address']);
 
-            (new ProcessingCheckout($this->product->company, null, $user, $address, $this->paymentMethod, $this->delivery_method, $this->hasExchange, \Cart::subtotal(), 'SITE'))->processing();
+            (new ProcessingCheckout(
+                $this->product->company,
+                null,
+                $user,
+                $address,
+                $this->paymentMethod,
+                $this->delivery_method,
+                $this->hasExchange,
+                \Cart::subtotal(),
+                \Cart::subtotal(),
+                null,
+                null,
+                null,
+                'SITE'
+            ))->processing();
             $this->forceClose()->closeModal();
             $this->emit('cartItem::index::cleanCart');
             $this->emitTo(TotalItensCart::class, 'cartItem::index::addToCart');

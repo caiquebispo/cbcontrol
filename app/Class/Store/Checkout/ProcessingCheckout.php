@@ -21,20 +21,24 @@ class ProcessingCheckout
         protected ?string $delivery_method = null,
         protected ?bool $hasExchange = null,
         protected ?float $amount = null,
+        protected ?float $total_amount = null,
+        protected ?int $type_increase_or_decrease = null,
+        protected ?int $value_increase_or_decrease = null,
+        protected ?float $delivery_man_id = null,
         protected ?string $origin = 'PDV',
     ) {
     }
 
-    public function processing($delivery_man_id = null): void
+    public function processing(): void
     {
         $client_id = is_object($this->client) ? $this->client->id : 0;
         $user_id = is_object($this->user) ? $this->user->id : 0;
         $address_id = ($this->address instanceof Collection) ? $this->address->get('id') : $this->address->id;
 
-        $this->storeOrder($this->company->id, $user_id, $client_id, $address_id, $this->paymentMethod, $this->delivery_method, $this->hasExchange, $this->amount, $this->origin, $delivery_man_id);
+        $this->storeOrder($this->company->id, $user_id, $client_id, $address_id);
     }
 
-    private function storeOrder($company_id, $user_id, $client_id, $address_id, $paymentMethod, $delivery_method, $hasExchange, $amount, $origin, $delivery_man_id): void
+    private function storeOrder($company_id, $user_id, $client_id, $address_id): void
     {
 
         $order = Order::create([
@@ -43,19 +47,21 @@ class ProcessingCheckout
             'company_id' => $company_id,
             'address_id' => $address_id,
             'day' => (new \DateTime('now'))->format('Y-m-d'),
-            'duet_day' => $paymentMethod === 'in_count' ? (new DateTime('now'))->modify('+1 month')->format('Y-m-d') : (new \DateTime('now'))->format('Y-m-d'),
-            'total_amount' => $amount,
-            'payment_method' => $paymentMethod,
-            'payment_status' => $this->setStatusSales($paymentMethod),
-            'delivery_method' => $delivery_method,
-            'hasExchange' => $hasExchange ?? 0,
-            'amount' => $amount ?: 0.00,
+            'duet_day' => $this->paymentMethod === 'in_count' ? (new DateTime('now'))->modify('+1 month')->format('Y-m-d') : (new \DateTime('now'))->format('Y-m-d'),
+            'total_amount' => $this->total_amount,
+            'payment_method' => $this->paymentMethod,
+            'payment_status' => $this->setStatusSales($this->paymentMethod),
+            'delivery_method' => $this->delivery_method,
+            'hasExchange' => $this->hasExchange ?? 0,
+            'amount' => $this->amount ?: 0.00,
             'quantityItem' => count(\Cart::content()),
-            'status_order' => $origin == 'PDV' ? 'confirmed' : 'new',
-            'origin' => $origin,
-            'received_day' => $this->setStatusSales($paymentMethod) != 'pending' ? (new DateTime('now'))->format('Y-m-d') : null,
-            'who_received_id' => ($this->setStatusSales($paymentMethod) != 'pending' && $origin == 'PDV') ? $user_id : null,
-            'delivery_man_id' => $delivery_man_id,
+            'status_order' => $this->origin == 'PDV' ? 'confirmed' : 'new',
+            'origin' => $this->origin,
+            'received_day' => $this->setStatusSales($this->paymentMethod) != 'pending' ? (new DateTime('now'))->format('Y-m-d') : null,
+            'who_received_id' => ($this->setStatusSales($this->paymentMethod) != 'pending' && $this->origin == 'PDV') ? $user_id : null,
+            'delivery_man_id' => $this->delivery_man_id,
+            'is_discount' => $this->type_increase_or_decrease !== null ? $this->type_increase_or_decrease : false,
+            'value_discount' => $this->value_increase_or_decrease  !== null ? $this->value_increase_or_decrease : 0,
         ]);
 
         $this->mountedStructureOrderProducts($order->id, \Cart::content());
