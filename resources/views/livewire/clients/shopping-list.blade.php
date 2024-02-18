@@ -40,8 +40,9 @@
                                 <x-table.th class="text-center">{{ $order['received_day'] }}</x-table.th>
                                 <x-table.th class="flex  justify-end">
                                     @if ($order['payment_status'] == 'PENDENTE')
-                                        <div>
+                                        <div class="flex space-x-2">
                                             <livewire:clients.recevied-payment :order_id="$order['id']" :key="now()->timestamp">
+                                                <livewire:clients.received-hav :order_id="$order['id']" :key="now()->timestamp">
                                         </div>
                                     @else
                                         <div class=" text-white p-1 rounded-md bg-green-300">
