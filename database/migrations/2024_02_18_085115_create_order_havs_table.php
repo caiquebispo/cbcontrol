@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('order_havs', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('received_id')->constrained('users')->onDelete('cascade');
+            $table->float('value');
+            $table->dateTime('day');
         });
     }
 
