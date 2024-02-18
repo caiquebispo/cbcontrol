@@ -93,6 +93,8 @@ let Sales = {
                 { data: 'status', title: 'STATUS/VENDA' },
                 { data: 'payment_status', title: 'STATUS/PAG' },
                 { data: 'value', title: 'VALOR' },
+                { data: 'hav', title: 'HAV' },
+                { data: 'remain', title: 'RESTA' },
                 { data: 'duet_day', title: 'DT/VENCIMENTO' },
                 { data: 'received_day', title: 'DT/RECEBIMENTO' },
                 { data: 'received_name', title: 'QUEM RECEBEU' },

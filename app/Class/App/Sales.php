@@ -38,7 +38,7 @@ class Sales
         $sales = [];
         $payload = $orders ?? $this->getSalesBasedOnPeriods();
         foreach ($payload as $key_sale => $sale) {
-
+            // dd($sale);
             $sales[$key_sale] = [
                 'id' => $sale->id,
                 'seller_name' => $sale->user?->name ?: 'SITE',
@@ -50,6 +50,8 @@ class Sales
                 'segment' => $sale->origin === 'SITE' ? 'VENDA ONLINE' : 'VENDA BALCAO',
                 'delivery_method' => $this->getTypeDelivery($sale->delivery_method),
                 'value' => 'R$ ' . number_format($sale->total_amount, 2, ',', '.'),
+                'hav' => $this->sumHav($sale->order_hav),
+                'remain' => $this->remain($this->sumHav($sale->order_hav), ($sale->total_amount)),
                 'total_items' => $sale->quantityItem,
                 'status' => $this->getTypeStatus($sale->status_order),
                 'payment_status' => $sale->payment_status == 'pending' ? 'PENDENTE' : 'PAGO',
@@ -72,7 +74,6 @@ class Sales
 
         return $sales;
     }
-
     public function getSummarySales()
     {
         $data = $this->getDataTableSales();
@@ -85,7 +86,6 @@ class Sales
 
         return $summary;
     }
-
     private function summarySellers($data)
     {
 
@@ -124,7 +124,6 @@ class Sales
 
         return $arr;
     }
-
     private function summaryReceived()
     {
         $payload =  $this->user->company->orders()
@@ -192,7 +191,6 @@ class Sales
 
         return $arr;
     }
-
     private function summaryProduct($data): array
     {
 
@@ -222,7 +220,6 @@ class Sales
 
         return $arr;
     }
-
     public function getDataGraph($type_graph = null, $field = null): ?array
     {
         return match ($type_graph) {
@@ -230,7 +227,6 @@ class Sales
             default => $this->getDataGraphComparisonLineOrBar()
         };
     }
-
     private function getDataGraphComparisonLineOrBar(): array
     {
         $data = $this->mountedArrayPeriods(['sale_actual' => 0, 'canceled_actual' => 0, 'sale_last' => 0, 'canceled_last' => 0]);
@@ -263,7 +259,6 @@ class Sales
 
         return $data;
     }
-
     private function getDataGraphPizza($field): array
     {
         return match ($field) {
@@ -276,7 +271,6 @@ class Sales
             default => 'Error! Graph Type not mapping'
         };
     }
-
     private function getDataGraphForStatus(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
@@ -293,7 +287,6 @@ class Sales
             return $accumulator;
         }, []));
     }
-
     private function getDataGraphForDeliveryMethod(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
@@ -311,7 +304,6 @@ class Sales
             return $accumulator;
         }, []));
     }
-
     private function getDataGraphForPaymentMethod(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
@@ -329,7 +321,6 @@ class Sales
             return $accumulator;
         }, []));
     }
-
     private function getDataGraphForSegment(): array
     {
         return array_values(array_reduce($this->getSalesBasedOnPeriods()->toArray(), function ($accumulator, $item) {
@@ -347,7 +338,6 @@ class Sales
             return $accumulator;
         }, []));
     }
-
     private function getDataGraphForCategories(): array
     {
         $data = [];
@@ -366,7 +356,6 @@ class Sales
 
         return $data;
     }
-
     private function getDataGraphForProducts(): array
     {
 
@@ -386,7 +375,22 @@ class Sales
 
         return $data;
     }
+    private function sumHav($order_hav): string
+    {
+        $hav = 0;
+        if (count($order_hav) > 0) {
+            foreach ($order_hav as $hav_pay) {
 
+                $hav += $hav_pay->value;
+            }
+        }
+        return 'R$ ' . number_format($hav, 2, ',', '.');
+    }
+    private function remain($hav, $total): string
+    {
+        $value = (float)str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $hav)));
+        return 'R$ ' . number_format(($total - $value), 2, ',', '.');
+    }
     private function getTypeDelivery($method): string
     {
         return match ($method) {
@@ -394,7 +398,6 @@ class Sales
             default => 'RETIRAR NO LOCAL'
         };
     }
-
     private function getTypeStatus($method): string
     {
         return match ($method) {
@@ -404,7 +407,6 @@ class Sales
             default => 'RETIRAR NO LOCAL'
         };
     }
-
     private function getTypePayment($method): string
     {
         return match ($method) {
@@ -413,7 +415,6 @@ class Sales
             default => 'A VISTA'
         };
     }
-
     private function mountedArrayPeriods($array_combine = null): array
     {
         $periods = [];
@@ -427,13 +428,12 @@ class Sales
 
         return $periods;
     }
-
     public function getSalesBasedOnPeriods($is_comparasion = false, $operator = '-', $quantity = 1, $type = 'months'): object
     {
 
         if ($is_comparasion) {
             return $this->user->company->orders()
-                ->with('user', 'client', 'who_received', 'delivery_man', 'order_product.product')->whereBetween(
+                ->with('user', 'client', 'who_received', 'delivery_man', 'order_hav', 'order_product.product')->whereBetween(
                     'day',
                     [
                         $this->start->modify($operator . ' ' . $quantity . ' ' . $type)->format('Y-m-d'),
@@ -443,7 +443,7 @@ class Sales
                 ->get();
         } else {
             return $this->user->company->orders()
-                ->with('user', 'client', 'who_received', 'delivery_man', 'order_product.product')->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
+                ->with('user', 'client', 'who_received', 'delivery_man', 'order_hav', 'order_product.product')->whereBetween('day', [$this->start->format('Y-m-d'), $this->end->format('Y-m-d')])
                 ->get();
         }
     }

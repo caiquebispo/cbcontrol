@@ -40,7 +40,10 @@ class Order extends Model
     {
         return $this->hasOne(User::class, 'id', 'delivery_man_id');
     }
-
+    public function order_hav(): HasMany
+    {
+        return $this->hasMany(OrderHav::class);
+    }
     public function reason(): HasOne
     {
         return $this->hasOne('reason', 'id', 'reason_id');
