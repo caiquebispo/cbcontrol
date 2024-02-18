@@ -10,6 +10,8 @@
                         <x-table.th class="text-center">ENTREGADOR</x-table.th>
                         <x-table.th class="text-center">TIPO/PG</x-table.th>
                         <x-table.th class="text-center">VALOR</x-table.th>
+                        <x-table.th class="text-center">HAV</x-table.th>
+                        <x-table.th class="text-center">RESTA</x-table.th>
                         <x-table.th class="text-center">STATUS/PG</x-table.th>
                         <x-table.th class="text-center">DT/COMPRA</x-table.th>
                         <x-table.th class="text-center">DT/VENCIMENTO</x-table.th>
@@ -24,6 +26,8 @@
                                 <x-table.th class="text-center">{{ $order['delivery_man'] }}</x-table.th>
                                 <x-table.th class="text-center">{{ $order['type_payment_sale'] }}</x-table.th>
                                 <x-table.th class="text-center">{{ $order['value'] }}</x-table.th>
+                                <x-table.th class="text-center">{{ $order['hav'] }}</x-table.th>
+                                <x-table.th class="text-center">{{ $order['remain'] }}</x-table.th>
                                 <x-table.th class=text-center>
                                     <div
                                         class=" text-white p-1 rounded-md @if ($order['payment_status'] == 'PENDENTE') bg-red-300 @else bg-green-300 @endif">
@@ -36,8 +40,9 @@
                                 <x-table.th class="text-center">{{ $order['received_day'] }}</x-table.th>
                                 <x-table.th class="flex  justify-end">
                                     @if ($order['payment_status'] == 'PENDENTE')
-                                        <div>
+                                        <div class="flex space-x-2">
                                             <livewire:clients.recevied-payment :order_id="$order['id']" :key="now()->timestamp">
+                                                <livewire:clients.received-hav :order_id="$order['id']" :key="now()->timestamp">
                                         </div>
                                     @else
                                         <div class=" text-white p-1 rounded-md bg-green-300">
