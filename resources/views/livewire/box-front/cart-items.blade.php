@@ -3,8 +3,9 @@
         <p>Operador(a): {{ auth()->user()->name }}</p>
     </article>
     <div class="my-6">
-        <div class="grid grid-cols-1 gap-4 items-center mb-4">
+        <div class="grid grid-cols-3 gap-2 mb-4">
             <livewire:box-front.register-client />
+            <livewire:box-front.receveid />
         </div>
         <div class="grid grid-cols-2 gap-4 items-center">
             <x-box-front.select-client />
