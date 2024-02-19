@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscribeController extends Controller
 {
-    public function __invoke()
+    public function subscribe()
     {
         $company = Auth::user()->company;
         if (!$company->settings->is_test_mode) {
@@ -23,5 +23,9 @@ class SubscribeController extends Controller
         } else {
             return redirect('/');
         }
+    }
+    public function handleWebhook()
+    {
+        return response()->json('success', 200);
     }
 }
