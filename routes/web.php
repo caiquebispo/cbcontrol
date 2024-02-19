@@ -37,8 +37,9 @@ Route::prefix('app')->group(base_path('routes/web/app/report.php'));
 //STORE ROUTE LINKS
 Route::prefix('store')->group(base_path('routes/web/store/home.php'));
 
-Route::get('subscribe', SubscribeController::class)
+Route::get('subscribe', [SubscribeController::class, 'subscribe'])
     ->name('subscribe')
     ->middleware(Authenticate::class);
+Route::post('stripe/webhook', [SubscribeController::class, 'handleWebhook'])->name('cashier.webhook')->withoutMiddleware(VerifyCsrfToken::class);
 
 require __DIR__ . '/auth.php';
