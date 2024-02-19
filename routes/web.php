@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SubscribeController;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
