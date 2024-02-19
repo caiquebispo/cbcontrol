@@ -16,7 +16,8 @@ class SubscribeController extends Controller
 
             return $company->newSubscription(
                 'default',
-                'price_1OjIz4CWYJrbHOpTpHPRgi7w'
+                'price_1Ole4NCWYJrbHOpTxmTobmWf',
+                //'price_1OjJ4WCWYJrbHOpT32TSwDt1'
             )
                 ->checkout()
                 ->redirect();
