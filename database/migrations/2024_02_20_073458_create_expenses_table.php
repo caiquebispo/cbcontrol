@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->float('value');
             $table->integer('quantity')->nullable();
+            $table->date('day');
         });
     }
 
