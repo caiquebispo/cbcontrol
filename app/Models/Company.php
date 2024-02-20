@@ -40,6 +40,10 @@ class Company extends Model
     {
         return $this->hasMany(Group::class);
     }
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
 
     public function settings(): HasOne
     {
