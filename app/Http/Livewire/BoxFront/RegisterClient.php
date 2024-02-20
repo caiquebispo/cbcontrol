@@ -37,8 +37,9 @@ class RegisterClient extends Component
 
             $data = array_merge($full_name, Arr::except($this->user['user'], ['password_confirm', 'name']));
             $user = Auth::user()->company->clients()->create($data);
-
-            $address = is_string($this->address) ? collect(json_decode($this->address, true)) : $user->address()->create($this->address['address']);
+            if ($this->address != null) {
+                $address = is_string($this->address) ? collect(json_decode($this->address, true)) : $user->address()->create($this->address['address']);
+            }
 
             $this->resetCheckoutField();
             $this->notification()->success(
