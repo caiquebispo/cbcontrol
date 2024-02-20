@@ -20,6 +20,7 @@ class RegisterClient extends Component
 
     public $address = [];
 
+
     public function nextStep(): void
     {
         match ($this->step) {
@@ -65,12 +66,12 @@ class RegisterClient extends Component
     {
 
         $this->user = $this->validate([
-            'user.name' => 'required|min:3',
-            'user.email' => 'nullable|email',
+            'user.name' => 'nullable|min:3',
+            'user.email' => 'nullable',
             'user.group_id' => 'nullable',
-            'user.number_phone' => 'required',
-            'user.password' => 'required|min:8|max:16',
-            'user.password_confirm' => 'required|min:8|max:16|same:user.password',
+            'user.number_phone' => 'nullable',
+            'user.password' => 'nullable|min:8|max:16',
+            'user.password_confirm' => 'nullable|min:8|max:16|same:user.password',
         ]);
     }
 
@@ -78,11 +79,11 @@ class RegisterClient extends Component
     {
 
         $this->address = $this->validate([
-            'address.states' => 'required|max:150',
-            'address.zipe_code' => 'required',
-            'address.city' => 'required',
-            'address.neighborhood' => 'required',
-            'address.road' => 'required',
+            'address.states' => 'nullable|max:150',
+            'address.zipe_code' => 'nullable',
+            'address.city' => 'nullable',
+            'address.neighborhood' => 'nullable',
+            'address.road' => 'nullable',
             'address.number' => 'nullable',
             'address.complement' => 'nullable',
         ]);
