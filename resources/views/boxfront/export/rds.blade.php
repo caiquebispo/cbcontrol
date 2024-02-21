@@ -39,8 +39,10 @@
 
 <body>
     <div>
-        <p style="text-align:center; font-size: 1.2rem">RDS - Resumo diário de vendas: {{(new Datetime('now'))->format('d/m/Y h:i:s')}}</p>
-        <p style="text-align:center; font-size: 1.1rem; margin-top: -15px">Empresa: {{auth()->user()->company->corporate_reason}} - Usuário: {{auth()->user()->name}}</p>
+        <p style="text-align:center; font-size: 1.2rem">RDS - Resumo diário de vendas:
+            {{ (new Datetime('now'))->format('d/m/Y h:i:s') }}</p>
+        <p style="text-align:center; font-size: 1.1rem; margin-top: -15px">Empresa:
+            {{ auth()->user()->company->corporate_reason }} - Usuário: {{ auth()->user()->name }}</p>
     </div>
     <div>
         <p style="text-align:center; font-size: 1.1rem; font-weight: bold;">Relação dos Produtos</p>
@@ -54,27 +56,26 @@
             </thead>
             <tbody>
                 @foreach ($summary['summary_products'] as $product)
-                <tr>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['quantity'] }}</td>
-                    <td>R$ {{ number_format($product['price'], 2,'.',',')}}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $product['name'] }}</td>
+                        <td>{{ $product['quantity'] }}</td>
+                        <td>R$ {{ number_format($product['price'], 2, '.', ',') }}</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     @php
-                    $total = 0;
-                    $qt = 0;
-                    foreach($summary['summary_products'] as $product){
-
-                    $total += $product['price'];
-                    $qt += $product['quantity'];
-                    }
+                        $total = 0;
+                        $qt = 0;
+                        foreach ($summary['summary_products'] as $product) {
+                            $total += $product['price'];
+                            $qt += $product['quantity'];
+                        }
                     @endphp
                     <td>TOTAL</td>
-                    <td>{{$qt}}</td>
-                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                    <td>{{ $qt }}</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
                 </tr>
             </tfoot>
         </table>
@@ -92,29 +93,28 @@
             </thead>
             <tbody>
                 @foreach ($summary['summary_sellers'] as $product)
-                <tr>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['product'] }}</td>
-                    <td>{{ $product['quantity'] }}</td>
-                    <td>R$ {{ number_format($product['price'], 2,'.',',')}}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $product['name'] }}</td>
+                        <td>{{ $product['product'] }}</td>
+                        <td>{{ $product['quantity'] }}</td>
+                        <td>R$ {{ number_format($product['price'], 2, '.', ',') }}</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     @php
-                    $total = 0;
-                    $qt = 0;
-                    foreach($summary['summary_sellers'] as $product){
-
-                    $total += $product['price'];
-                    $qt += $product['quantity'];
-                    }
+                        $total = 0;
+                        $qt = 0;
+                        foreach ($summary['summary_sellers'] as $product) {
+                            $total += $product['price'];
+                            $qt += $product['quantity'];
+                        }
                     @endphp
                     <td>TOTAL</td>
                     <td>-</td>
-                    <td>{{$qt}}</td>
-                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                    <td>{{ $qt }}</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
                 </tr>
             </tfoot>
         </table>
@@ -132,29 +132,28 @@
             </thead>
             <tbody>
                 @foreach ($summary['summary_clients'] as $product)
-                <tr>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['product'] }}</td>
-                    <td>{{ $product['quantity'] }}</td>
-                    <td>R$ {{ number_format($product['price'], 2,'.',',')}}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $product['name'] }}</td>
+                        <td>{{ $product['product'] }}</td>
+                        <td>{{ $product['quantity'] }}</td>
+                        <td>R$ {{ number_format($product['price'], 2, '.', ',') }}</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     @php
-                    $total = 0;
-                    $qt = 0;
-                    foreach($summary['summary_clients'] as $product){
-
-                    $total += $product['price'];
-                    $qt += $product['quantity'];
-                    }
+                        $total = 0;
+                        $qt = 0;
+                        foreach ($summary['summary_clients'] as $product) {
+                            $total += $product['price'];
+                            $qt += $product['quantity'];
+                        }
                     @endphp
                     <td>TOTAL</td>
                     <td>-</td>
-                    <td>{{$qt}}</td>
-                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                    <td>{{ $qt }}</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
                 </tr>
             </tfoot>
         </table>
@@ -174,31 +173,70 @@
             </thead>
             <tbody>
                 @foreach ($summary['summary_received'] as $product)
-                <tr>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['seller'] }}</td>
-                    <td>{{ $product['date'] }}</td>
-                    <td>{{ $product['duet_day'] }}</td>
-                    <td>{{ $product['received_name'] }}</td>
-                    <td>{{ $product['value'] }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $product['name'] }}</td>
+                        <td>{{ $product['seller'] }}</td>
+                        <td>{{ $product['date'] }}</td>
+                        <td>{{ $product['duet_day'] }}</td>
+                        <td>{{ $product['received_name'] }}</td>
+                        <td>{{ $product['value'] }}</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     @php
-                    $total = 0;
-                    foreach($summary['summary_received'] as $product){
-
-                    $total += str_replace(',','.',str_replace('.','',str_replace('R$ ', '',$product['value'])));
-                    }
+                        $total = 0;
+                        foreach ($summary['summary_received'] as $product) {
+                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                        }
                     @endphp
                     <td>TOTAL</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
-                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <p style="text-align:center; font-size: 1.1rem; font-weight: bold;">Relação de Despesas</p>
+        <table>
+            <thead style="backgoround-color: red !important">
+                <tr>
+                    <th>DATA</th>
+                    <th>QUEM CADASTROU</th>
+                    <th>DESPESA</th>
+                    <th>QUANTIDADE</th>
+                    <th>VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($summary['summary_expenses'] as $product)
+                    <tr>
+                        <td>{{ $product['date'] }}</td>
+                        <td>{{ $product['user_name'] }}</td>
+                        <td>{{ $product['expense_name'] }}</td>
+                        <td>{{ $product['quantity'] }}</td>
+                        <td>{{ $product['value'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    @php
+                        $total = 0;
+                        foreach ($summary['summary_expenses'] as $product) {
+                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                        }
+                    @endphp
+                    <td>TOTAL</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
                 </tr>
             </tfoot>
         </table>
@@ -218,31 +256,30 @@
             </thead>
             <tbody>
                 @foreach ($summary['general'] as $product)
-                <tr>
-                    <td>{{ $product['client_name'] }}</td>
-                    <td>{{ $product['seller_name'] }}</td>
-                    <td>{{ $product['type_payment_sale'] }}</td>
-                    <td>{{ $product['payment_status'] }}</td>
-                    <td>{{ $product['segment'] }}</td>
-                    <td>{{$product['value']}}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $product['client_name'] }}</td>
+                        <td>{{ $product['seller_name'] }}</td>
+                        <td>{{ $product['type_payment_sale'] }}</td>
+                        <td>{{ $product['payment_status'] }}</td>
+                        <td>{{ $product['segment'] }}</td>
+                        <td>{{ $product['value'] }}</td>
+                    </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     @php
-                    $total = 0;
-                    foreach($summary['general'] as $product){
-
-                    $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
-                    }
+                        $total = 0;
+                        foreach ($summary['general'] as $product) {
+                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                        }
                     @endphp
                     <td>TOTAL</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
-                    <td>R$ {{ number_format($total, 2,',','.')}}</td>
+                    <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
                 </tr>
             </tfoot>
         </table>
