@@ -82,11 +82,40 @@ class Sales
         $summary['summary_sellers'] = $this->summarySellers($data);
         $summary['summary_clients'] = $this->summaryClients($data);
         $summary['summary_received'] = $this->summaryReceived();
+        $summary['summary_expenses'] = $this->summaryExpenses();
         $summary['general'] = $data;
 
         return $summary;
     }
-    private function summarySellers($data)
+    private function summaryExpenses()
+    {
+        $payload =  $this->user->company->expenses()
+            ->with('user')->whereBetween(
+                'day',
+                [
+                    now()->format('Y-m-d'),
+                    now()->format('Y-m-d'),
+                ]
+            )
+            ->get();
+
+        $arr = [];
+
+        foreach ($payload as $d) {
+            array_push(
+                $arr,
+                [
+                    'user_name' => $d->user->name,
+                    'expense_name' => $d->name,
+                    'value' => 'R$ ' . number_format($d->value, 2, ',', '.'),
+                    'quantity' => $d->quantity,
+                    'date' => (new DateTime($d->day))->format(('d/m/Y')),
+                ]
+            );
+        }
+        return $arr;
+    }
+    private function summarySellers($data): array
     {
 
         $arr = [];
@@ -124,7 +153,7 @@ class Sales
 
         return $arr;
     }
-    private function summaryReceived()
+    private function summaryReceived(): array
     {
         $payload =  $this->user->company->orders()
             ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
@@ -153,7 +182,7 @@ class Sales
         }
         return $arr;
     }
-    private function summaryClients($data)
+    private function summaryClients($data): array
     {
 
         $arr = [];
