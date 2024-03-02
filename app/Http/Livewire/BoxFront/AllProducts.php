@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class AllProducts extends Component
 {
+    public ?string $search = '';
+
     protected $listeners = [
 
         'products::index::created' => '$refresh',
@@ -15,13 +17,24 @@ class AllProducts extends Component
         'products::index::updated' => '$refresh',
     ];
 
-    protected function getAll()
+    protected function getAll(): object
     {
-        return Auth::user()->company->products;
+        return Auth::user()->company->products()
+            ->when($this->search != '', function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->get();
+    }
+    private function getAllCategories(): object
+    {
+        return Auth::user()->company->categories;
     }
 
     public function render(): View
     {
-        return view('livewire.box-front.all-products', ['products' => $this->getAll()]);
+        return view('livewire.box-front.all-products', [
+            'products' => $this->getAll(),
+            'categories' => $this->getAllCategories()
+        ]);
     }
 }
