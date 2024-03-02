@@ -5,10 +5,14 @@ namespace App\Http\Livewire\BoxFront;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AllProducts extends Component
 {
-    public ?string $search = '';
+    use WithPagination;
+    public ?int $items_page = 10;
+    public ?string $search = "";
+    public ?string $category_id = "";
 
     protected $listeners = [
 
@@ -19,11 +23,16 @@ class AllProducts extends Component
 
     protected function getAll(): object
     {
+        // dd($this->items_page, $this->search, $this->category_id);
+
         return Auth::user()->company->products()
-            ->when($this->search != '', function ($query) {
+            ->when($this->search != "", function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
-            ->get();
+            ->when($this->category_id != "", function ($query) {
+                $query->where('category_id', $this->category_id);
+            })
+            ->paginate((int)$this->items_page);
     }
     private function getAllCategories(): object
     {
