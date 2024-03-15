@@ -74,6 +74,17 @@ class Sales
 
         return $sales;
     }
+    public  function getPedingCount(): object|array
+    {
+        $data = $this->user->company->orders()
+            ->with('user', 'client', 'who_received', 'delivery_man', 'order_hav', 'order_product.product')
+            ->where([
+                [ 'day', '<' , now()->format('Y-m-d')],
+                [ 'payment_status', 'pending'],
+            ])
+            ->get();
+        return $this->getDataTableSales($data);
+    }
     public function getSummarySales()
     {
         $data = $this->getDataTableSales();

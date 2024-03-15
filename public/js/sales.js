@@ -29,6 +29,23 @@ let Sales = {
         Sales.get_data_resume_table_sales(moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
 
     },
+    getSalesPending: function (){
+        axios({
+            method: 'GET',
+            url: `${window.location.origin}/app/sales/getPendingCounts?`,
+        }).then((response) => {
+            if(response.data.has_pending_orders)
+            {
+                $('.content-table').html(response.data.view);
+                $('#modal-pending-sales').removeClass('hidden')
+                $('.close-modal').on('click', function(e){
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    $('#modal-pending-sales').addClass('hidden')
+                })
+            }
+        })
+    },
     get_data_graphs_pizzas(start, end) {
         axios({
             method: 'GET',
