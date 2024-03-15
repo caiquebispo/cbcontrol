@@ -3,7 +3,7 @@
     $size = $size === 'md' ? 2 : 7;
 @endphp
 @if($show)
-<div class="fixed inset-0 flex items-center justify-center z-50">
+<div class="fixed inset-0 flex items-center justify-center z-50 modal-main">
     <div class="fixed inset-0 bg-cyan-600 bg-opacity-10 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-{{$size}}xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
