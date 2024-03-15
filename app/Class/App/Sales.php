@@ -79,8 +79,8 @@ class Sales
         $data = $this->user->company->orders()
             ->with('user', 'client', 'who_received', 'delivery_man', 'order_hav', 'order_product.product')
             ->where([
-                [ 'day', '<' , now()->format('Y-m-d')],
-                [ 'payment_status', 'pending'],
+                ['payment_status', 'pending'],
+                ['duet_day', '<=', (new DateTime('now'))->format('Y-m-d')]
             ])
             ->get();
         return $this->getDataTableSales($data);
