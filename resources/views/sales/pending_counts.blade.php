@@ -2,6 +2,7 @@
 <x-table.content-table>
     <x-table>
         <x-table.thead>
+            <x-table.th class="text-center">CLIENTE</x-table.th>
             <x-table.th class="text-center">VENDEDOR</x-table.th>
             <x-table.th class="text-center">ENTREGADOR</x-table.th>
             <x-table.th class="text-center">TIPO/PG</x-table.th>
@@ -15,6 +16,7 @@
         <x-table.tbody>
             @foreach ($orders as $order)
                 <x-table.tr>
+                    <x-table.th class="text-center">{{ $order['client_name'] }}</x-table.th>
                     <x-table.th class="text-center">{{ $order['seller_name'] }}</x-table.th>
                     <x-table.th class="text-center">{{ $order['delivery_man'] }}</x-table.th>
                     <x-table.th class="text-center">{{ $order['type_payment_sale'] }}</x-table.th>
