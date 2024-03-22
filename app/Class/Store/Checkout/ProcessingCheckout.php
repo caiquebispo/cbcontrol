@@ -25,6 +25,7 @@ class ProcessingCheckout
         protected ?int $type_increase_or_decrease = null,
         protected ?int $value_increase_or_decrease = null,
         protected ?float $delivery_man_id = null,
+        protected ?bool $is_retroactive = false,
         protected ?string $origin = 'PDV',
     ) {
     }
@@ -62,6 +63,7 @@ class ProcessingCheckout
             'delivery_man_id' => $this->delivery_man_id,
             'is_discount' => $this->type_increase_or_decrease !== null ? $this->type_increase_or_decrease : false,
             'value_discount' => $this->value_increase_or_decrease  !== null ? $this->value_increase_or_decrease : 0,
+            'is_retroactive' => $this->is_retroactive,
         ]);
 
         $this->mountedStructureOrderProducts($order->id, \Cart::content());

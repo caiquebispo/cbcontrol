@@ -60,6 +60,7 @@ class Sales
                 'duet_day' => $sale->duet_day != null ? (new DateTime($sale->duet_day))->format('d/m/Y') : (new DateTime($sale->day))->format('d/m/Y'),
                 'received_day' => $sale->received_day != null ? (new DateTime($sale->received_day))->format('d/m/Y') : 'AGUARDANDO...',
                 'qty_items' => count($sale->order_product),
+                'is_retroactive' => $sale->is_retroactive,
                 'products_sale' => [],
             ];
             foreach ($sale->order_product as $key_sale_product => $sale_product) {
@@ -88,6 +89,7 @@ class Sales
     public function getSummarySales()
     {
         $data = $this->getDataTableSales();
+
         $summary = [];
         $summary['summary_products'] = $this->summaryProduct($data);
         $summary['summary_sellers'] = $this->summarySellers($data);
@@ -132,32 +134,33 @@ class Sales
         $arr = [];
 
         foreach ($data as $key_d => $d) {
+            if (!$d['is_retroactive']) {
+                foreach ($d['products_sale'] as $key_p => $product) {
 
-            foreach ($d['products_sale'] as $key_p => $product) {
+                    $index = -1;
+                    foreach ($arr as $key_a => $a) {
 
-                $index = -1;
-                foreach ($arr as $key_a => $a) {
-
-                    if (($a['name'] == $d['seller_name']) && ($a['product'] == $product['name'])) {
-                        $index = $key_a;
+                        if (($a['name'] == $d['seller_name']) && ($a['product'] == $product['name'])) {
+                            $index = $key_a;
+                        }
                     }
-                }
 
-                if ($index > -1) {
+                    if ($index > -1) {
 
-                    $arr[$index]['quantity'] += $product['qty_product'];
-                    $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
-                } else {
+                        $arr[$index]['quantity'] += $product['qty_product'];
+                        $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                    } else {
 
-                    array_push(
-                        $arr,
-                        [
-                            'name' => $d['seller_name'],
-                            'product' => $product['name'],
-                            'quantity' => $product['qty_product'],
-                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
-                        ]
-                    );
+                        array_push(
+                            $arr,
+                            [
+                                'name' => $d['seller_name'],
+                                'product' => $product['name'],
+                                'quantity' => $product['qty_product'],
+                                'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
+                            ]
+                        );
+                    }
                 }
             }
         }
@@ -167,14 +170,13 @@ class Sales
     private function summaryReceived(): array
     {
         $payload =  $this->user->company->orders()
-            ->with('user', 'client', 'who_received', 'order_product.product')->whereBetween(
-                'received_day',
-                [
-                    now()->format('Y-m-d'),
-                    now()->format('Y-m-d'),
-                ]
-            )
+            ->with('user', 'client', 'who_received', 'order_product.product')
+            ->where([
+                ['orders.received_day',  now()->format('Y-m-d')],
+                ['orders.payment_status',  'confirmed']
+            ])
             ->get();
+
         $data = $this->getDataTableSales($payload);
         $arr = [];
 
@@ -199,32 +201,33 @@ class Sales
         $arr = [];
 
         foreach ($data as $key_d => $d) {
+            if (!$d['is_retroactive']) {
+                foreach ($d['products_sale'] as $key_p => $product) {
 
-            foreach ($d['products_sale'] as $key_p => $product) {
+                    $index = -1;
+                    foreach ($arr as $key_a => $a) {
 
-                $index = -1;
-                foreach ($arr as $key_a => $a) {
-
-                    if (($a['name'] == $d['client_name']) && ($a['product'] == $product['name'])) {
-                        $index = $key_a;
+                        if (($a['name'] == $d['client_name']) && ($a['product'] == $product['name'])) {
+                            $index = $key_a;
+                        }
                     }
-                }
 
-                if ($index > -1) {
+                    if ($index > -1) {
 
-                    $arr[$index]['quantity'] += $product['qty_product'];
-                    $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
-                } else {
+                        $arr[$index]['quantity'] += $product['qty_product'];
+                        $arr[$index]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                    } else {
 
-                    array_push(
-                        $arr,
-                        [
-                            'name' => $d['client_name'],
-                            'product' => $product['name'],
-                            'quantity' => $product['qty_product'],
-                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
-                        ]
-                    );
+                        array_push(
+                            $arr,
+                            [
+                                'name' => $d['client_name'],
+                                'product' => $product['name'],
+                                'quantity' => $product['qty_product'],
+                                'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
+                            ]
+                        );
+                    }
                 }
             }
         }
@@ -237,23 +240,25 @@ class Sales
         $arr = [];
         foreach ($data as $key_d => $d) {
 
-            foreach ($d['products_sale'] as $key_p => $product) {
+            if (!$d['is_retroactive']) {
+                foreach ($d['products_sale'] as $key_p => $product) {
 
-                $index_product = array_search($product['name'], array_column($arr, 'name'));
+                    $index_product = array_search($product['name'], array_column($arr, 'name'));
 
-                if ($index_product !== false) {
+                    if ($index_product !== false) {
 
-                    $arr[$index_product]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
-                    $arr[$index_product]['quantity'] += $product['qty_product'];
-                } else {
-                    array_push(
-                        $arr,
-                        [
-                            'name' => $product['name'],
-                            'quantity' => $product['qty_product'],
-                            'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
-                        ]
-                    );
+                        $arr[$index_product]['price'] += (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price'])));
+                        $arr[$index_product]['quantity'] += $product['qty_product'];
+                    } else {
+                        array_push(
+                            $arr,
+                            [
+                                'name' => $product['name'],
+                                'quantity' => $product['qty_product'],
+                                'price' => (float) str_replace(',', '.', str_replace('.', '.', str_replace('R$ ', '', $product['price']))),
+                            ]
+                        );
+                    }
                 }
             }
         }

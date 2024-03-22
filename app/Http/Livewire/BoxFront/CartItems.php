@@ -25,6 +25,7 @@ class CartItems extends Component
     public  $type_increase_or_decrease = null;
     public ?float $amount = null;
     public ?bool $hasExchange = false;
+    public ?bool $is_retroactive = false;
 
     protected $listeners = [
         'cartItem::index::addToCart' => '$refresh',
@@ -74,7 +75,8 @@ class CartItems extends Component
             $total_amount,
             $this->type_increase_or_decrease,
             $this->value_increase_or_decrease,
-            $this->delivery_man_id
+            $this->delivery_man_id,
+            $this->is_retroactive
         ))->processing();
 
         $this->emit('cartItem::index::finishSale');
