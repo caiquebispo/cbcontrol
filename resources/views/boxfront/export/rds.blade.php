@@ -188,7 +188,11 @@
                     @php
                         $total = 0;
                         foreach ($summary['summary_received'] as $product) {
-                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                            $total += str_replace(
+                                ',',
+                                '.',
+                                str_replace('.', '', str_replace('R$ ', '', $product['value'])),
+                            );
                         }
                     @endphp
                     <td>TOTAL</td>
@@ -229,7 +233,11 @@
                     @php
                         $total = 0;
                         foreach ($summary['summary_expenses'] as $product) {
-                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                            $total += str_replace(
+                                ',',
+                                '.',
+                                str_replace('.', '', str_replace('R$ ', '', $product['value'])),
+                            );
                         }
                     @endphp
                     <td>TOTAL</td>
@@ -256,14 +264,16 @@
             </thead>
             <tbody>
                 @foreach ($summary['general'] as $product)
-                    <tr>
-                        <td>{{ $product['client_name'] }}</td>
-                        <td>{{ $product['seller_name'] }}</td>
-                        <td>{{ $product['type_payment_sale'] }}</td>
-                        <td>{{ $product['payment_status'] }}</td>
-                        <td>{{ $product['segment'] }}</td>
-                        <td>{{ $product['value'] }}</td>
-                    </tr>
+                    @if (!$product['is_retroactive'])
+                        <tr>
+                            <td>{{ $product['client_name'] }}</td>
+                            <td>{{ $product['seller_name'] }}</td>
+                            <td>{{ $product['type_payment_sale'] }}</td>
+                            <td>{{ $product['payment_status'] }}</td>
+                            <td>{{ $product['segment'] }}</td>
+                            <td>{{ $product['value'] }}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
             <tfoot>
@@ -271,7 +281,13 @@
                     @php
                         $total = 0;
                         foreach ($summary['general'] as $product) {
-                            $total += str_replace(',', '.', str_replace('.', '', str_replace('R$ ', '', $product['value'])));
+                            if (!$product['is_retroactive']) {
+                                $total += str_replace(
+                                    ',',
+                                    '.',
+                                    str_replace('.', '', str_replace('R$ ', '', $product['value'])),
+                                );
+                            }
                         }
                     @endphp
                     <td>TOTAL</td>
