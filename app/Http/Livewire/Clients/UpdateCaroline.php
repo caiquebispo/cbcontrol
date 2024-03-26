@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 
-class UpdateUltragaz extends Component
+class UpdateCaroline extends Component
 {
     use Actions;
 
@@ -88,6 +88,6 @@ class UpdateUltragaz extends Component
     public function render(): View
     {
         $groups = $this->user->company->groups;
-        return view('livewire.clients.update-ultragaz', compact('groups'));
+        return view('livewire.clients.update-caroline', compact('groups'));
     }
 }

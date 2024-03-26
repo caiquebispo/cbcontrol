@@ -21,9 +21,9 @@ class ClientController extends Controller
     {
         return view('clients.index');
     }
-    public function ultragaz(): View
+    public function caroline(): View
     {
-        return view('clients.ultragaz');
+        return view('clients.caroline');
     }
     public function getAll(Request $request): Collection
     {

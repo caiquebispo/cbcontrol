@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ListClientsUltragaz extends Component
+class ListClientsCaroline extends Component
 {
     use SettingTable;
     use WithPagination;
@@ -43,6 +43,6 @@ class ListClientsUltragaz extends Component
     }
     public function render(): View
     {
-        return view('livewire.clients.list-clients-ultragaz', ['clients' => $this->getClients()]);
+        return view('livewire.clients.list-clients-caroline', ['clients' => $this->getClients()]);
     }
 }
