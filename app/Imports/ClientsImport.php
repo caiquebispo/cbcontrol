@@ -18,24 +18,20 @@ class ClientsImport implements ToModel
     {
         set_time_limit(0);
         $company = Auth::user()->company;
+        if ($row[0] != 'Codigo_Clientes') {
 
-        if ($row[0] != 'NOME') {
-
-            if (!$company->clients()->where('full_name', strtoupper($row[0]))->first()) {
+            if (isset($row[1]) && !$company->clients()->where('full_name', strtoupper($row[1]))->first()) {
 
                 $company->clients()
                     ->create([
 
-                        'full_name' => strtoupper($row[0]),
-                        'group_id' => 10,
-
-                    ])->address()->create([
-
-                        'states' => 'BA',
-                        'zipe_code' => 45500000,
-                        'city' => 'Ibirapitanga',
-                        'neighborhood' => $row[1] != "" ? $row[1] : 'N/D',
-                        'road' => $row[2] != "" ? $row[2] : 'N/D',
+                        'full_name' => strtoupper($row[1]),
+                        'number_phone' => $row[18],
+                        'value' => 0,
+                        'local' => $row[11],
+                        'delivery' => $row[15],
+                        'payment_method' => strtoupper('NAO DEFINIDO'),
+                        'group_id' => 2,
 
                     ]);
             }
